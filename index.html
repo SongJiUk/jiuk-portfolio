@@ -474,6 +474,135 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
 // ══════════════════════════════════════════
 const PROJECTS = [
   {
+    id:'prison',
+    name:'Prison Life',
+    emoji:'🏢',
+    subtitle:'슈퍼센트 Ad-Dev 과제 · 2026.03 ~ 04',
+    color:'#a78bfa',
+    zoneColor:0x3a1a4a,
+    year:'2026',
+    platform:'PC',
+    duration:'1주일',
+    isLatest:true,
+    shortDesc:'광석 채굴부터 수감자 수용까지 자동화. UniTask async/await 기반 NPC 자동화 루프와 IHandCuff 인터페이스로 구현한 아이들 경영 시뮬레이션.',
+    desc:'슈퍼센트 Ad-Dev 클라이언트 개발자(인턴) 채용 과제. 광부→수갑 제작→간부 운반→수감자 수용 흐름을 UniTask async/await로 완전 자동화. IHandCuff 인터페이스로 수갑 전달 시스템 설계, ObjectPool·DOTween·ScriptableObject 적용.',
+    systems:[
+      {icon:'⚡',name:'UniTask NPC 자동화 루프',desc:'코루틴 없이 async/await 패턴으로 광부·간부 NPC의 이동·대기·전달을 while(true) 루프로 처리. CancellationToken으로 OnDisable 시 안전 해제.'},
+      {icon:'🔗',name:'IHandCuff 인터페이스 설계',desc:'IHandCuffGiver / IHandCuffReceiver 분리로 수갑 전달 시스템 결합도 최소화. NPC 간 직접 참조 없이 인터페이스만으로 통신.'},
+      {icon:'✨',name:'DOTween 스폰 연출',desc:'광석·수갑·돈이 해당 구역으로 날아가는 연출. ObjectPool + OnComplete 콜백으로 애니메이션 완료 후 Release 처리.'},
+      {icon:'📋',name:'ScriptableObject 데이터 관리',desc:'방(RoomData)·구매구역(PurchaseZoneData)·무기(WeaponData)를 ScriptableObject로 분리. MonoBehaviour 하드코딩 제거.'},
+      {icon:'♻️',name:'ObjectPool 자원 관리',desc:'광석·수갑 등 반복 생성 오브젝트를 Unity ObjectPool<T>로 재사용. Destroy 호출 없이 pool.Release()로 반환.'},
+    ],
+    codeSnippets:[
+      {title:'UniTask 간부 자동화 루프',file:'JailerController.cs',
+       code:`<span class="kw">async</span> <span class="tp">UniTaskVoid</span> <span class="fn">AsyncWalkJailer</span>()
+{
+    <span class="kw">while</span> (<span class="kw">true</span>)
+    {
+        <span class="kw">if</span> (handCuffStack.Count == <span class="nm">0</span>)
+        {
+            <span class="kw">await</span> <span class="fn">AsyncMoveToPosition</span>(handCuffZone.transform.position);
+            <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => handCuffStack.Count >= HandCuffLine);
+        }
+        <span class="kw">await</span> <span class="fn">AsyncMoveToPosition</span>(prisonerZone.transform.position);
+        <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => handCuffStack.Count == <span class="nm">0</span>);
+        <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => prisonerZone.HandCuffCount == <span class="nm">0</span>);
+    }
+}`},
+      {title:'IHandCuff 인터페이스',file:'IHandCuffInterface.cs',
+       code:`<span class="kw">public interface</span> <span class="tp">IHandCuffGiver</span>
+{
+    <span class="kw">void</span> <span class="fn">GiveHandCuff</span>(<span class="tp">IHandCuffReceiver</span> receiver);
+}
+
+<span class="kw">public interface</span> <span class="tp">IHandCuffReceiver</span>
+{
+    <span class="kw">void</span> <span class="fn">ReceiveHandCuff</span>(<span class="kw">int</span> amount);
+}`},
+      {title:'DOTween 수갑 전달 연출',file:'HandCuffZone.cs',
+       code:`handCuff.<span class="fn">DOJump</span>(
+    _receiver.HandCuffPosition,
+    jumpPower: <span class="nm">1f</span>,
+    numJumps: <span class="nm">1</span>,
+    duration: <span class="nm">0.1f</span>
+).<span class="fn">OnComplete</span>(() =>
+{
+    _receiver.<span class="fn">AddHandCuff</span>(handCuff);
+});`},
+      {title:'ScriptableObject RoomData',file:'RoomData.cs',
+       code:`[<span class="tp">CreateAssetMenu</span>(fileName = <span class="st">"PurchaseZoneData"</span>, menuName = <span class="st">"Data/RoomData"</span>)]
+<span class="kw">public class</span> <span class="tp">RoomData</span> : <span class="tp">ScriptableObject</span>
+{
+    <span class="kw">public int</span> maxCount;
+    <span class="kw">public</span> <span class="tp">RoomData</span> nextLevel;
+}`},
+    ],
+    tags:['Unity','C#','UniTask','DOTween','ScriptableObject','ObjectPool'],
+    notion:'https://www.notion.so/341ea58668dd819fa009eec04dd07362',
+    github:'https://github.com/SongJiUk/AssignmentGame',
+    youtube:'https://youtu.be/eDnIBZUNspc',
+    images:[],
+    zoneX:26, zoneY:29, zoneW:8, zoneH:7,
+    tileTheme:'prison'
+  },
+  {
+    id:'tower',
+    name:'3D 로그라이크 타워디펜스',
+    emoji:'🗼',
+    subtitle:'개인 프로젝트 · 2026.04 ~ 진행 중',
+    color:'#22c55e',
+    zoneColor:0x1a4a2a,
+    year:'2026',
+    platform:'PC',
+    duration:'진행 중',
+    isLatest:false,
+    shortDesc:'웨이브마다 랜덤 스킬/타워를 선택하는 3D 로그라이크 타워디펜스. UniTask 웨이브 시스템, ITickable 중앙 업데이트 루프, 숲·사막·겨울·던전 4개 테마.',
+    desc:'3D 2.5D 시점의 로그라이크 타워디펜스. 웨이브 클리어 시 랜덤 스킬/타워 선택, UniTask 기반 웨이브 타이밍, ITickable 중앙 업데이트 루프, ObjectPool·ScriptableObject 적용. 숲·사막·겨울·던전 4개 테마.',
+    systems:[
+      {icon:'🔄',name:'ITickable 중앙 업데이트 루프',desc:'MonoBehaviour.Update() 남용 방지. HashSet 기반 ITickable/IUnScaledTickable로 scaled/unscaled 틱 분리. 순회 중 null 컴포넌트 자동 제거.'},
+      {icon:'🌊',name:'UniTask 웨이브 시스템',desc:'WaveData ScriptableObject로 웨이브별 적 구성 정의. UniTask async/await 기반 스폰 타이밍 제어.'},
+      {icon:'🗺',name:'A* 경로탐색',desc:'타워 배치에 따라 적이 동적으로 경로를 재탐색. 그리드 기반 A* 알고리즘 구현.'},
+      {icon:'🎲',name:'로그라이크 선택 시스템',desc:'웨이브 클리어 후 랜덤 스킬/타워 3개 중 1개 선택. 버프 ScriptableObject로 즉시 적용.'},
+      {icon:'♻️',name:'ObjectPool (적/투사체)',desc:'Unity ObjectPool<T>로 적·투사체 반복 생성 최적화. Destroy 없이 pool.Release() 반환.'},
+    ],
+    codeSnippets:[
+      {title:'ITickable 중앙 업데이트 루프',file:'UpdateManager.cs',
+       code:`<span class="kw">public interface</span> <span class="tp">ITickable</span>
+{
+    <span class="kw">void</span> <span class="fn">Tick</span>(<span class="kw">float</span> _deltaTime);
+}
+
+<span class="kw">public class</span> <span class="tp">UpdateManager</span> : <span class="tp">MonoBehaviour</span>
+{
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; tickables = <span class="kw">new</span>();
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toAdd = <span class="kw">new</span>();
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toRemove = <span class="kw">new</span>();
+
+    <span class="kw">private void</span> <span class="fn">Update</span>()
+    {
+        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toAdd) tickables.<span class="fn">Add</span>(t);
+        toAdd.<span class="fn">Clear</span>();
+        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toRemove) tickables.<span class="fn">Remove</span>(t);
+        toRemove.<span class="fn">Clear</span>();
+
+        <span class="kw">foreach</span> (<span class="kw">var</span> tick <span class="kw">in</span> tickables)
+        {
+            <span class="kw">if</span> (tick <span class="kw">is</span> <span class="tp">Component</span> c && c == <span class="kw">null</span>)
+            { toRemove.<span class="fn">Add</span>(tick); <span class="kw">continue</span>; }
+            tick.<span class="fn">Tick</span>(<span class="tp">Time</span>.deltaTime);
+        }
+    }
+}`},
+    ],
+    tags:['Unity','C#','UniTask','A*','로그라이크','ObjectPool','ScriptableObject','DOTween'],
+    notion:null,
+    github:'https://github.com/SongJiUk/TowerDefense',
+    youtube:null,
+    images:[],
+    zoneX:15, zoneY:4, zoneW:8, zoneH:7,
+    tileTheme:'castle'
+  },
+  {
     id:'idle',
     name:'모바일 방치형 RPG',
     emoji:'⚔️',
@@ -757,78 +886,6 @@ const PROJECTS = [
     tileTheme:'city'
   },
 
-  {
-    id:'prison',
-    name:'Prison Life',
-    emoji:'🏢',
-    subtitle:'슈퍼센트 Ad-Dev 과제 · 2026.03 ~ 04',
-    color:'#a78bfa',
-    zoneColor:0x3a1a4a,
-    year:'2026',
-    platform:'PC',
-    duration:'1주일',
-    isLatest:true,
-    shortDesc:'광석 채굴부터 수감자 수용까지 자동화. UniTask async/await 기반 NPC 자동화 루프와 IHandCuff 인터페이스로 구현한 아이들 경영 시뮬레이션.',
-    desc:'슈퍼센트 Ad-Dev 클라이언트 개발자(인턴) 채용 과제. 광부→수갑 제작→간부 운반→수감자 수용 흐름을 UniTask async/await로 완전 자동화. IHandCuff 인터페이스로 수갑 전달 시스템 설계, ObjectPool·DOTween·ScriptableObject 적용.',
-    systems:[
-      {icon:'⚡',name:'UniTask NPC 자동화 루프',desc:'코루틴 없이 async/await 패턴으로 광부·간부 NPC의 이동·대기·전달을 while(true) 루프로 처리. CancellationToken으로 OnDisable 시 안전 해제.'},
-      {icon:'🔗',name:'IHandCuff 인터페이스 설계',desc:'IHandCuffGiver / IHandCuffReceiver 분리로 수갑 전달 시스템 결합도 최소화. NPC 간 직접 참조 없이 인터페이스만으로 통신.'},
-      {icon:'✨',name:'DOTween 스폰 연출',desc:'광석·수갑·돈이 해당 구역으로 날아가는 연출. ObjectPool + OnComplete 콜백으로 애니메이션 완료 후 Release 처리.'},
-      {icon:'📋',name:'ScriptableObject 데이터 관리',desc:'방(RoomData)·구매구역(PurchaseZoneData)·무기(WeaponData)를 ScriptableObject로 분리. MonoBehaviour 하드코딩 제거.'},
-      {icon:'♻️',name:'ObjectPool 자원 관리',desc:'광석·수갑 등 반복 생성 오브젝트를 Unity ObjectPool<T>로 재사용. Destroy 호출 없이 pool.Release()로 반환.'},
-    ],
-    codeSnippets:[
-      {title:'UniTask 간부 자동화 루프',file:'JailerController.cs',
-       code:`<span class="kw">async</span> <span class="tp">UniTaskVoid</span> <span class="fn">AsyncWalkJailer</span>()
-{
-    <span class="kw">while</span> (<span class="kw">true</span>)
-    {
-        <span class="kw">if</span> (handCuffStack.Count == <span class="nm">0</span>)
-        {
-            <span class="kw">await</span> <span class="fn">AsyncMoveToPosition</span>(handCuffZone.transform.position);
-            <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => handCuffStack.Count >= HandCuffLine);
-        }
-        <span class="kw">await</span> <span class="fn">AsyncMoveToPosition</span>(prisonerZone.transform.position);
-        <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => handCuffStack.Count == <span class="nm">0</span>);
-        <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => prisonerZone.HandCuffCount == <span class="nm">0</span>);
-    }
-}`},
-      {title:'IHandCuff 인터페이스',file:'IHandCuffInterface.cs',
-       code:`<span class="kw">public interface</span> <span class="tp">IHandCuffGiver</span>
-{
-    <span class="kw">void</span> <span class="fn">GiveHandCuff</span>(<span class="tp">IHandCuffReceiver</span> receiver);
-}
-
-<span class="kw">public interface</span> <span class="tp">IHandCuffReceiver</span>
-{
-    <span class="kw">void</span> <span class="fn">ReceiveHandCuff</span>(<span class="kw">int</span> amount);
-}`},
-      {title:'DOTween 수갑 전달 연출',file:'HandCuffZone.cs',
-       code:`handCuff.<span class="fn">DOJump</span>(
-    _receiver.HandCuffPosition,
-    jumpPower: <span class="nm">1f</span>,
-    numJumps: <span class="nm">1</span>,
-    duration: <span class="nm">0.1f</span>
-).<span class="fn">OnComplete</span>(() =>
-{
-    _receiver.<span class="fn">AddHandCuff</span>(handCuff);
-});`},
-      {title:'ScriptableObject RoomData',file:'RoomData.cs',
-       code:`[<span class="tp">CreateAssetMenu</span>(fileName = <span class="st">"PurchaseZoneData"</span>, menuName = <span class="st">"Data/RoomData"</span>)]
-<span class="kw">public class</span> <span class="tp">RoomData</span> : <span class="tp">ScriptableObject</span>
-{
-    <span class="kw">public int</span> maxCount;
-    <span class="kw">public</span> <span class="tp">RoomData</span> nextLevel;
-}`},
-    ],
-    tags:['Unity','C#','UniTask','DOTween','ScriptableObject','ObjectPool'],
-    notion:'https://www.notion.so/341ea58668dd819fa009eec04dd07362',
-    github:'https://github.com/SongJiUk/AssignmentGame',
-    youtube:'https://youtu.be/eDnIBZUNspc',
-    images:[],
-    zoneX:26, zoneY:29, zoneW:8, zoneH:7,
-    tileTheme:'prison'
-  },
 
   {
     id:'rpg3d',
