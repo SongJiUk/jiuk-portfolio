@@ -234,6 +234,7 @@ footer{border-top:1px solid var(--border);padding:20px 36px;display:flex;justify
 .dmeta-v{font-size:13px;font-weight:500}
 .detail-body{max-width:1100px;margin:0 auto;padding:52px 40px}
 .detail-grid{display:grid;grid-template-columns:1fr 360px;gap:52px;align-items:start}
+.detail-grid>div{min-width:0}
 .ss-label{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:11px}
 .ss-main{width:100%;height:240px;image-rendering:pixelated;border:1px solid var(--border);display:block;margin-bottom:9px;cursor:zoom-in}
 .ss-track{display:flex;gap:9px;overflow-x:auto;padding-bottom:5px;scrollbar-width:thin;margin-bottom:38px}
@@ -248,7 +249,7 @@ footer{border-top:1px solid var(--border);padding:20px 36px;display:flex;justify
 .code-section{margin-top:38px}
 .code-title{font-size:10px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:9px;display:flex;justify-content:space-between}
 .code-file{font-family:var(--mono);font-size:9px;color:var(--purple)}
-pre{background:#050508;border:1px solid var(--border);padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:11px;line-height:1.9;tab-size:2;position:relative;margin-bottom:14px}
+pre{background:#050508;border:1px solid var(--border);padding:16px 18px;overflow-x:auto;font-family:var(--mono);font-size:11px;line-height:1.9;tab-size:2;position:relative;margin-bottom:14px;max-width:100%}
 pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-size:7px;color:var(--muted);letter-spacing:1px;text-transform:uppercase}
 .kw{color:#c792ea}.tp{color:#ffcb6b}.fn{color:#82aaff}.st{color:#c3e88d}.cm{color:#435f6a;font-style:italic}.nm{color:#f78c6c}.op{color:#89ddff}
 .side-card{border:1px solid var(--border);padding:17px;margin-bottom:13px;background:var(--bg2)}
@@ -298,7 +299,7 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
 <body>
 
 <nav>
-  <div class="nav-logo" onclick="window.scrollTo({top:0,behavior:'smooth'});goHome()"><div class="nav-dot"></div>JIUK.DEV</div>
+  <div class="nav-logo" onclick="goTop()"><div class="nav-dot"></div>JIUK.DEV</div>
   <div class="nav-links">
     <a href="#explorer">MAP</a>
     <a href="#works-section">WORKS</a>
@@ -321,10 +322,10 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
     <span class="chip hi">Unity C#</span>
     <span class="chip hi">UniTask</span>
     <span class="chip hi">Firebase</span>
-    <span class="chip">DOTween</span>
-    <span class="chip">Addressables</span>
     <span class="chip">Object Pool</span>
-    <span class="chip">FSM</span>
+    <span class="chip">Data-Driven</span>
+    <span class="chip">ScriptableObject</span>
+    <span class="chip">DOTween</span>
     <span class="chip">IAP / AdMob</span>
   </div>
   <div class="hero-btns">
@@ -525,8 +526,35 @@ const PROJECTS = [
     <span class="kw">await</span> _ref.<span class="fn">UpdateChildrenAsync</span>(updates)
                .<span class="fn">WithCancellation</span>(ct);
 }`},
+      {title:'ILoader - Data-Driven 인터페이스',file:'Data.cs',
+       code:`<span class="cm">// 구글시트 → CSV → JSON → C# 런타임 Dictionary</span>
+<span class="kw">public interface</span> <span class="tp">ILoader</span>&lt;<span class="tp">TKey</span>, <span class="tp">TValue</span>&gt;
+{
+    <span class="tp">Dictionary</span>&lt;<span class="tp">TKey</span>, <span class="tp">TValue</span>&gt; <span class="fn">MakeDict</span>();
+}
+
+[<span class="tp">Serializable</span>]
+<span class="kw">public class</span> <span class="tp">HeroDataLoader</span>
+    : <span class="tp">ILoader</span>&lt;<span class="tp">int</span>, <span class="tp">HeroData</span>&gt;
+{
+    <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">HeroData</span>&gt; heroes;
+    <span class="cm">// List → Dictionary 변환, O(1) 조회</span>
+    <span class="kw">public</span> <span class="tp">Dictionary</span>&lt;<span class="tp">int</span>, <span class="tp">HeroData</span>&gt; <span class="fn">MakeDict</span>()
+        => heroes.<span class="fn">ToDictionary</span>(h => h.id, h => h);
+}
+
+<span class="cm">// DataManager에서 일괄 로드</span>
+<span class="kw">void</span> <span class="fn">LoadJson</span>&lt;<span class="tp">TLoader</span>, <span class="tp">TKey</span>, <span class="tp">TValue</span>&gt;(<span class="tp">string</span> path,
+    <span class="kw">out</span> <span class="tp">Dictionary</span>&lt;<span class="tp">TKey</span>, <span class="tp">TValue</span>&gt; dict)
+    <span class="kw">where</span> <span class="tp">TLoader</span> : <span class="tp">ILoader</span>&lt;<span class="tp">TKey</span>, <span class="tp">TValue</span>&gt;, <span class="kw">new</span>()
+{
+    <span class="kw">var</span> json = <span class="tp">Resources</span>.<span class="fn">Load</span>&lt;<span class="tp">TextAsset</span>&gt;(path).text;
+    <span class="tp">TLoader</span> loader = <span class="tp">JsonUtility</span>.<span class="fn">FromJson</span>&lt;<span class="tp">TLoader</span>&gt;(json);
+    dict = loader.<span class="fn">MakeDict</span>();
+}`},
     ],
     tags:['Unity 2022.3','C#','Firebase','UniTask','IAP','AdMob','GPGS','Localization','Object Pool'],
+    notion:'https://www.notion.so/RPG-325ea58668dd81d1a463eaea62627482',
     github:'https://github.com/SongJiUk/IdleGame',
     youtube:'https://youtu.be/gLDDEcBPnWE',
     images:[
@@ -595,32 +623,43 @@ const PROJECTS = [
     <span class="kw">public void</span> <span class="fn">ReleaseMonster</span>(<span class="tp">Monster</span> m)
         => _monsterPool.<span class="fn">Release</span>(m);
 }`},
-      {title:'UI 자동 바인딩 (Enum 기반)',file:'UI_Base.cs',
-       code:`<span class="cm">// Enum으로 UI 컴포넌트 이름 정의</span>
-<span class="kw">enum</span> <span class="tp">Buttons</span> { BtnStart, BtnRetry, BtnClose }
-<span class="kw">enum</span> <span class="tp">Texts</span>   { TxtScore, TxtStage }
-
-<span class="kw">void</span> <span class="fn">Start</span>()
+      {title:'로그라이크 스킬 진화 시스템',file:'SkillSystem.cs',
+       code:`<span class="cm">// Lv1~4: 일반 스킬, Lv5: 진화 스킬 해금</span>
+<span class="kw">public class</span> <span class="tp">SkillData</span>
 {
-    <span class="fn">Bind</span>&lt;<span class="tp">Button</span>&gt;(<span class="kw">typeof</span>(<span class="tp">Buttons</span>));
-    <span class="fn">Bind</span>&lt;<span class="tp">Text</span>&gt;(<span class="kw">typeof</span>(<span class="tp">Texts</span>));
-    <span class="fn">GetButton</span>((<span class="tp">int</span>)<span class="tp">Buttons</span>.BtnStart)
-        .<span class="fn">onClick</span>.<span class="fn">AddListener</span>(OnClickStart);
+    <span class="kw">public int</span>    id;
+    <span class="kw">public string</span> name;
+    <span class="kw">public int</span>    evolveIntoId; <span class="cm">// -1이면 진화 없음</span>
 }
 
-<span class="cm">// FindChild로 자동 탐색 후 딕셔너리 저장</span>
-<span class="kw">protected void</span> <span class="fn">Bind</span>&lt;<span class="tp">T</span>&gt;(<span class="tp">Type</span> type)
-    <span class="kw">where</span> <span class="tp">T</span> : <span class="tp">UnityEngine.Object</span>
+<span class="kw">public class</span> <span class="tp">SkillSystem</span>
 {
-    <span class="kw">string</span>[] names = <span class="tp">Enum</span>.<span class="fn">GetNames</span>(type);
-    <span class="kw">var</span> objects = <span class="kw">new</span> <span class="tp">UnityEngine.Object</span>[names.Length];
-    _objects[<span class="kw">typeof</span>(<span class="tp">T</span>)] = objects;
-    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="nm">0</span>; i < names.Length; i++)
-        objects[i] = <span class="fn">FindChild</span>&lt;<span class="tp">T</span>&gt;(gameObject, names[i]);
+    <span class="tp">Dictionary</span>&lt;<span class="tp">int</span>, <span class="tp">int</span>&gt; _levels = <span class="kw">new</span>(); <span class="cm">// skillId → level</span>
+
+    <span class="kw">public void</span> <span class="fn">LevelUp</span>(<span class="tp">SkillData</span> skill)
+    {
+        _levels.<span class="fn">TryGetValue</span>(skill.id, <span class="kw">out int</span> cur);
+        <span class="kw">int</span> next = cur + <span class="nm">1</span>;
+
+        <span class="kw">if</span> (next >= <span class="nm">5</span> && skill.evolveIntoId != -<span class="nm">1</span>)
+        {
+            <span class="cm">// 레벨 5 도달 시 진화 스킬로 교체</span>
+            _levels.<span class="fn">Remove</span>(skill.id);
+            _levels[skill.evolveIntoId] = <span class="nm">1</span>;
+        }
+        <span class="kw">else</span>
+        {
+            _levels[skill.id] = next;
+        }
+    }
+
+    <span class="kw">public int</span> <span class="fn">GetLevel</span>(<span class="tp">int</span> skillId)
+        => _levels.<span class="fn">GetValueOrDefault</span>(skillId, <span class="nm">0</span>);
 }`},
     ],
     tags:['Unity','C#','Object Pooling','Data-Driven','JSON','UpdateManager','로그라이크'],
-    github:null,
+    notion:'https://www.notion.so/273ea58668dd81668644fb8fb223093e',
+    github:'https://github.com/SongJiUk/likeTangTang',
     youtube:'https://youtu.be/tz1HFhinCac',
     images:[
       'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/TopDownShooting/TopDownShooting_1.png',
@@ -629,53 +668,6 @@ const PROJECTS = [
     ],
     zoneX:37, zoneY:4, zoneW:8, zoneH:7,
     tileTheme:'military'
-  },
-  {
-    id:'rpg3d',
-    name:'3D RPG 개인 프로젝트',
-    emoji:'🏰',
-    subtitle:'개인 프로젝트 · 2021.05 ~ 10',
-    color:'#60a5fa',
-    zoneColor:0x1a4a8a,
-    year:'2021',
-    platform:'PC',
-    duration:'약 6개월',
-    isLatest:false,
-    shortDesc:'로그라이크 형식의 3D RPG. 퀘스트, 상점, 인벤토리, 씬 전환 시스템 1인 개발.',
-    desc:'로그라이크 형식의 3D RPG 게임. 오브젝트 풀링으로 몬스터 생성 최적화, 퀘스트 수주·진행·완료 상태 관리, 상점 시스템(아이템 구매·판매·인벤토리 연동) 구현.',
-    systems:[
-      {icon:'🗺',name:'사냥터 이동 / 씬 전환',desc:'씬 전환 시 PlayerPrefs 기반 데이터 유지, 로딩 화면 구현.'},
-      {icon:'📜',name:'퀘스트 시스템',desc:'수주·진행·완료 상태 관리. 옵저버 패턴으로 조건 충족 시 자동 완료.'},
-      {icon:'🏪',name:'상점 + 인벤토리',desc:'아이템 구매/판매, 인벤토리 연동, 장비 합성·강화 기능 구현.'},
-      {icon:'♻️',name:'오브젝트 풀링',desc:'몬스터 반복 생성 최적화. OnCreate/OnGet/OnRelease/OnDestroy 구현.'},
-    ],
-    codeSnippets:[
-      {title:'퀘스트 상태 관리',file:'QuestSystem.cs',
-       code:`<span class="kw">public enum</span> <span class="tp">QuestState</span>
-{
-    NotStarted, InProgress, Completed
-}
-
-<span class="kw">public class</span> <span class="tp">QuestSystem</span>
-{
-    <span class="kw">public void</span> <span class="fn">CheckCompletion</span>(<span class="tp">Quest</span> q)
-    {
-        <span class="kw">if</span> (q.State != <span class="tp">QuestState</span>.InProgress) <span class="kw">return</span>;
-
-        <span class="kw">bool</span> done = q.Conditions.<span class="fn">All</span>(c => c.<span class="fn">IsMet</span>());
-        <span class="kw">if</span> (done) q.State = <span class="tp">QuestState</span>.Completed;
-    }
-}`},
-    ],
-    tags:['Unity','C#','3D','Object Pool','퀘스트','상점','씬 전환'],
-    github:null,
-    youtube:'https://www.youtube.com/watch?v=_SKasgeYxo4',
-    images:[
-      'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/3DRPG_Solo/3DRPG_Solo_1.png',
-      'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/3DRPG_Solo/3DRPG_Solo_2.png',
-    ],
-    zoneX:4, zoneY:29, zoneW:8, zoneH:7,
-    tileTheme:'castle'
   },
   {
     id:'collab',
@@ -721,6 +713,7 @@ const PROJECTS = [
 }`},
     ],
     tags:['Unity','C#','3D','RPG','협업','Git','Singleton','PlayerPrefs','JSON'],
+    notion:'https://www.notion.so/3D-RPG-273ea58668dd810ebc97c5202a8cb26f',
     github:'https://github.com/SongJiUk/Project',
     youtube:'https://www.youtube.com/watch?v=IEsUX_KIpRA',
     images:[
@@ -751,6 +744,7 @@ const PROJECTS = [
     ],
     codeSnippets:[],
     tags:['Unity','C#','Match-3','Mobile','Live Service','Google Play','App Store','IAP','인게임','아웃게임'],
+    notion:'https://www.notion.so/273ea58668dd816f8300e9fd527a388c',
     github:null,
     youtube:null,
     images:[
@@ -761,22 +755,96 @@ const PROJECTS = [
     ],
     zoneX:37, zoneY:29, zoneW:8, zoneH:7,
     tileTheme:'city'
+  },
+
+  {
+    id:'rpg3d',
+    name:'3D RPG 개인 프로젝트',
+    emoji:'🏰',
+    subtitle:'개인 프로젝트 · 2021.05 ~ 10',
+    color:'#60a5fa',
+    zoneColor:0x1a4a8a,
+    year:'2021',
+    platform:'PC',
+    duration:'약 6개월',
+    isLatest:false,
+    shortDesc:'로그라이크 형식의 3D RPG. 퀘스트, 상점, 인벤토리, 씬 전환 시스템 1인 개발.',
+    desc:'로그라이크 형식의 3D RPG 게임. 오브젝트 풀링으로 몬스터 생성 최적화, 퀘스트 수주·진행·완료 상태 관리, 상점 시스템(아이템 구매·판매·인벤토리 연동) 구현.',
+    systems:[
+      {icon:'🗺',name:'사냥터 이동 / 씬 전환',desc:'씬 전환 시 PlayerPrefs 기반 데이터 유지, 로딩 화면 구현.'},
+      {icon:'📜',name:'퀘스트 시스템',desc:'수주·진행·완료 상태 관리. 옵저버 패턴으로 조건 충족 시 자동 완료.'},
+      {icon:'🏪',name:'상점 + 인벤토리',desc:'아이템 구매/판매, 인벤토리 연동, 장비 합성·강화 기능 구현.'},
+      {icon:'♻️',name:'오브젝트 풀링',desc:'몬스터 반복 생성 최적화. OnCreate/OnGet/OnRelease/OnDestroy 구현.'},
+    ],
+    codeSnippets:[
+      {title:'퀘스트 상태 관리',file:'QuestSystem.cs',
+       code:`<span class="kw">public enum</span> <span class="tp">QuestState</span>
+{
+    NotStarted, InProgress, Completed
+}
+
+<span class="kw">public class</span> <span class="tp">QuestSystem</span>
+{
+    <span class="kw">public void</span> <span class="fn">CheckCompletion</span>(<span class="tp">Quest</span> q)
+    {
+        <span class="kw">if</span> (q.State != <span class="tp">QuestState</span>.InProgress) <span class="kw">return</span>;
+
+        <span class="kw">bool</span> done = q.Conditions.<span class="fn">All</span>(c => c.<span class="fn">IsMet</span>());
+        <span class="kw">if</span> (done) q.State = <span class="tp">QuestState</span>.Completed;
+    }
+}`},
+      {title:'ObjectPool - 몬스터 풀 관리',file:'PoolManager.cs',
+       code:`<span class="kw">public class</span> <span class="tp">PoolManager</span> : <span class="tp">MonoBehaviour</span>
+{
+    [<span class="tp">SerializeField</span>] <span class="kw">private</span> <span class="tp">Monster</span> _prefab;
+    <span class="tp">ObjectPool</span>&lt;<span class="tp">Monster</span>&gt; _pool;
+
+    <span class="kw">void</span> <span class="fn">Awake</span>()
+    {
+        _pool = <span class="kw">new</span> <span class="tp">ObjectPool</span>&lt;<span class="tp">Monster</span>&gt;(
+            createFunc:      () => <span class="fn">Instantiate</span>(_prefab),
+            actionOnGet:     m  => m.gameObject.<span class="fn">SetActive</span>(<span class="kw">true</span>),
+            actionOnRelease: m  => m.gameObject.<span class="fn">SetActive</span>(<span class="kw">false</span>),
+            actionOnDestroy: m  => <span class="fn">Destroy</span>(m.gameObject),
+            maxSize: <span class="nm">100</span>
+        );
+    }
+
+    <span class="kw">public</span> <span class="tp">Monster</span> <span class="fn">Spawn</span>(<span class="tp">Vector3</span> pos)
+    {
+        <span class="tp">Monster</span> m = _pool.<span class="fn">Get</span>();
+        m.transform.position = pos;
+        <span class="kw">return</span> m;
+    }
+
+    <span class="kw">public void</span> <span class="fn">Return</span>(<span class="tp">Monster</span> m)
+        => _pool.<span class="fn">Release</span>(m);
+}`},
+    ],
+    tags:['Unity','C#','3D','Object Pool','퀘스트','상점','씬 전환'],
+    notion:'https://www.notion.so/3D-273ea58668dd815e83bdef248542b8f2',
+    github:null,
+    youtube:'https://www.youtube.com/watch?v=_SKasgeYxo4',
+    images:[
+      'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/3DRPG_Solo/3DRPG_Solo_1.png',
+      'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/3DRPG_Solo/3DRPG_Solo_2.png',
+    ],
+    zoneX:4, zoneY:29, zoneW:8, zoneH:7,
+    tileTheme:'castle'
   }
 ];
 
 const SKILLS=[
-  {name:'Unity C#',level:.9,color:'#f5c842'},
-  {name:'UniTask',level:.85,color:'#a78bfa'},
-  {name:'Firebase',level:.8,color:'#ff6b6b'},
-  {name:'DOTween',level:.8,color:'#a78bfa'},
-  {name:'Addressables',level:.72,color:'#60a5fa'},
+  {name:'Unity C#',level:.92,color:'#f5c842'},
   {name:'Object Pool',level:.88,color:'#22c55e'},
-  {name:'FSM Design',level:.78,color:'#a78bfa'},
-  {name:'IAP / AdMob',level:.75,color:'#f5c842'},
+  {name:'Data-Driven',level:.85,color:'#60a5fa'},
+  {name:'UniTask',level:.85,color:'#a78bfa'},
+  {name:'Firebase',level:.82,color:'#ff6b6b'},
   {name:'Git',level:.82,color:'#f5c842'},
-  {name:'UI Binding',level:.8,color:'#a78bfa'},
-  {name:'GC Optimization',level:.75,color:'#22c55e'},
-  {name:'Data-Driven',level:.82,color:'#60a5fa'},
+  {name:'ScriptableObject',level:.80,color:'#a78bfa'},
+  {name:'DOTween',level:.78,color:'#a78bfa'},
+  {name:'IAP / AdMob',level:.75,color:'#f5c842'},
+  {name:'UI Binding',level:.80,color:'#60a5fa'},
 ];
 
 // ══════════════════════════════════════════
@@ -1107,14 +1175,27 @@ PROJECTS.forEach(p=>{SS[p.id]=[0,1,2].map(v=>makePixelCanvas(p.id,v));});
 // NAVIGATION
 // ══════════════════════════════════════════
 let _savedScrollY=0;
+const _vpDefault='width=device-width,initial-scale=1.0';
+const _vpNoZoom='width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no';
+const _vpMeta=document.querySelector('meta[name=viewport]');
 function goHome(){
+  _vpMeta.content=_vpDefault;
   document.getElementById('main-view').classList.add('active');
   document.getElementById('detail-view').classList.remove('active');
   // 저장된 스크롤 위치로 복원
   requestAnimationFrame(()=>window.scrollTo(0,_savedScrollY));
 }
+function goTop(){
+  _vpMeta.content=_vpDefault;
+  document.getElementById('main-view').classList.add('active');
+  document.getElementById('detail-view').classList.remove('active');
+  // 항상 최상단으로 이동
+  requestAnimationFrame(()=>window.scrollTo({top:0,behavior:'smooth'}));
+}
 function openDetail(pid){
   const p=PROJECTS.find(x=>x.id===pid);if(!p)return;
+  // 3DRPG 제외 상세페이지는 pinch-zoom 비활성화
+  _vpMeta.content=(pid==='rpg3d'||pid==='collab')?_vpDefault:_vpNoZoom;
   // 현재 스크롤 위치 저장
   _savedScrollY=window.scrollY;
   document.getElementById('main-view').classList.remove('active');
@@ -1260,7 +1341,7 @@ function renderDetail(p){
   const dl=document.getElementById('d-links');dl.innerHTML='';
   if(p.youtube){const a=document.createElement('a');a.className='side-link yt';a.href=p.youtube;a.target='_blank';a.innerHTML=`<span>▶</span> 플레이 영상 보기<span class="la">↗</span>`;dl.appendChild(a);}
   if(p.github){const a=document.createElement('a');a.className='side-link gh';a.href=p.github;a.target='_blank';a.innerHTML=`<span>◈</span> GitHub Repository<span class="la">↗</span>`;dl.appendChild(a);}
-  const n=document.createElement('a');n.className='side-link';n.href='https://www.notion.so/273ea58668dd80769e87e65dcd3aca42';n.target='_blank';n.innerHTML=`<span>📋</span> Notion 포트폴리오<span class="la">↗</span>`;dl.appendChild(n);
+  if(p.notion){const n=document.createElement('a');n.className='side-link';n.href=p.notion;n.target='_blank';n.innerHTML=`<span>📋</span> Notion 포트폴리오<span class="la">↗</span>`;dl.appendChild(n);}
 }
 
 function openLB(img){const lb=document.getElementById('lightbox'),c=document.getElementById('lb-img');c.width=img.width;c.height=img.height;c.getContext('2d').drawImage(img,0,0);c.style.width=Math.min(img.width*3,window.innerWidth*.85)+'px';lb.classList.add('show');}
@@ -1356,10 +1437,10 @@ function gT(x,y){if(x<0||x>=MW||y<0||y>=MH)return 1;return map[y*MW+x];}
 const cv=document.getElementById('gameCanvas'),ctx=cv.getContext('2d');
 const mc=document.getElementById('minimap'),mctx=mc.getContext('2d');
 let VW,VH;
-function rc(){const pane=document.getElementById('map-pane');VW=pane.clientWidth;VH=pane.clientHeight||460;cv.width=VW;cv.height=VH;}
+function rc(){const pane=document.getElementById('map-pane');VW=pane.clientWidth;VH=pane.clientHeight||460;cv.width=VW;cv.height=VH;ctx.imageSmoothingEnabled=false;}
 rc();window.addEventListener('resize',rc);
 
-let px=26*TILE, py=24*TILE, camX=px-VW/2, camY=py-VH/2;
+let px=26*TILE, py=26*TILE, camX=px-VW/2, camY=py-VH/2;
 const SPD=2.4,keys={};
 document.addEventListener('keydown',e=>{
   keys[e.code]=true;
@@ -1427,7 +1508,7 @@ function drawParticles(){
     const a=p.life*0.9;
     ctx.globalAlpha=a;
     ctx.fillStyle=p.color;
-    ctx.fillRect(p.x-camX-p.size/2|0, p.y-camY-p.size/2|0, p.size|0, p.size|0);
+    ctx.fillRect(Math.round(p.x-p.size/2)-rCamX, Math.round(p.y-p.size/2)-rCamY, p.size|0, p.size|0);
   });
   ctx.globalAlpha=1;
 }
@@ -1436,7 +1517,7 @@ function drawParticles(){
 function drawZoneProps(p){
   const zx=p.zoneX*TILE, zy=p.zoneY*TILE;
   const zw=p.zoneW*TILE, zh=p.zoneH*TILE;
-  const sx=zx-camX|0, sy=zy-camY|0;
+  const sx=zx-rCamX, sy=zy-rCamY;
   if(sx+zw<0||sx>VW||sy+zh<0||sy>VH) return;
   const T2=TILE, t=Date.now();
 
@@ -1532,8 +1613,8 @@ function drawZoneProps(p){
     }
   }
   else if(p.tileTheme==='city'){
-    // 빌딩 창문 (깜빡이는 불빛)
-    for(let i=0;i<6;i++){
+    // 빌딩 창문 (깜빡이는 불빛, zone 8타일 안에만)
+    for(let i=0;i<4;i++){
       const wx=sx+T2*(1+i*2), wy=sy+T2*(1+i%3);
       const on=Math.sin(t/1000+i*2.3)>0;
       ctx.fillStyle=on?'#ffe066':'#0a0a18';
@@ -1570,10 +1651,8 @@ const torchFrame=()=>Math.floor(Date.now()/180)%3;
 
 function dTile(tx,ty){
   const t=gT(tx,ty);
-  // 픽셀 정렬: 카메라 좌표계를 정수로 스냅해서 타일 간 gap 제거
-  const camXi=camX|0, camYi=camY|0;
-  const sx=tx*TILE-camXi;
-  const sy=ty*TILE-camYi;
+  const sx=tx*TILE-rCamX;
+  const sy=ty*TILE-rCamY;
   const sz=TILE;
   if(sx+sz<=-1||sx>VW||sy+sz<=-1||sy>VH)return;
   const dk=(tx+ty)%2===0;
@@ -1671,7 +1750,7 @@ function dTile(tx,ty){
 }
 
 function dPlayer(){
-  const sx=px-camX|0,sy=py-camY|0;
+  const sx=Math.round(px)-rCamX,sy=Math.round(py)-rCamY;
   // shadow
   ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(sx-5,sy+8,10,4);
   // body
@@ -1688,7 +1767,7 @@ function dPlayer(){
 }
 
 function dLabel(p){
-  const zx=(p.zoneX+p.zoneW/2)*TILE-camX, zy=(p.zoneY+1)*TILE-camY;
+  const zx=(p.zoneX+p.zoneW/2)*TILE-rCamX, zy=(p.zoneY+1)*TILE-rCamY;
   if(zx<-100||zx>VW+100||zy<-20||zy>VH+20)return;
   ctx.save();
   ctx.font=`bold ${p.isLatest?8:7}px "Press Start 2P",monospace`;
@@ -1722,7 +1801,7 @@ function dMini(){
   }
   mctx.fillStyle='#a78bfa';mctx.fillRect((px/TILE)*sw-1|0,(py/TILE)*sh-1|0,3,3);
   mctx.strokeStyle='rgba(167,139,250,0.5)';mctx.lineWidth=.5;
-  mctx.strokeRect((camX/TILE)*sw|0,(camY/TILE)*sh|0,(VW/TILE)*sw|0,(VH/TILE)*sh|0);
+  mctx.strokeRect((rCamX/TILE)*sw|0,(rCamY/TILE)*sh|0,(VW/TILE)*sw|0,(VH/TILE)*sh|0);
 }
 
 // curZone: 현재 밟고 있는 구역 인덱스 (-1 = 없음)
@@ -1780,9 +1859,13 @@ function update(){
   }
 }
 
+// 매 프레임 전체 렌더링이 공유하는 정수 스냅 카메라
+let rCamX=0,rCamY=0;
 function draw(){
+  rCamX=Math.round(camX); rCamY=Math.round(camY);
   ctx.fillStyle='#080814';ctx.fillRect(0,0,VW,VH);
-  const sx=Math.max(0,(camX/TILE|0)-1),sy=Math.max(0,(camY/TILE|0)-1);
+  ctx.imageSmoothingEnabled=false;
+  const sx=Math.max(0,(rCamX/TILE|0)-1),sy=Math.max(0,(rCamY/TILE|0)-1);
   const ex=Math.min(MW,sx+Math.ceil(VW/TILE)+3),ey=Math.min(MH,sy+Math.ceil(VH/TILE)+3);
   for(let ty=sy;ty<ey;ty++)for(let tx=sx;tx<ex;tx++)dTile(tx,ty);
   // 구역 소품 (타일 위에)
