@@ -29,34 +29,39 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 .link-row{display:flex;gap:10px}
 .btn{font-size:12px;font-weight:600;padding:9px 20px;border-radius:2px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all .2s;border:none;cursor:pointer}
 .btn-primary{background:var(--gold);color:var(--bg)}.btn-primary:hover{background:#ffe070;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}.btn-outline:hover{border-color:var(--coral);color:var(--coral)}
 .screenshots{padding:44px 0;border-bottom:1px solid var(--border)}
 .sec-label{font-family:var(--pixel);font-size:6px;letter-spacing:4px;color:var(--muted);margin-bottom:18px}
 .img-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .img-grid img{width:100%;border-radius:4px;border:1px solid var(--border);display:block}
 .section{padding:44px 0;border-bottom:1px solid var(--border)}
 .sec-title{font-size:18px;font-weight:700;margin-bottom:22px}
-.overview-quote{border-left:3px solid var(--coral);padding:16px 20px;background:var(--bg2);border-radius:0 4px 4px 0;font-size:14px;line-height:1.8;margin-bottom:20px}
-.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:32px}
 .meta-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px 16px}
 .meta-card .lbl{font-size:10px;color:var(--muted);margin-bottom:4px}
 .meta-card .val{font-size:13px;font-weight:600}
-.role-list{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.role-item{font-size:13px;color:var(--muted);padding-left:16px;position:relative;line-height:1.6}
-.role-item::before{content:'▸';position:absolute;left:0;color:var(--coral)}
-.sys-list{display:flex;flex-direction:column;gap:20px}
+.sys-list{display:flex;flex-direction:column;gap:28px}
 .sys-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
 .sys-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
 .sys-num{font-family:var(--pixel);font-size:8px;color:var(--muted);min-width:28px}
 .sys-name{font-size:14px;font-weight:600}
-.sys-body{padding:20px}
-.sys-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px}
-.img-full{margin:12px 0}.img-full img{width:100%;border-radius:4px;border:1px solid var(--border)}
-.img-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0}
+.sys-body{padding:20px;display:flex;flex-direction:column;gap:16px}
+.problem-box{background:rgba(255,107,107,.06);border:1px solid rgba(255,107,107,.2);border-radius:4px;padding:14px 16px}
+.solution-box{background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.15);border-radius:4px;padding:14px 16px}
+.box-label{font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:8px}
+.box-label.prob{color:var(--coral)}
+.box-label.sol{color:var(--green)}
+.box-text{font-size:13px;color:var(--muted);line-height:1.8}
+.img-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
 .img-row img{width:100%;border-radius:4px;border:1px solid var(--border)}
-.hl{background:var(--surface);padding:1px 6px;border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--coral)}
+.img-single{margin-top:12px}
+.img-single img{width:100%;border-radius:4px;border:1px solid var(--border)}
+.img-caption{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+.img-triple{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.img-triple img{width:100%;border-radius:4px;border:1px solid var(--border)}
 .footer-nav{padding:44px 0 60px;display:flex;justify-content:center}
 .footer-nav a{font-family:var(--pixel);font-size:7px;color:var(--purple);text-decoration:none;letter-spacing:2px;transition:color .2s}.footer-nav a:hover{color:var(--gold)}
-@media(max-width:600px){.img-grid{grid-template-columns:1fr 1fr}.img-row{grid-template-columns:1fr}}
+@media(max-width:600px){.img-grid,.img-row,.img-triple{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -75,130 +80,191 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     <span class="project-emoji">🔫</span>
     <div class="project-label">INDIVIDUAL PROJECT</div>
     <h1 class="project-title">유니티 탑다운 슈팅게임</h1>
-    <p class="project-subtitle">탕탕특공대 모작 · 5스테이지 완성 · ObjectPool 최적화</p>
+    <p class="project-subtitle">탕탕특공대 모작 · 5스테이지 완성 · 로그라이크 스킬 진화 시스템</p>
     <div class="meta-row">
       <span class="badge hi">2025.05 – 2025.06</span>
       <span class="badge">Unity 2022.3</span>
+      <span class="badge">C#</span>
       <span class="badge">1인 개발</span>
       <span class="badge">PC</span>
     </div>
     <div class="link-row">
       <a href="https://youtu.be/tz1HFhinCac" target="_blank" class="btn btn-primary">▶ 플레이 영상</a>
+      <a href="https://github.com/SongJiUk/likeTangTang" target="_blank" class="btn btn-outline">⌥ GitHub</a>
     </div>
   </section>
 
   <section class="screenshots">
     <div class="sec-label">SCREENSHOTS</div>
     <div class="img-grid">
-      <img src="../images/TopDownShooting/TopDownShooting_1.png" alt="슈팅게임 1">
-      <img src="../images/TopDownShooting/TopDownShooting_2.png" alt="슈팅게임 2">
-      <img src="../images/TopDownShooting/TopDownShooting_3.png" alt="슈팅게임 3">
+      <img src="../images/TopDownShooting/TopDownShooting_1.png" alt="슈팅게임 스크린샷 1">
+      <img src="../images/TopDownShooting/TopDownShooting_2.png" alt="슈팅게임 스크린샷 2">
+      <img src="../images/TopDownShooting/TopDownShooting_3.png" alt="슈팅게임 스크린샷 3">
     </div>
   </section>
 
   <section class="section">
     <h2 class="sec-title">🎮 프로젝트 개요</h2>
-    <div class="overview-quote">
-      탕탕특공대를 모작으로 한 탑다운 슈팅게임입니다.
-      5스테이지를 완성하고 ObjectPool · UI 시스템 · 전투 로직을 직접 구현했습니다.
-    </div>
     <div class="meta-grid">
       <div class="meta-card"><div class="lbl">PLATFORM</div><div class="val">PC (Unity)</div></div>
-      <div class="meta-card"><div class="lbl">PERIOD</div><div class="val">약 7주</div></div>
+      <div class="meta-card"><div class="lbl">PERIOD</div><div class="val">2025.05 – 2025.06</div></div>
       <div class="meta-card"><div class="lbl">TEAM</div><div class="val">1인 개발</div></div>
       <div class="meta-card"><div class="lbl">STAGE</div><div class="val">5스테이지</div></div>
     </div>
   </section>
 
   <section class="section">
-    <h2 class="sec-title">🛠️ 구현 내용</h2>
-    <div class="role-list">
-      <div class="role-item">탑다운 슈팅 게임 1인 개발 (5스테이지 완성)</div>
-      <div class="role-item">ObjectPool 시스템 구현으로 런타임 메모리 최적화</div>
-      <div class="role-item">UI 시스템 개발 (체력바, 스테이지 전환, 게임오버 화면)</div>
-      <div class="role-item">인게임 전투 로직 구현 (플레이어 조작, 총알 발사, 적 패턴)</div>
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="sec-title">⚙️ 핵심 시스템</h2>
+    <h2 class="sec-title">🛠️ 기술적 구현 상세</h2>
     <div class="sys-list">
 
       <div class="sys-item">
-        <div class="sys-head"><span class="sys-num">01</span><span class="sys-name">ObjectPool 기반 총알·적 재사용</span></div>
+        <div class="sys-head"><span class="sys-num">01</span><span class="sys-name">데이터 기반 콘텐츠 및 캐릭터 성장 관리</span></div>
         <div class="sys-body">
-          <p class="sys-desc">
-            총알과 적 오브젝트를 매 프레임 생성/파괴 대신 <span class="hl">ObjectPool</span>로 재사용해 GC 부하를 제거했습니다.
-          </p>
+          <div class="problem-box">
+            <div class="box-label prob">PROBLEM</div>
+            <p class="box-text">게임 밸런스 조정 및 콘텐츠 추가 시 코드 수정이 필요하여 개발 효율이 떨어졌습니다.</p>
+          </div>
+          <div class="solution-box">
+            <div class="box-label sol">SOLUTION</div>
+            <p class="box-text">모든 게임 데이터를 구글시트에서 관리하여 개발환경과 분리, 코드를 수정하지 않고도 게임의 밸런스와 콘텐츠를 유연하게 조정할 수 있는 데이터 기반 설계를 적용했습니다.<br><br>
+            몬스터·스킬·캐릭터·장비 데이터를 구글 시트에 정리 → CSV → JSON으로 변환 → JsonUtility로 C# 객체로 변환. ILoader 인터페이스로 List를 Dictionary로 변환해 O(1) 탐색을 최적화했습니다.</p>
+          </div>
           <div class="img-row">
-            <img src="../images/TopDownShooting/TopDownShooting_4.png" alt="ObjectPool 코드">
-            <img src="../images/TopDownShooting/TopDownShooting_5.png" alt="ObjectPool 사용">
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_4.png" alt="구글시트 데이터">
+              <p class="img-caption">구글시트에서 데이터 관리</p>
+            </div>
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_5.png" alt="구글시트→Json 변환">
+              <p class="img-caption">구글시트 → Json파일로 변환</p>
+            </div>
+          </div>
+          <div class="img-row">
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_6.png" alt="Json→C# 역직렬화">
+              <p class="img-caption">Json → C# 객체로 변환 (Newtonsoft.Json)</p>
+            </div>
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_7.png" alt="ILoader 딕셔너리 변환">
+              <p class="img-caption">ILoader로 List → Dictionary 변환, O(1) 조회 최적화</p>
+            </div>
+          </div>
+          <div class="img-single">
+            <img src="../images/TopDownShooting/TopDownShooting_8.png" alt="캐릭터 성장 시스템">
+            <p class="img-caption">플레이어 성장 시스템: 장비 합성, 정렬, 강화 / 캐릭터 해방 / 뽑기 시스템 / 출석체크 & 미션</p>
           </div>
         </div>
       </div>
 
       <div class="sys-item">
-        <div class="sys-head"><span class="sys-num">02</span><span class="sys-name">플레이어 전투 시스템</span></div>
+        <div class="sys-head"><span class="sys-num">02</span><span class="sys-name">핵심 게임 로직 및 최적화</span></div>
         <div class="sys-body">
-          <p class="sys-desc">
-            WASD 이동, 마우스 방향 조준, 총알 발사 로직을 구현했습니다. 무기별 발사 속도와 데미지를 데이터로 분리했습니다.
-          </p>
+          <div class="problem-box">
+            <div class="box-label prob">PROBLEM</div>
+            <p class="box-text">수많은 몬스터와 오브젝트가 동시다발적으로 생성·소멸되는 환경에서 메모리 할당/해제 오버헤드로 인한 성능 저하가 있었습니다.</p>
+          </div>
+          <div class="solution-box">
+            <div class="box-label sol">SOLUTION</div>
+            <p class="box-text">Unity의 ObjectPool&lt;T&gt;를 적극 활용하여 메모리와 CPU 부하를 최소화했습니다.<br><br>
+            몬스터를 처치하여 얻은 젬으로 레벨업하고, 무작위로 등장하는 스킬을 선택하여 성장하는 로그라이크 플레이를 구현했습니다. 스킬 레벨이 5가 된 후 특정 아이템을 획득하면 스킬이 진화하는 시스템으로 전략적 깊이를 더했습니다.</p>
+          </div>
+          <div class="img-single">
+            <img src="../images/TopDownShooting/TopDownShooting_9.png" alt="핵심 게임 로직">
+            <p class="img-caption">로그라이크 스킬 선택 / 스킬 레벨 5 진화 시스템</p>
+          </div>
+          <div class="img-single">
+            <img src="../images/TopDownShooting/TopDownShooting_10.png" alt="히든 스테이지">
+            <p class="img-caption">10개 스테이지 / 엘리트 보스 / 자기장 시스템으로 긴장감 조성</p>
+          </div>
           <div class="img-row">
-            <img src="../images/TopDownShooting/TopDownShooting_6.png" alt="플레이어 컨트롤러">
-            <img src="../images/TopDownShooting/TopDownShooting_7.png" alt="총알 발사 로직">
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_11.png" alt="ObjectPool OnCreate/Get/Release">
+              <p class="img-caption">ObjectPool — OnCreate, OnGet, OnRelease, OnDestroy 구현</p>
+            </div>
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_12.png" alt="오브젝트풀 관리 코드">
+              <p class="img-caption">오브젝트 풀을 관리하는 코드</p>
+            </div>
+          </div>
+          <div class="img-single">
+            <img src="../images/TopDownShooting/TopDownShooting_13.png" alt="오브젝트풀 사용 코드">
+            <p class="img-caption">실제 오브젝트 풀을 사용하는 코드</p>
           </div>
         </div>
       </div>
 
       <div class="sys-item">
-        <div class="sys-head"><span class="sys-num">03</span><span class="sys-name">적 AI 패턴</span></div>
+        <div class="sys-head"><span class="sys-num">03</span><span class="sys-name">중앙 집중식 업데이트 시스템</span></div>
         <div class="sys-body">
-          <p class="sys-desc">
-            적의 이동 패턴과 공격 로직을 구현했습니다. 스테이지 진행에 따라 적의 수와 속도가 증가합니다.
-          </p>
+          <div class="problem-box">
+            <div class="box-label prob">PROBLEM</div>
+            <p class="box-text">유니티의 개별적인 Update() 호출 방식은 오브젝트 수가 많아질 때 불필요한 호출 오버헤드를 유발하여 성능 저하로 이어집니다.</p>
+          </div>
+          <div class="solution-box">
+            <div class="box-label sol">SOLUTION</div>
+            <p class="box-text">ITickable 인터페이스와 UpdateManager를 구축하여 모든 업데이트 로직을 일괄적으로 관리했습니다.</p>
+          </div>
           <div class="img-row">
-            <img src="../images/TopDownShooting/TopDownShooting_8.png" alt="적 AI">
-            <img src="../images/TopDownShooting/TopDownShooting_9.png" alt="스테이지 관리">
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_14.png" alt="UpdateManager 코드">
+              <p class="img-caption">UpdateManager — 연결된 오브젝트들의 업데이트 로직을 일괄 관리</p>
+            </div>
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_15.png" alt="ITickable 연결/해제">
+              <p class="img-caption">필요한 스크립트에서 Register/Unregister로 관리</p>
+            </div>
           </div>
         </div>
       </div>
 
       <div class="sys-item">
-        <div class="sys-head"><span class="sys-num">04</span><span class="sys-name">UI 시스템</span></div>
+        <div class="sys-head"><span class="sys-num">04</span><span class="sys-name">Drag &amp; Drop 없는 UI 바인딩 시스템</span></div>
         <div class="sys-body">
-          <p class="sys-desc">
-            체력바, 스테이지 전환 연출, 게임오버 화면을 구현했습니다.
-          </p>
+          <div class="problem-box">
+            <div class="box-label prob">PROBLEM</div>
+            <p class="box-text">기존 Unity UI 작업 방식은 수동 연결로 인한 반복 작업, 휴먼에러, 유지보수의 어려움이 있었습니다.</p>
+          </div>
+          <div class="solution-box">
+            <div class="box-label sol">SOLUTION</div>
+            <p class="box-text">Enum과 코드 기반의 자동 UI 바인딩 시스템을 구축했습니다. 코드로 컴포넌트 간 의존성을 명확하게 관리하고, UI의 유지보수성 및 확장성을 확보했습니다.</p>
+          </div>
           <div class="img-row">
-            <img src="../images/TopDownShooting/TopDownShooting_10.png" alt="UI 체력바">
-            <img src="../images/TopDownShooting/TopDownShooting_11.png" alt="게임오버 화면">
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_16.png" alt="Enum 기반 자동 바인딩">
+              <p class="img-caption">Enum 기반으로 컴포넌트를 찾아 자동 연결하는 Bind&lt;T&gt;() 코드</p>
+            </div>
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_17.png" alt="프리팹 이름 설정">
+              <p class="img-caption">프리팹에서 컴포넌트 이름과 Enum 이름을 일치시켜 자동 연결</p>
+            </div>
+          </div>
+          <div class="img-single">
+            <img src="../images/TopDownShooting/TopDownShooting_18.png" alt="Bind 자동연결 코드">
+            <p class="img-caption">Enum 기반으로 컴포넌트를 찾아 연결하는 코드</p>
+          </div>
+          <div class="img-row">
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_19.png" alt="이벤트 바인드">
+              <p class="img-caption">특정 오브젝트에 이벤트를 바인드하는 코드</p>
+            </div>
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_20.png" alt="Utils 코드">
+              <p class="img-caption">어디서든 쉽게 사용할 수 있도록 Utils로 만든 코드</p>
+            </div>
+          </div>
+          <div class="img-row">
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_21.png" alt="EventHandler 바인드">
+              <p class="img-caption">EventHandler를 이용해 게임오브젝트에 이벤트를 바인드하는 코드</p>
+            </div>
+            <div>
+              <img src="../images/TopDownShooting/TopDownShooting_22.png" alt="타입별 바인드">
+              <p class="img-caption">타입별로 바인딩 가능하여 실수를 최소화</p>
+            </div>
           </div>
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <section class="section">
-    <h2 class="sec-title">🖼️ 게임플레이 스크린샷</h2>
-    <div class="img-grid">
-      <img src="../images/TopDownShooting/TopDownShooting_12.png" alt="">
-      <img src="../images/TopDownShooting/TopDownShooting_13.png" alt="">
-      <img src="../images/TopDownShooting/TopDownShooting_14.png" alt="">
-    </div>
-    <div class="img-grid" style="margin-top:10px">
-      <img src="../images/TopDownShooting/TopDownShooting_15.png" alt="">
-      <img src="../images/TopDownShooting/TopDownShooting_16.png" alt="">
-      <img src="../images/TopDownShooting/TopDownShooting_17.png" alt="">
-    </div>
-    <div class="img-grid" style="margin-top:10px">
-      <img src="../images/TopDownShooting/TopDownShooting_18.png" alt="">
-      <img src="../images/TopDownShooting/TopDownShooting_19.png" alt="">
-      <img src="../images/TopDownShooting/TopDownShooting_20.png" alt="">
-    </div>
-    <div class="img-grid" style="margin-top:10px">
-      <img src="../images/TopDownShooting/TopDownShooting_21.png" alt="">
-      <img src="../images/TopDownShooting/TopDownShooting_22.png" alt="">
     </div>
   </section>
 
