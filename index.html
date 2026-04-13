@@ -803,21 +803,16 @@ const PROJECTS = [
 {
     <span class="kw">void</span> <span class="fn">ReceiveHandCuff</span>(<span class="kw">int</span> amount);
 }`},
-      {title:'DOTween 스폰 연출',file:'SpawnEffect.cs',
-       code:`<span class="kw">public void</span> <span class="fn">SpawnAndFlyTo</span>(<span class="tp">Transform</span> target, <span class="tp">GameObject</span> prefab)
+      {title:'DOTween 수갑 전달 연출',file:'HandCuffZone.cs',
+       code:`handCuff.<span class="fn">DOJump</span>(
+    _receiver.HandCuffPosition,
+    jumpPower: <span class="nm">1f</span>,
+    numJumps: <span class="nm">1</span>,
+    duration: <span class="nm">0.1f</span>
+).<span class="fn">OnComplete</span>(() =>
 {
-    <span class="kw">var</span> obj = _pool.<span class="fn">Get</span>();
-    obj.transform.position = spawnPoint.position;
-
-    obj.transform
-        .<span class="fn">DOMove</span>(target.position, <span class="nm">0.4f</span>)
-        .<span class="fn">SetEase</span>(<span class="tp">Ease</span>.OutQuad)
-        .<span class="fn">OnComplete</span>(() =>
-        {
-            _pool.<span class="fn">Release</span>(obj);
-            OnArrived?.Invoke();
-        });
-}`},
+    _receiver.<span class="fn">AddHandCuff</span>(handCuff);
+});`},
       {title:'ScriptableObject RoomData',file:'RoomData.cs',
        code:`[<span class="tp">CreateAssetMenu</span>(fileName = <span class="st">"PurchaseZoneData"</span>, menuName = <span class="st">"Data/RoomData"</span>)]
 <span class="kw">public class</span> <span class="tp">RoomData</span> : <span class="tp">ScriptableObject</span>
