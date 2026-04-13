@@ -1231,8 +1231,19 @@ window.closeLB=closeLB;
 const wg=document.getElementById('works-grid');
 PROJECTS.forEach((p,i)=>{
   const card=document.createElement('div');card.className='wcard';card.style.setProperty('--c',p.color);
-  const prev=document.createElement('canvas');prev.width=240;prev.height=160;prev.className='wcard-preview';
-  prev.getContext('2d').drawImage(SS[p.id][0],0,0);prev.style.width='100%';prev.style.height='110px';
+  let prev;
+if(p.images&&p.images.length>0){
+  prev=document.createElement('img');
+  prev.src=p.images[0];
+  prev.alt=p.name;
+  prev.className='wcard-preview';
+  prev.style.cssText='width:100%;height:110px;object-fit:cover;display:block;border:1px solid var(--border);background:var(--bg3)';
+} else {
+  prev=document.createElement('canvas');
+  prev.width=240;prev.height=160;prev.className='wcard-preview';
+  prev.getContext('2d').drawImage(SS[p.id][0],0,0);
+  prev.style.width='100%';prev.style.height='110px';
+}
   card.innerHTML=`<div class="wcard-accent"></div><div class="wcard-num">${String(i+1).padStart(2,'0')} / ${String(PROJECTS.length).padStart(2,'0')}</div>${p.isLatest?'<div class="wcard-badge">★ LATEST</div>':''}`;
   card.appendChild(prev);
   card.innerHTML+=`<div class="wcard-title" style="color:${p.color}">${p.emoji} ${p.name}</div>
