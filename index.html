@@ -819,13 +819,11 @@ const PROJECTS = [
         });
 }`},
       {title:'ScriptableObject RoomData',file:'RoomData.cs',
-       code:`[<span class="tp">CreateAssetMenu</span>(fileName = <span class="st">"RoomData"</span>, menuName = <span class="st">"Data/RoomData"</span>)]
+       code:`[<span class="tp">CreateAssetMenu</span>(fileName = <span class="st">"PurchaseZoneData"</span>, menuName = <span class="st">"Data/RoomData"</span>)]
 <span class="kw">public class</span> <span class="tp">RoomData</span> : <span class="tp">ScriptableObject</span>
 {
-    <span class="kw">public string</span> roomName;
-    <span class="kw">public int</span> maxCapacity;
-    <span class="kw">public int</span> incomePerPrisoner;
-    <span class="kw">public</span> <span class="tp">Sprite</span> roomIcon;
+    <span class="kw">public int</span> maxCount;
+    <span class="kw">public</span> <span class="tp">RoomData</span> nextLevel;
 }`},
     ],
     tags:['Unity','C#','UniTask','DOTween','ScriptableObject','ObjectPool'],
