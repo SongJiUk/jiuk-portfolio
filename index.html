@@ -85,6 +85,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 #minimap{position:absolute;top:10px;right:10px;border:1px solid rgba(167,139,250,0.3);image-rendering:pixelated;box-shadow:0 0 12px rgba(167,139,250,0.15)}
 #hud-box{position:absolute;top:10px;left:10px;background:rgba(8,8,20,0.88);border:1px solid var(--border);padding:9px 12px;font-family:var(--mono);font-size:9px;color:var(--muted);line-height:2.1}
 #hud-box .hl{color:var(--purple)}
+#hud-box{cursor:pointer;transition:all .2s}
+#hud-box.collapsed > *:not(:first-child){display:none}
+#hud-box.collapsed{padding:6px 10px}
 #zone-pill{position:absolute;bottom:90px;left:50%;transform:translateX(-50%);font-family:var(--pixel);font-size:6px;padding:6px 16px;border:1px solid currentColor;display:none;white-space:nowrap;pointer-events:none;letter-spacing:1px;background:rgba(8,8,20,0.9);transition:color .2s}
 
 /* joystick */
@@ -274,6 +277,12 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
   .detail-hero,.detail-body{padding:40px 20px}
   footer{flex-direction:column;gap:6px;text-align:center}
   .works-grid{grid-template-columns:1fr}
+  .detail-hero{padding:20px 16px;}
+  .detail-title{font-size:22px;}
+  .detail-subtitle{font-size:12px;}
+  .detail-meta{gap:12px;}
+  .detail-back{padding:12px 16px;}
+
 }
 </style>
 </head>
@@ -775,6 +784,10 @@ function makePixelCanvas(id, variant, w=240, h=160){
   return c;
 }
 
+document.getElementById('hud-box').addEventListener('click', function(){
+  this.classList.toggle('collapsed');
+});
+
 // ── 벽돌/타일 패턴 헬퍼 ──────────────────
 function drawBrick(x,rx,ry,T,c1,c2,offset=false){
   const ox=offset?T:0;
@@ -1109,14 +1122,22 @@ function openPanel(pid){
   const p=PROJECTS.find(x=>x.id===pid);if(!p)return;
   panelOpen=true;
   const inner=document.getElementById('panel-inner');
-  const imgs=SS[p.id];
-  const thumbsHtml=imgs.map((_,i)=>`<canvas class="panel-ss-thumb${i===0?' active':''}" data-idx="${i}" width="240" height="160"></canvas>`).join('');
+  const hasRealImgs=p.images&&p.images.length>0;
+  
+  const mainMediaHtml=hasRealImgs
+    ? `<img id="pss-main-img" src="${p.images[0]}" style="width:100%;height:160px;object-fit:cover;border:1px solid var(--border);display:block;margin-bottom:8px;background:var(--bg3)">`
+    : `<canvas class="panel-ss-main" id="pss-main" width="240" height="160"></canvas>`;
+
+  const thumbsHtml=hasRealImgs
+    ? p.images.map((url,i)=>`<img class="panel-ss-thumb${i===0?' active':''}" src="${url}" data-idx="${i}" style="width:64px;height:44px;object-fit:cover;flex-shrink:0">`).join('')
+    : `<canvas class="panel-ss-thumb active" data-idx="0" width="240" height="160"></canvas>`;
+
   inner.innerHTML=`
     <div class="panel-badge">// ${p.emoji} PROJECT${p.isLatest?' &nbsp;<span style="color:var(--gold);font-size:8px">★ LATEST</span>':''}</div>
     <div class="panel-title" style="color:${p.color}">${p.name}</div>
     <div class="panel-sub">${p.subtitle}</div>
     ${p.isLatest?`<div class="panel-notice">★ 최신 프로젝트 — 가장 최근 기술 스택 적용</div>`:''}
-    <canvas class="panel-ss-main" id="pss-main" width="240" height="160"></canvas>
+    ${mainMediaHtml}
     <div class="panel-ss-strip">${thumbsHtml}</div>
     <hr class="panel-divider">
     <p class="panel-desc">${p.desc}</p>
@@ -1136,18 +1157,30 @@ function openPanel(pid){
     </div>`;
 
   requestAnimationFrame(()=>{
-    const main=document.getElementById('pss-main');
-    if(main){main.getContext('2d').drawImage(imgs[0],0,0);main.style.width='100%';main.style.height='160px';}
-    inner.querySelectorAll('.panel-ss-thumb').forEach((c,i)=>{
-      c.getContext('2d').drawImage(imgs[i],0,0);c.style.width='64px';c.style.height='44px';
-      c.addEventListener('click',()=>{
-        if(main)main.getContext('2d').drawImage(imgs[i],0,0);
-        inner.querySelectorAll('.panel-ss-thumb').forEach(x=>x.classList.remove('active'));c.classList.add('active');
+    if(hasRealImgs){
+      const mainImg=document.getElementById('pss-main-img');
+      inner.querySelectorAll('.panel-ss-thumb').forEach((img,i)=>{
+        img.addEventListener('click',()=>{
+          mainImg.src=p.images[i];
+          inner.querySelectorAll('.panel-ss-thumb').forEach(x=>x.classList.remove('active'));
+          img.classList.add('active');
+        });
       });
-    });
+    } else {
+      const main=document.getElementById('pss-main');
+      if(main){main.getContext('2d').drawImage(SS[p.id][0],0,0);main.style.width='100%';main.style.height='160px';}
+      inner.querySelectorAll('.panel-ss-thumb').forEach((c,i)=>{
+        c.getContext('2d').drawImage(SS[p.id][i]||SS[p.id][0],0,0);
+        c.style.width='64px';c.style.height='44px';
+        c.addEventListener('click',()=>{
+          if(main)main.getContext('2d').drawImage(SS[p.id][i],0,0);
+          inner.querySelectorAll('.panel-ss-thumb').forEach(x=>x.classList.remove('active'));
+          c.classList.add('active');
+        });
+      });
+    }
   });
   document.getElementById('side-panel').classList.add('open');
-  panelOpen=true;
 }
 function closePanel(){
   document.getElementById('side-panel').classList.remove('open');
@@ -1320,11 +1353,11 @@ rc();window.addEventListener('resize',rc);
 let px=(MW/2)*TILE, py=(MH/2)*TILE, camX=px-VW/2, camY=py-VH/2;
 const SPD=2.4,keys={};
 document.addEventListener('keydown',e=>{
-  keys[e.key]=true;
+  keys[e.code]=true;
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight',' '].includes(e.key))e.preventDefault();
   if((e.key==='Enter'||e.key===' ')&&curZone>=0)openPanel(PROJECTS[curZone].id);
 });
-document.addEventListener('keyup',e=>{keys[e.key]=false;});
+document.addEventListener('keyup',e=>{keys[e.code]=false;});
 
 let ja=false,jx=0,jy=0,jdx=0,jdy=0;
 const jb2=document.getElementById('jb'),jk=document.getElementById('jk');
@@ -1690,10 +1723,10 @@ const pill=document.getElementById('zone-pill');
 
 function update(){
   let dx=0,dy=0;
-  if(keys['ArrowUp']||keys['w']||keys['W']||dp.u)dy=-1;
-  if(keys['ArrowDown']||keys['s']||keys['S']||dp.d)dy=1;
-  if(keys['ArrowLeft']||keys['a']||keys['A']||dp.l)dx=-1;
-  if(keys['ArrowRight']||keys['d']||keys['D']||dp.r)dx=1;
+  if(keys['ArrowUp']||keys['KeyW']||dp.u)dy=-1;
+  if(keys['ArrowDown']||keys['KeyS']||dp.d)dy=1;
+  if(keys['ArrowLeft']||keys['KeyA']||dp.l)dx=-1;
+  if(keys['ArrowRight']||keys['KeyD']||dp.r)dx=1;
   if(ja){if(Math.abs(jdx)>.12)dx=jdx;if(Math.abs(jdy)>.12)dy=jdy;}
   const mg=4,nx=px+dx*SPD,ny=py+dy*SPD;
   const bl=[1,3,4,11];
