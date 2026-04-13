@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D 타워디펜스 · JIUK SONG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080814;--bg2:#0d0d20;--surface:#1a1a38;--border:#252548;--border2:#383870;--text:#ddddf5;--muted:#5858a0;--dim:#383878;--gold:#f5c842;--cyan:#00d4ff;--green:#22c55e;--purple:#a78bfa;--coral:#ff6b6b;--pixel:'Press Start 2P',monospace;--sans:'Inter',sans-serif;--mono:'JetBrains Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;line-height:1.7}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(transparent 0px,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 3px);pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(8,8,20,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.nav-back{font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}.nav-back:hover{color:var(--text)}
+.nav-logo{font-family:var(--pixel);font-size:8px;color:var(--gold);letter-spacing:1px}
+.nav-links a{font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s}.nav-links a:hover{color:var(--text)}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.project-hero{padding:96px 0 56px;border-bottom:1px solid var(--border)}
+.project-emoji{font-size:48px;margin-bottom:16px;display:block}
+.project-label{font-family:var(--pixel);font-size:6px;letter-spacing:4px;color:var(--gold);margin-bottom:12px}
+.wip-banner{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--gold);border-radius:2px;background:rgba(245,200,66,.08);font-family:var(--pixel);font-size:7px;color:var(--gold);letter-spacing:1px;margin-bottom:16px}
+.wip-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:blink 1.2s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.project-title{font-size:clamp(22px,4.5vw,38px);font-weight:700;letter-spacing:-.5px;line-height:1.2;margin-bottom:10px}
+.project-subtitle{font-size:14px;color:var(--muted);margin-bottom:22px}
+.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.badge{font-size:11px;font-weight:500;padding:4px 12px;border:1px solid var(--border2);border-radius:2px;color:var(--dim)}
+.badge.hi{border-color:var(--gold);color:var(--gold);background:rgba(245,200,66,.07)}
+.link-row{display:flex;gap:10px}
+.btn{font-size:12px;font-weight:600;padding:9px 20px;border-radius:2px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all .2s;border:none;cursor:pointer}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.section{padding:44px 0;border-bottom:1px solid var(--border)}
+.sec-title{font-size:18px;font-weight:700;margin-bottom:22px}
+.overview-quote{border-left:3px solid var(--gold);padding:16px 20px;background:var(--bg2);border-radius:0 4px 4px 0;font-size:14px;line-height:1.8;margin-bottom:20px}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.meta-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px 16px}
+.meta-card .lbl{font-size:10px;color:var(--muted);margin-bottom:4px}
+.meta-card .val{font-size:13px;font-weight:600}
+.progress-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:20px;margin-bottom:16px}
+.progress-title{font-size:13px;font-weight:600;margin-bottom:12px;color:var(--gold)}
+.progress-list{display:flex;flex-direction:column;gap:8px}
+.progress-item{display:flex;align-items:center;gap:10px;font-size:13px}
+.progress-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.progress-item.done .dot{background:var(--green)}
+.progress-item.todo .dot{background:var(--border2)}
+.progress-item.done{color:var(--text)}
+.progress-item.todo{color:var(--muted)}
+.game-loop{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px}
+.loop-step{font-size:12px;padding:6px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:2px;color:var(--muted)}
+.loop-arrow{color:var(--border2);font-size:14px}
+.sys-list{display:flex;flex-direction:column;gap:20px}
+.sys-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.sys-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sys-num{font-family:var(--pixel);font-size:8px;color:var(--muted);min-width:28px}
+.sys-name{font-size:14px;font-weight:600}
+.sys-body{padding:20px}
+.sys-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px}
+.code-block{background:#060612;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:8px}
+.code-head{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.code-lang{font-size:10px;font-weight:600;color:var(--purple)}
+.code-file{font-size:10px;color:var(--muted)}
+.code-body{padding:16px;overflow-x:auto}
+.code-body pre{font-family:var(--mono);font-size:12px;line-height:1.8;color:#c9d1d9;white-space:pre}
+.kw{color:#ff79c6}.cl{color:#50fa7b}.fn{color:#8be9fd}.st{color:#f1fa8c}.cm{color:#6272a4}.nu{color:#bd93f9}.tp{color:#ffb86c}
+.theme-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:8px}
+.theme-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px;text-align:center}
+.theme-card .icon{font-size:24px;margin-bottom:8px;display:block}
+.theme-card .name{font-size:12px;font-weight:600;margin-bottom:4px}
+.theme-card .status{font-size:10px;color:var(--muted)}
+.theme-card.current{border-color:var(--gold)}
+.footer-nav{padding:44px 0 60px;display:flex;justify-content:center}
+.footer-nav a{font-family:var(--pixel);font-size:7px;color:var(--purple);text-decoration:none;letter-spacing:2px;transition:color .2s}.footer-nav a:hover{color:var(--gold)}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-back">← 포트폴리오로</a>
+  <span class="nav-logo">JIUK.DEV</span>
+  <div class="nav-links">
+    <a href="https://github.com/SongJiUk/TowerDefense" target="_blank">GitHub</a>
+  </div>
+</nav>
+
+<main>
+<div class="container">
+
+  <section class="project-hero">
+    <span class="project-emoji">🏰</span>
+    <div class="project-label">INDIVIDUAL PROJECT</div>
+    <div class="wip-banner"><span class="wip-dot"></span>개발 진행 중</div>
+    <h1 class="project-title">3D 로그라이크 타워디펜스</h1>
+    <p class="project-subtitle">2.5D 카메라 · 웨이브 시스템 · 로그라이크 스킬 선택 · UniTask 비동기</p>
+    <div class="meta-row">
+      <span class="badge hi">2026.04 ~ 개발 진행 중</span>
+      <span class="badge">Unity 2022.3 LTS</span>
+      <span class="badge">1인 개발</span>
+      <span class="badge">PC (URP)</span>
+    </div>
+    <div class="link-row">
+      <a href="https://github.com/SongJiUk/TowerDefense" target="_blank" class="btn btn-outline">⌥ GitHub</a>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">🎮 프로젝트 개요</h2>
+    <div class="overview-quote">
+      3D 환경에서 2.5D(카메라 45도 고정) 시점으로 진행하는 <strong>로그라이크 타워디펜스</strong>입니다.<br>
+      웨이브마다 랜덤 스킬/타워를 선택하며 전략을 발전시켜 나가는 런 기반 플레이를 목표로 개발 중입니다.
+    </div>
+    <div class="meta-grid">
+      <div class="meta-card"><div class="lbl">PLATFORM</div><div class="val">PC (Unity URP)</div></div>
+      <div class="meta-card"><div class="lbl">STATUS</div><div class="val" style="color:var(--gold)">개발 진행 중</div></div>
+      <div class="meta-card"><div class="lbl">TEAM</div><div class="val">1인 개발</div></div>
+      <div class="meta-card"><div class="lbl">CAMERA</div><div class="val">2.5D (45도 고정)</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">🔄 게임 핵심 루프</h2>
+    <div class="game-loop">
+      <span class="loop-step">웨이브 시작</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step">적이 A* 경로로 코어 이동</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step">타워 배치 / 업그레이드</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step">웨이브 클리어</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step">랜덤 스킬 / 타워 선택</span>
+      <span class="loop-arrow">→</span>
+      <span class="loop-step">코어 HP 0 → 런 종료</span>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">📋 개발 현황</h2>
+    <div class="progress-block">
+      <div class="progress-title">✅ 완료</div>
+      <div class="progress-list">
+        <div class="progress-item done"><span class="dot"></span>Managers 싱글톤 패턴 구축</div>
+        <div class="progress-item done"><span class="dot"></span>ITickable / UpdateManager 중앙 집중식 업데이트 시스템</div>
+      </div>
+    </div>
+    <div class="progress-block">
+      <div class="progress-title">🔄 예정</div>
+      <div class="progress-list">
+        <div class="progress-item todo"><span class="dot"></span>A* 경로탐색</div>
+        <div class="progress-item todo"><span class="dot"></span>UniTask 기반 웨이브 시스템</div>
+        <div class="progress-item todo"><span class="dot"></span>타워 배치 / 업그레이드</div>
+        <div class="progress-item todo"><span class="dot"></span>로그라이크 스킬/타워 선택 UI</div>
+        <div class="progress-item todo"><span class="dot"></span>ObjectPool (적 / 투사체)</div>
+        <div class="progress-item todo"><span class="dot"></span>ScriptableObject 데이터 관리</div>
+        <div class="progress-item todo"><span class="dot"></span>Enum 기반 UI 자동 바인딩</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">⚙️ 구현된 시스템</h2>
+    <div class="sys-list">
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">01</span><span class="sys-name">ITickable / UpdateManager</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            개별 MonoBehaviour의 Update() 대신 중앙 UpdateManager가 ITickable 구현체를 일괄 호출합니다.
+            toAdd / toRemove 버퍼를 사용해 이터레이션 중 컬렉션 수정 문제를 안전하게 처리합니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">UpdateManager.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public interface</span> <span class="tp">ITickable</span>
+{
+    <span class="kw">void</span> <span class="fn">Tick</span>(<span class="kw">float</span> _deltaTime);
+}
+
+<span class="kw">public class</span> <span class="tp">UpdateManager</span> : <span class="tp">MonoBehaviour</span>
+{
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; tickables = <span class="kw">new</span>();
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toAdd = <span class="kw">new</span>();
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toRemove = <span class="kw">new</span>();
+
+    <span class="kw">public void</span> <span class="fn">Register</span>(<span class="tp">ITickable</span> _tickable)   => toAdd.<span class="fn">Add</span>(_tickable);
+    <span class="kw">public void</span> <span class="fn">UnRegister</span>(<span class="tp">ITickable</span> _tickable) => toRemove.<span class="fn">Add</span>(_tickable);
+
+    <span class="kw">private void</span> <span class="fn">Update</span>()
+    {
+        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toAdd) tickables.<span class="fn">Add</span>(t);
+        toAdd.<span class="fn">Clear</span>();
+        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toRemove) tickables.<span class="fn">Remove</span>(t);
+        toRemove.<span class="fn">Clear</span>();
+
+        <span class="kw">foreach</span> (<span class="kw">var</span> tick <span class="kw">in</span> tickables)
+            tick.<span class="fn">Tick</span>(<span class="tp">Time</span>.deltaTime);
+    }
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">🗺️ 스테이지 테마</h2>
+    <div class="theme-grid">
+      <div class="theme-card current">
+        <span class="icon">🌲</span>
+        <div class="name">숲 (Forest)</div>
+        <div class="status" style="color:var(--gold)">현재 개발 중</div>
+      </div>
+      <div class="theme-card">
+        <span class="icon">🏜️</span>
+        <div class="name">사막 (Desert)</div>
+        <div class="status">예정</div>
+      </div>
+      <div class="theme-card">
+        <span class="icon">❄️</span>
+        <div class="name">겨울 (Winter)</div>
+        <div class="status">예정</div>
+      </div>
+      <div class="theme-card">
+        <span class="icon">🔥</span>
+        <div class="name">던전 (Dungeon)</div>
+        <div class="status">예정</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-nav">
+    <a href="../index.html">← BACK TO PORTFOLIO</a>
+  </div>
+
+</div>
+</main>
+</body>
+</html>

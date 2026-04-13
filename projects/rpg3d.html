@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D RPG 개인 · JIUK SONG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080814;--bg2:#0d0d20;--surface:#1a1a38;--border:#252548;--border2:#383870;--text:#ddddf5;--muted:#5858a0;--dim:#383878;--gold:#f5c842;--cyan:#60a5fa;--green:#22c55e;--purple:#a78bfa;--coral:#ff6b6b;--pixel:'Press Start 2P',monospace;--sans:'Inter',sans-serif;--mono:'JetBrains Mono',monospace}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;line-height:1.7}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(transparent 0px,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 3px);pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(8,8,20,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.nav-back{font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}.nav-back:hover{color:var(--text)}
+.nav-logo{font-family:var(--pixel);font-size:8px;color:var(--gold);letter-spacing:1px}
+.nav-links a{font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s}.nav-links a:hover{color:var(--text)}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.project-hero{padding:96px 0 56px;border-bottom:1px solid var(--border)}
+.project-emoji{font-size:48px;margin-bottom:16px;display:block}
+.project-label{font-family:var(--pixel);font-size:6px;letter-spacing:4px;color:var(--cyan);margin-bottom:12px}
+.project-title{font-size:clamp(22px,4.5vw,38px);font-weight:700;letter-spacing:-.5px;line-height:1.2;margin-bottom:10px}
+.project-subtitle{font-size:14px;color:var(--muted);margin-bottom:22px}
+.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.badge{font-size:11px;font-weight:500;padding:4px 12px;border:1px solid var(--border2);border-radius:2px;color:var(--dim)}
+.badge.hi{border-color:var(--cyan);color:var(--cyan);background:rgba(96,165,250,.07)}
+.link-row{display:flex;gap:10px}
+.btn{font-size:12px;font-weight:600;padding:9px 20px;border-radius:2px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all .2s;border:none;cursor:pointer}
+.btn-primary{background:var(--gold);color:var(--bg)}.btn-primary:hover{background:#ffe070;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}.btn-outline:hover{border-color:var(--cyan);color:var(--cyan)}
+.screenshots{padding:44px 0;border-bottom:1px solid var(--border)}
+.sec-label{font-family:var(--pixel);font-size:6px;letter-spacing:4px;color:var(--muted);margin-bottom:18px}
+.img-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.img-grid img{width:100%;border-radius:4px;border:1px solid var(--border)}
+.section{padding:44px 0;border-bottom:1px solid var(--border)}
+.sec-title{font-size:18px;font-weight:700;margin-bottom:22px}
+.overview-quote{border-left:3px solid var(--cyan);padding:16px 20px;background:var(--bg2);border-radius:0 4px 4px 0;font-size:14px;line-height:1.8;margin-bottom:20px}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px}
+.meta-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px 16px}
+.meta-card .lbl{font-size:10px;color:var(--muted);margin-bottom:4px}
+.meta-card .val{font-size:13px;font-weight:600}
+.sys-list{display:flex;flex-direction:column;gap:20px}
+.sys-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.sys-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sys-num{font-family:var(--pixel);font-size:8px;color:var(--muted);min-width:28px}
+.sys-name{font-size:14px;font-weight:600}
+.sys-body{padding:20px}
+.sys-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:14px}
+.code-block{background:#060612;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:8px}
+.code-head{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between}
+.code-lang{font-size:10px;font-weight:600;color:var(--purple)}
+.code-file{font-size:10px;color:var(--muted)}
+.code-body{padding:16px;overflow-x:auto}
+.code-body pre{font-family:var(--mono);font-size:12px;line-height:1.8;color:#c9d1d9;white-space:pre}
+.kw{color:#ff79c6}.cl{color:#50fa7b}.fn{color:#8be9fd}.st{color:#f1fa8c}.cm{color:#6272a4}.nu{color:#bd93f9}.tp{color:#ffb86c}
+.role-list{display:flex;flex-direction:column;gap:8px}
+.role-item{font-size:13px;color:var(--muted);padding-left:16px;position:relative;line-height:1.6}
+.role-item::before{content:'▸';position:absolute;left:0;color:var(--cyan)}
+.footer-nav{padding:44px 0 60px;display:flex;justify-content:center}
+.footer-nav a{font-family:var(--pixel);font-size:7px;color:var(--purple);text-decoration:none;letter-spacing:2px;transition:color .2s}.footer-nav a:hover{color:var(--gold)}
+@media(max-width:600px){.img-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav>
+  <a href="../index.html" class="nav-back">← 포트폴리오로</a>
+  <span class="nav-logo">JIUK.DEV</span>
+  <div class="nav-links">
+    <a href="https://www.youtube.com/watch?v=_SKasgeYxo4" target="_blank">영상</a>
+  </div>
+</nav>
+
+<main>
+<div class="container">
+
+  <section class="project-hero">
+    <span class="project-emoji">🏰</span>
+    <div class="project-label">INDIVIDUAL PROJECT</div>
+    <h1 class="project-title">3D RPG 개인 프로젝트</h1>
+    <p class="project-subtitle">로그라이크 형식의 3D RPG · 퀘스트 · 상점 · 인벤토리 · 오브젝트 풀링</p>
+    <div class="meta-row">
+      <span class="badge hi">2021.05 – 2021.10</span>
+      <span class="badge">Unity</span>
+      <span class="badge">C#</span>
+      <span class="badge">1인 개발</span>
+      <span class="badge">PC</span>
+    </div>
+    <div class="link-row">
+      <a href="https://www.youtube.com/watch?v=_SKasgeYxo4" target="_blank" class="btn btn-primary">▶ 플레이 영상</a>
+    </div>
+  </section>
+
+  <section class="screenshots">
+    <div class="sec-label">SCREENSHOTS</div>
+    <div class="img-grid">
+      <img src="../images/3DRPG_Solo/3DRPG_Solo_1.png" alt="3D RPG 개인 1">
+      <img src="../images/3DRPG_Solo/3DRPG_Solo_2.png" alt="3D RPG 개인 2">
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">🎮 프로젝트 개요</h2>
+    <div class="overview-quote">
+      로그라이크 형식의 3D RPG 게임을 1인 개발했습니다.<br>
+      오브젝트 풀링으로 몬스터 생성 최적화, 퀘스트 수주·진행·완료 상태 관리, 상점 시스템(아이템 구매·판매·인벤토리 연동)을 직접 구현했습니다.
+    </div>
+    <div class="meta-grid">
+      <div class="meta-card"><div class="lbl">PLATFORM</div><div class="val">PC (Unity)</div></div>
+      <div class="meta-card"><div class="lbl">PERIOD</div><div class="val">약 6개월</div></div>
+      <div class="meta-card"><div class="lbl">TEAM</div><div class="val">1인 개발</div></div>
+      <div class="meta-card"><div class="lbl">GENRE</div><div class="val">3D RPG</div></div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">🛠️ 구현 내용</h2>
+    <div class="role-list">
+      <div class="role-item">사냥터 이동 및 씬 전환 시스템 구현 (PlayerPrefs 기반 데이터 유지)</div>
+      <div class="role-item">퀘스트 수주·진행·완료 상태 관리 시스템 구현</div>
+      <div class="role-item">상점 시스템 — 아이템 구매/판매, 인벤토리 연동, 장비 합성·강화</div>
+      <div class="role-item">ObjectPool 기반 몬스터 반복 생성 최적화</div>
+    </div>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">⚙️ 핵심 시스템</h2>
+    <div class="sys-list">
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">01</span><span class="sys-name">퀘스트 상태 관리 시스템</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            퀘스트를 NotStarted / InProgress / Completed 세 가지 상태로 관리합니다.
+            조건 리스트를 순회해 모든 조건이 충족되면 자동으로 완료 처리됩니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">QuestSystem.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public enum</span> <span class="tp">QuestState</span>
+{
+    NotStarted, InProgress, Completed
+}
+
+<span class="kw">public class</span> <span class="tp">QuestSystem</span>
+{
+    <span class="kw">public void</span> <span class="fn">CheckCompletion</span>(<span class="tp">Quest</span> q)
+    {
+        <span class="kw">if</span> (q.State != <span class="tp">QuestState</span>.InProgress) <span class="kw">return</span>;
+
+        <span class="kw">bool</span> done = q.Conditions.<span class="fn">All</span>(c => c.<span class="fn">IsMet</span>());
+        <span class="kw">if</span> (done) q.State = <span class="tp">QuestState</span>.Completed;
+    }
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">02</span><span class="sys-name">ObjectPool — 몬스터 풀 관리</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            몬스터를 매 프레임 생성/파괴하는 대신 ObjectPool로 재사용해 GC 부하를 줄였습니다.
+            OnCreate/OnGet/OnRelease/OnDestroy 콜백을 각각 구현해 상태를 명확히 관리합니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">PoolManager.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public class</span> <span class="tp">PoolManager</span> : <span class="tp">MonoBehaviour</span>
+{
+    [<span class="tp">SerializeField</span>] <span class="kw">private</span> <span class="tp">Monster</span> _prefab;
+    <span class="tp">ObjectPool</span>&lt;<span class="tp">Monster</span>&gt; _pool;
+
+    <span class="kw">void</span> <span class="fn">Awake</span>()
+    {
+        _pool = <span class="kw">new</span> <span class="tp">ObjectPool</span>&lt;<span class="tp">Monster</span>&gt;(
+            createFunc:      () => <span class="fn">Instantiate</span>(_prefab),
+            actionOnGet:     m  => m.gameObject.<span class="fn">SetActive</span>(<span class="kw">true</span>),
+            actionOnRelease: m  => m.gameObject.<span class="fn">SetActive</span>(<span class="kw">false</span>),
+            actionOnDestroy: m  => <span class="fn">Destroy</span>(m.gameObject),
+            maxSize: <span class="nu">100</span>
+        );
+    }
+
+    <span class="kw">public</span> <span class="tp">Monster</span> <span class="fn">Spawn</span>(<span class="tp">Vector3</span> pos)
+    {
+        <span class="tp">Monster</span> m = _pool.<span class="fn">Get</span>();
+        m.transform.position = pos;
+        <span class="kw">return</span> m;
+    }
+
+    <span class="kw">public void</span> <span class="fn">Return</span>(<span class="tp">Monster</span> m)
+        => _pool.<span class="fn">Release</span>(m);
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">03</span><span class="sys-name">씬 전환 & 데이터 유지</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            사냥터 이동 등 씬 전환 시 PlayerPrefs로 플레이어 데이터를 유지합니다.
+            로딩 화면을 구현해 씬 로드 중 빈 화면이 노출되지 않도록 처리했습니다.
+          </p>
+          <div class="role-list">
+            <div class="role-item">씬 간 PlayerPrefs 기반 핵심 데이터(체력, 경험치, 스탯) 유지</div>
+            <div class="role-item">비동기 씬 로드 + 로딩 화면 구현</div>
+            <div class="role-item">씬 로드 완료 후 플레이어 스폰 포인트 지정</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">04</span><span class="sys-name">상점 + 인벤토리 시스템</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            아이템 구매·판매, 인벤토리 연동, 장비 합성·강화 기능을 구현했습니다.
+            드래그앤드롭 방식의 인벤토리 UI와 아이템 툴팁을 제작했습니다.
+          </p>
+          <div class="role-list">
+            <div class="role-item">상점 구매/판매 및 골드 연동</div>
+            <div class="role-item">인벤토리 드래그앤드롭 UI 구현</div>
+            <div class="role-item">장비 합성 및 강화 시스템</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="footer-nav">
+    <a href="../index.html">← BACK TO PORTFOLIO</a>
+  </div>
+
+</div>
+</main>
+</body>
+</html>

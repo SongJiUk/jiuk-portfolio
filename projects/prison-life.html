@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prison Life · JIUK SONG</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#080814;--bg2:#0d0d20;--bg3:#141428;--surface:#1a1a38;
+  --border:#252548;--border2:#383870;--text:#ddddf5;--muted:#5858a0;
+  --dim:#383878;--gold:#f5c842;--cyan:#00d4ff;--green:#22c55e;
+  --purple:#a78bfa;--coral:#ff6b6b;
+  --pixel:'Press Start 2P',monospace;--sans:'Inter',sans-serif;--mono:'JetBrains Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;line-height:1.7}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(transparent 0px,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 3px);pointer-events:none;z-index:9999}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg2)}::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(8,8,20,.94);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.nav-back{font-size:12px;font-weight:500;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:6px;transition:color .2s}
+.nav-back:hover{color:var(--text)}
+.nav-logo{font-family:var(--pixel);font-size:8px;color:var(--gold);letter-spacing:1px}
+.nav-links{display:flex;gap:16px}
+.nav-links a{font-size:11px;color:var(--muted);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--text)}
+
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+
+.project-hero{padding:96px 0 56px;border-bottom:1px solid var(--border)}
+.project-emoji{font-size:48px;margin-bottom:16px;display:block}
+.project-label{font-family:var(--pixel);font-size:6px;letter-spacing:4px;color:var(--purple);margin-bottom:12px}
+.project-title{font-size:clamp(26px,5vw,42px);font-weight:700;letter-spacing:-.5px;line-height:1.2;margin-bottom:10px}
+.project-subtitle{font-size:14px;color:var(--muted);margin-bottom:22px}
+.meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+.badge{font-size:11px;font-weight:500;padding:4px 12px;border:1px solid var(--border2);border-radius:2px;color:var(--dim)}
+.badge.hi{border-color:var(--purple);color:var(--purple);background:rgba(167,139,250,.08)}
+.link-row{display:flex;gap:10px}
+.btn{font-size:12px;font-weight:600;padding:9px 20px;border-radius:2px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all .2s;cursor:pointer;border:none}
+.btn-primary{background:var(--gold);color:var(--bg)}
+.btn-primary:hover{background:#ffe070;transform:translateY(-1px)}
+.btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}
+.btn-outline:hover{border-color:var(--purple);color:var(--purple)}
+
+.screenshots{padding:44px 0;border-bottom:1px solid var(--border)}
+.sec-label{font-family:var(--pixel);font-size:6px;letter-spacing:4px;color:var(--muted);margin-bottom:18px}
+.img-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px}
+.img-grid img{width:100%;border-radius:4px;border:1px solid var(--border);display:block;transition:transform .2s}
+.img-grid img:hover{transform:scale(1.02)}
+.img-single img{max-width:100%;border-radius:4px;border:1px solid var(--border);display:block}
+
+.section{padding:44px 0;border-bottom:1px solid var(--border)}
+.sec-title{font-size:18px;font-weight:700;margin-bottom:22px;display:flex;align-items:center;gap:10px}
+
+.overview-quote{border-left:3px solid var(--purple);padding:16px 20px;background:var(--bg2);border-radius:0 4px 4px 0;font-size:14px;line-height:1.8;margin-bottom:20px}
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:20px}
+.meta-card{background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:14px 16px}
+.meta-card .lbl{font-size:10px;color:var(--muted);margin-bottom:4px;letter-spacing:.5px}
+.meta-card .val{font-size:13px;font-weight:600}
+
+.flow-steps{display:flex;flex-direction:column}
+.flow-step{display:flex;gap:16px;align-items:flex-start}
+.flow-left{display:flex;flex-direction:column;align-items:center;min-width:32px}
+.flow-dot{width:32px;height:32px;border-radius:50%;background:var(--surface);border:2px solid var(--purple);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;font-weight:700;color:var(--purple)}
+.flow-line{width:2px;flex:1;min-height:24px;background:linear-gradient(to bottom,var(--border2),transparent)}
+.flow-content{padding:4px 0 28px;flex:1}
+.flow-content h4{font-size:14px;font-weight:600;margin-bottom:4px}
+.flow-content p{font-size:13px;color:var(--muted)}
+
+.sys-list{display:flex;flex-direction:column;gap:28px}
+.sys-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+.sys-head{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.sys-num{font-family:var(--pixel);font-size:8px;color:var(--muted);min-width:28px}
+.sys-name{font-size:14px;font-weight:600}
+.sys-body{padding:20px}
+.sys-desc{font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:16px}
+.sys-img{width:100%;border-radius:4px;border:1px solid var(--border);margin:12px 0}
+.sys-img-cap{font-size:11px;color:var(--muted);text-align:center;margin-top:-6px;margin-bottom:12px}
+.hl{background:var(--surface);padding:1px 6px;border-radius:3px;font-family:var(--mono);font-size:11px;color:var(--purple)}
+
+.code-block{background:#060612;border:1px solid var(--border);border-radius:4px;overflow:hidden;margin-top:8px}
+.code-head{padding:8px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.code-lang{font-size:10px;font-weight:600;color:var(--purple)}
+.code-file{font-size:10px;color:var(--muted)}
+.code-body{padding:16px;overflow-x:auto}
+.code-body pre{font-family:var(--mono);font-size:12px;line-height:1.8;color:#c9d1d9;white-space:pre}
+.kw{color:#ff79c6}.cl{color:#50fa7b}.fn{color:#8be9fd}.st{color:#f1fa8c}.cm{color:#6272a4}.nu{color:#bd93f9}.tp{color:#ffb86c}
+
+.trouble-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:16px}
+.trouble-row{padding:14px 18px;display:flex;align-items:flex-start;gap:10px}
+.trouble-row+.trouble-row{border-top:1px solid var(--border)}
+.trouble-row.problem{background:rgba(255,107,107,.04)}
+.trouble-tag{font-size:10px;font-weight:700;letter-spacing:.4px;min-width:44px;padding-top:2px}
+.trouble-row.problem .trouble-tag{color:var(--coral)}
+.trouble-row.solution .trouble-tag{color:var(--green)}
+.trouble-txt{font-size:13px;line-height:1.7}
+
+.folder-tree{background:#060612;border:1px solid var(--border);border-radius:4px;padding:20px;font-family:var(--mono);font-size:12px;line-height:2;overflow-x:auto}
+.folder-tree .dir{color:#50fa7b}
+.folder-tree .cmt{color:#6272a4}
+
+.retro-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:600px){.retro-grid{grid-template-columns:1fr}}
+.retro-card{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:20px}
+.retro-card.good{border-top:2px solid var(--green)}
+.retro-card.bad{border-top:2px solid var(--coral)}
+.retro-card h4{font-size:13px;font-weight:700;margin-bottom:14px}
+.retro-card.good h4{color:var(--green)}
+.retro-card.bad h4{color:var(--coral)}
+.retro-card ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.retro-card li{font-size:13px;color:var(--muted);padding-left:16px;position:relative;line-height:1.6}
+.retro-card.good li::before{content:'✓';position:absolute;left:0;color:var(--green)}
+.retro-card.bad li::before{content:'△';position:absolute;left:0;color:var(--coral)}
+
+.footer-nav{padding:44px 0 60px;display:flex;justify-content:center}
+.footer-nav a{font-family:var(--pixel);font-size:7px;color:var(--purple);text-decoration:none;letter-spacing:2px;transition:color .2s}
+.footer-nav a:hover{color:var(--gold)}
+
+@media(max-width:680px){
+  .project-title{font-size:26px}
+  .img-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="../index.html" class="nav-back">← 포트폴리오로</a>
+  <span class="nav-logo">JIUK.DEV</span>
+  <div class="nav-links">
+    <a href="https://github.com/SongJiUk/AssignmentGame" target="_blank">GitHub</a>
+    <a href="https://youtu.be/eDnIBZUNspc" target="_blank">영상</a>
+  </div>
+</nav>
+
+<main>
+<div class="container">
+
+  <!-- HERO -->
+  <section class="project-hero">
+    <span class="project-emoji">🏢</span>
+    <div class="project-label">INDIVIDUAL PROJECT</div>
+    <h1 class="project-title">Prison Life</h1>
+    <p class="project-subtitle">슈퍼센트 Ad-Dev 클라이언트 개발자(인턴) 채용 과제 · 1주일 개발</p>
+    <div class="meta-row">
+      <span class="badge hi">2026.03.30 – 04.04</span>
+      <span class="badge">Unity 2022.3 LTS</span>
+      <span class="badge">1인 개발</span>
+      <span class="badge">PC</span>
+    </div>
+    <div class="link-row">
+      <a href="https://youtu.be/eDnIBZUNspc" target="_blank" class="btn btn-primary">▶ 플레이 영상</a>
+      <a href="https://github.com/SongJiUk/AssignmentGame" target="_blank" class="btn btn-outline">⌥ GitHub</a>
+    </div>
+  </section>
+
+  <!-- SCREENSHOTS -->
+  <section class="screenshots">
+    <div class="sec-label">SCREENSHOTS</div>
+    <div class="img-grid">
+      <img src="../images/PrisonLife/PrisonLife_1.png" alt="Prison Life 스크린샷 1">
+      <img src="../images/PrisonLife/PrisonLife_2.png" alt="Prison Life 스크린샷 2">
+    </div>
+  </section>
+
+  <!-- OVERVIEW -->
+  <section class="section">
+    <h2 class="sec-title">🎮 프로젝트 개요</h2>
+    <div class="overview-quote">
+      Prison Life는 광석 채굴부터 수감자 수용까지 자동화되는 Ad-Dev 게임입니다.<br>
+      슈퍼센트 Ad-Dev 클라이언트 개발자(인턴) 채용 과제로 <strong>1주일</strong> 안에 개발했습니다.
+    </div>
+    <div class="meta-grid">
+      <div class="meta-card"><div class="lbl">PLATFORM</div><div class="val">Unity 2022.3 LTS (PC)</div></div>
+      <div class="meta-card"><div class="lbl">PERIOD</div><div class="val">약 1주일</div></div>
+      <div class="meta-card"><div class="lbl">TEAM</div><div class="val">1인 개발</div></div>
+      <div class="meta-card"><div class="lbl">ROLE</div><div class="val">전체 설계 및 구현</div></div>
+    </div>
+  </section>
+
+  <!-- GAME FLOW -->
+  <section class="section">
+    <h2 class="sec-title">🔄 게임 플로우</h2>
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot">1</div><div class="flow-line"></div></div>
+        <div class="flow-content"><h4>광석 채굴</h4><p>광부(MiningWorker)가 광석 구역에서 광석을 채굴합니다</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot">2</div><div class="flow-line"></div></div>
+        <div class="flow-content"><h4>수갑 제작</h4><p>채굴한 광석을 기계에 투입해 수갑으로 변환합니다</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot">3</div><div class="flow-line"></div></div>
+        <div class="flow-content"><h4>수감자 구역 이동</h4><p>간부(Jailer)가 수갑을 수감자 구역으로 운반합니다</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot">4</div><div class="flow-line"></div></div>
+        <div class="flow-content"><h4>수입 발생</h4><p>수감자 수용 완료 시 골드 수입이 발생합니다</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot">5</div><div class="flow-line"></div></div>
+        <div class="flow-content"><h4>자동화 확장</h4><p>무기 업그레이드 / 광부·간부 고용으로 자동화를 확장합니다</p></div>
+      </div>
+      <div class="flow-step">
+        <div class="flow-left"><div class="flow-dot">6</div></div>
+        <div class="flow-content"><h4>감옥 업그레이드</h4><p>감옥 정원이 가득 찼을 때 골드를 지불해 수용 인원을 늘립니다</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CORE SYSTEMS -->
+  <section class="section">
+    <h2 class="sec-title">⚙️ 핵심 시스템</h2>
+    <div class="sys-list">
+
+      <!-- 01 UniTask -->
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">01</span><span class="sys-name">UniTask 기반 NPC 자동화 루프</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            간부(Jailer)는 수갑이 쌓일 때까지 대기 → 수감자 구역으로 이동 → 전달 완료 후 반복.
+            코루틴 없이 <strong>UniTask</strong> async/await 패턴으로 구현했습니다.
+            <span class="hl">UniTask.WaitUntil()</span>로 조건 대기를 처리해 코드 가독성과 흐름 제어를 모두 확보했습니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">JailerController.cs</span></div>
+            <div class="code-body"><pre><span class="kw">async</span> <span class="tp">UniTaskVoid</span> <span class="fn">AsyncWalkJailer</span>()
+{
+    <span class="kw">while</span> (<span class="kw">true</span>)
+    {
+        <span class="kw">if</span> (handCuffStack.Count == <span class="nu">0</span>)
+        {
+            <span class="kw">await</span> <span class="fn">AsyncMoveToPosition</span>(handCuffZone.transform.position);
+            <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => handCuffStack.Count >= HandCuffLine);
+        }
+
+        <span class="kw">await</span> <span class="fn">AsyncMoveToPosition</span>(prisonerZone.transform.position);
+        <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => handCuffStack.Count == <span class="nu">0</span>);
+        <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => prisonerZone.HandCuffCount == <span class="nu">0</span>);
+    }
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 IHandCuff -->
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">02</span><span class="sys-name">IHandCuff 인터페이스 기반 수갑 전달</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            수갑을 주는 쪽(<span class="hl">IHandCuffGiver</span>)과 받는 쪽(<span class="hl">IHandCuffReceiver</span>)을
+            인터페이스로 분리해 결합도를 낮췄습니다.
+            전달 로직이 구체 클래스에 의존하지 않아 수감자, 보관함 등 다양한 수신자에 재사용 가능합니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">IHandCuff.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public interface</span> <span class="tp">IHandCuffGiver</span>
+{
+    <span class="kw">void</span> <span class="fn">GiveHandCuff</span>(<span class="tp">IHandCuffReceiver</span> receiver);
+}
+
+<span class="kw">public interface</span> <span class="tp">IHandCuffReceiver</span>
+{
+    <span class="kw">void</span> <span class="fn">ReceiveHandCuff</span>(<span class="kw">int</span> amount);
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 DOTween -->
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">03</span><span class="sys-name">DOTween 포물선 연출 (DOJump)</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            수갑이 수감자 머리 위로 날아가는 연출을 <strong>DOJump</strong>로 구현했습니다.
+            애니메이션 완료 콜백으로 수감자에게 수갑을 전달하는 로직을 체이닝해 타이밍을 보장합니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">HandCuffZone.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public void</span> <span class="fn">GiveHandCuff</span>(<span class="tp">IHandCuffReceiver</span> _receiver)
+{
+    <span class="kw">var</span> handCuff = _handCuffStack.Pop();
+
+    handCuff.<span class="fn">DOJump</span>(
+        _receiver.HandCuffPosition,
+        jumpPower: <span class="nu">1f</span>,
+        numJumps: <span class="nu">1</span>,
+        duration: <span class="nu">0.1f</span>
+    ).<span class="fn">OnComplete</span>(() =>
+    {
+        _receiver.<span class="fn">AddHandCuff</span>(handCuff);
+    });
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 ScriptableObject -->
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">04</span><span class="sys-name">ScriptableObject 데이터 관리</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            방(Room) 데이터를 <strong>ScriptableObject</strong>로 외부화했습니다.
+            <span class="hl">nextLevel</span> 필드로 레벨 체인을 연결해 업그레이드 시 다음 단계 데이터를 바로 참조합니다.
+            MonoBehaviour에 수치를 하드코딩하지 않아 기획 변경에 유연하게 대응할 수 있습니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">RoomData.cs</span></div>
+            <div class="code-body"><pre>[<span class="fn">CreateAssetMenu</span>(fileName = <span class="st">"PurchaseZoneData"</span>, menuName = <span class="st">"Data/RoomData"</span>)]
+<span class="kw">public class</span> <span class="tp">RoomData</span> : <span class="tp">ScriptableObject</span>
+{
+    <span class="kw">public int</span> maxCount;
+    <span class="kw">public</span> <span class="tp">RoomData</span> nextLevel;
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 업그레이드 -->
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">05</span><span class="sys-name">감옥 업그레이드 시스템</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            감옥 정원이 가득 차면 골드를 지불해 수용 인원을 늘릴 수 있습니다.
+            <span class="hl">RoomData.nextLevel</span>을 참조해 업그레이드 비용과 최대 수용 인원을 단계별로 적용합니다.
+            업그레이드 버튼은 골드가 부족하거나 정원이 차지 않으면 비활성화됩니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 06 ObjectPool -->
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">06</span><span class="sys-name">ObjectPool (Unity 2021+)</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            수갑 아이템처럼 반복 생성·파괴되는 오브젝트는 Unity 내장
+            <span class="hl">ObjectPool&lt;T&gt;</span>로 재사용했습니다.
+            <strong>Destroy</strong> 대신 <strong>pool.Release()</strong>를 호출해 GC 부하를 줄이고
+            런타임 메모리를 안정적으로 유지했습니다.
+          </p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- TROUBLESHOOTING -->
+  <section class="section">
+    <h2 class="sec-title">🐛 트러블슈팅</h2>
+
+    <div class="trouble-item">
+      <div class="trouble-row problem">
+        <span class="trouble-tag">문제</span>
+        <span class="trouble-txt">DOTween 애니메이션이 끝나기 전에 스택에서 <span class="hl">Pop()</span>이 호출되어, 맨 아래 슬롯이 순간적으로 비어 보이는 시각 버그 발생</span>
+      </div>
+      <div class="trouble-row solution">
+        <span class="trouble-tag">임시</span>
+        <span class="trouble-txt">게임 시작 시 <span class="hl">Delay(500ms)</span> 대기 추가</span>
+      </div>
+      <div class="trouble-row solution">
+        <span class="trouble-tag">근본</span>
+        <span class="trouble-txt"><span class="hl">AsyncWaitForCompletion()</span>으로 애니메이션 완료를 await한 뒤 Pop 호출</span>
+      </div>
+    </div>
+
+    <div class="code-block">
+      <div class="code-head"><span class="code-lang">C#</span><span class="code-file">개선 코드</span></div>
+      <div class="code-body"><pre><span class="cm">// Before: 타이밍 불일치로 시각 버그</span>
+obj.transform.<span class="fn">DOMove</span>(target.position, <span class="nu">0.4f</span>);
+_stack.<span class="fn">Pop</span>();
+
+<span class="cm">// After: 애니메이션 완료 후 Pop</span>
+<span class="kw">await</span> obj.transform.<span class="fn">DOMove</span>(target.position, <span class="nu">0.4f</span>).<span class="fn">AsyncWaitForCompletion</span>();
+_stack.<span class="fn">Pop</span>();</pre></div>
+    </div>
+  </section>
+
+  <!-- FOLDER STRUCTURE -->
+  <section class="section">
+    <h2 class="sec-title">📁 폴더 구조</h2>
+    <div class="folder-tree"><pre><span class="dir">Assets/Scripts/</span>
+├── <span class="dir">Controller/</span>    <span class="cmt"># JailerController, MiningWorkerController, ...</span>
+├── <span class="dir">Manager/</span>       <span class="cmt"># Managers, GameManager, PoolManager, UIManager, ...</span>
+├── <span class="dir">Data/</span>          <span class="cmt"># PurchaseZoneData, RoomData, WeaponData (ScriptableObject)</span>
+└── <span class="dir">Interface/</span>     <span class="cmt"># IHandCuffReceiver, IHandCuffGiver</span></pre></div>
+  </section>
+
+  <!-- RETROSPECTIVE -->
+  <section class="section">
+    <h2 class="sec-title">💬 회고</h2>
+    <div class="retro-grid">
+      <div class="retro-card good">
+        <h4>잘한 점</h4>
+        <ul>
+          <li>UniTask async/await 패턴으로 코루틴 없이 NPC 루프 구현</li>
+          <li>인터페이스로 수갑 전달 시스템을 유연하게 설계</li>
+          <li>ScriptableObject로 데이터와 로직 분리</li>
+        </ul>
+      </div>
+      <div class="retro-card bad">
+        <h4>아쉬운 점</h4>
+        <ul>
+          <li>UI 바인딩 미완성 (빠른 프로토타입 우선)</li>
+          <li>DOTween 타이밍 버그를 Delay(500ms)로 임시 해결 → AsyncWaitForCompletion()으로 개선 필요</li>
+          <li>1주일이라는 짧은 기간 안에 완성도보다 동작 우선으로 개발</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer-nav">
+    <a href="../index.html">← BACK TO PORTFOLIO</a>
+  </div>
+
+</div>
+</main>
+</body>
+</html>

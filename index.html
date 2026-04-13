@@ -1507,7 +1507,8 @@ if(p.images&&p.images.length>0){
     <div class="wcard-desc">${p.shortDesc}</div>
     <div class="wcard-tags">${p.tags.slice(0,4).map(t=>`<span class="wtag">${t}</span>`).join('')}</div>
     <div class="wcard-arrow">→</div>`;
-  card.addEventListener('click',()=>openDetail(p.id));
+  const pageMap={prison:'projects/prison-life.html',tower:'projects/tower-defense.html',idle:'projects/idle-game.html',shooter:'projects/top-down-shooting.html',collab:'projects/collab-rpg.html',company:'projects/company.html',rpg3d:'projects/rpg3d.html'};
+  card.addEventListener('click',()=>{ if(pageMap[p.id]) window.location.href=pageMap[p.id]; else openDetail(p.id); });
   wg.appendChild(card);
 });
 
