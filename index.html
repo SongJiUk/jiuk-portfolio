@@ -1179,9 +1179,12 @@ function renderDetail(p){
   if(realImgs.length>0){
     // 실제 이미지 모드
     main.style.display='none';
+    const oldImg=main.parentNode.querySelector('img.main-screenshot');
+    if(oldImg)oldImg.remove();
     const mainImg=document.createElement('img');
+    mainImg.className='main-screenshot';
     mainImg.src=realImgs[0];mainImg.alt='screenshot';
-    mainImg.style.cssText='width:100%;height:240px;object-fit:cover;border:1px solid var(--border);display:block;margin-bottom:9px;cursor:zoom-in;background:var(--bg3)';
+    mainImg.style.cssText='width:100%;height:240px;object-fit:contain;border:1px solid var(--border);display:block;margin-bottom:9px;cursor:zoom-in;background:var(--bg3)';
     mainImg.onclick=()=>{const lb=document.getElementById('lightbox');lb.innerHTML='';const lbimg=document.createElement('img');lbimg.src=mainImg.src;lbimg.style.cssText='max-width:90vw;max-height:80vh;border:1px solid var(--border2)';lb.appendChild(lbimg);lb.classList.add('show');lb.onclick=()=>lb.classList.remove('show');};
     main.parentNode.insertBefore(mainImg,main);
     realImgs.forEach((url,i)=>{
