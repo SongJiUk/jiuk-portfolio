@@ -483,7 +483,7 @@ const PROJECTS = [
     year:'2025~2026',
     platform:'Android / iOS',
     duration:'5개월',
-    isLatest:true,
+    isLatest:false,
     shortDesc:'Firebase, UniTask, IAP/AdMob 등 실서비스 수준 SDK를 직접 연동한 1인 개발 방치형 RPG.',
     desc:'Unity C#으로 개발한 1인 개발 모바일 방치형 RPG. 자동 전투, 강화, 던전, 가챠 등 핵심 콘텐츠 구현과 함께 Firebase, IAP, AdMob 등 실서비스 수준의 외부 SDK를 직접 연동했습니다.',
     systems:[
@@ -755,6 +755,62 @@ const PROJECTS = [
     ],
     zoneX:37, zoneY:29, zoneW:8, zoneH:7,
     tileTheme:'city'
+  },
+
+  {
+    id:'prison',
+    name:'Prison Life',
+    emoji:'🏢',
+    subtitle:'슈퍼센트 Ad-Dev 과제 · 2026.03 ~ 04',
+    color:'#a78bfa',
+    zoneColor:0x3a1a4a,
+    year:'2026',
+    platform:'PC',
+    duration:'1주일',
+    isLatest:true,
+    shortDesc:'광석 채굴부터 수감자 수용까지 자동화. UniTask async/await 기반 NPC 자동화 루프와 IHandCuff 인터페이스로 구현한 아이들 경영 시뮬레이션.',
+    desc:'슈퍼센트 Ad-Dev 클라이언트 개발자(인턴) 채용 과제. 광부→수갑 제작→간부 운반→수감자 수용 흐름을 UniTask async/await로 완전 자동화. IHandCuff 인터페이스로 수갑 전달 시스템 설계, ObjectPool·DOTween·ScriptableObject 적용.',
+    systems:[
+      {icon:'⚡',name:'UniTask NPC 자동화 루프',desc:'코루틴 없이 async/await 패턴으로 광부·간부 NPC의 이동·대기·전달을 while(true) 루프로 처리. CancellationToken으로 OnDisable 시 안전 해제.'},
+      {icon:'🔗',name:'IHandCuff 인터페이스 설계',desc:'IHandCuffGiver / IHandCuffReceiver 분리로 수갑 전달 시스템 결합도 최소화. NPC 간 직접 참조 없이 인터페이스만으로 통신.'},
+      {icon:'✨',name:'DOTween 스폰 연출',desc:'광석·수갑·돈이 해당 구역으로 날아가는 연출. ObjectPool + OnComplete 콜백으로 애니메이션 완료 후 Release 처리.'},
+      {icon:'📋',name:'ScriptableObject 데이터 관리',desc:'방(RoomData)·구매구역(PurchaseZoneData)·무기(WeaponData)를 ScriptableObject로 분리. MonoBehaviour 하드코딩 제거.'},
+      {icon:'♻️',name:'ObjectPool 자원 관리',desc:'광석·수갑 등 반복 생성 오브젝트를 Unity ObjectPool<T>로 재사용. Destroy 호출 없이 pool.Release()로 반환.'},
+    ],
+    codeSnippets:[
+      {title:'UniTask 간부 자동화 루프',file:'JailerController.cs',
+       code:`<span class="kw">async</span> <span class="tp">UniTaskVoid</span> <span class="fn">AsyncWalkJailer</span>()
+{
+    <span class="kw">while</span> (<span class="kw">true</span>)
+    {
+        <span class="kw">if</span> (handCuffStack.Count == <span class="nm">0</span>)
+        {
+            <span class="kw">await</span> <span class="fn">AsyncMoveToPosition</span>(handCuffZone.transform.position);
+            <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => handCuffStack.Count >= HandCuffLine);
+        }
+        <span class="kw">await</span> <span class="fn">AsyncMoveToPosition</span>(prisonerZone.transform.position);
+        <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => handCuffStack.Count == <span class="nm">0</span>);
+        <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">WaitUntil</span>(() => prisonerZone.HandCuffCount == <span class="nm">0</span>);
+    }
+}`},
+      {title:'IHandCuff 인터페이스',file:'IHandCuffInterface.cs',
+       code:`<span class="kw">public interface</span> <span class="tp">IHandCuffGiver</span>
+{
+    <span class="kw">void</span> <span class="fn">GiveHandCuff</span>(<span class="tp">IHandCuffReceiver</span> receiver);
+}
+
+<span class="kw">public interface</span> <span class="tp">IHandCuffReceiver</span>
+{
+    <span class="kw">void</span> <span class="fn">ReceiveHandCuff</span>(<span class="kw">int</span> amount);
+}`},
+    ],
+    tags:['Unity','C#','UniTask','DOTween','ScriptableObject','ObjectPool'],
+    notion:'https://www.notion.so/341ea58668dd819fa009eec04dd07362',
+    github:'https://github.com/SongJiUk/AssignmentGame',
+    youtube:null,
+    images:[],
+    zoneX:26, zoneY:29, zoneW:8, zoneH:7,
+    tileTheme:'prison'
   },
 
   {
@@ -1637,6 +1693,30 @@ function drawZoneProps(p){
     // 노트북 (앞에)
     ctx.fillStyle='#222233'; ctx.fillRect(sx+zw/2-T2*2|0,sy+zh/2+T2*2,T2*4,T2);
     ctx.fillStyle='#00d4ff'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2+T2*2+1,T2*2,T2-2);
+  }
+  else if(p.tileTheme==='prison'){
+    // 철창 (좌우)
+    [sx+T2, sx+zw-T2*2].forEach(bx=>{
+      ctx.fillStyle='#2a1a3a'; ctx.fillRect(bx,sy+T2,T2,zh-T2*2);
+      ctx.fillStyle='#4a2a6a'; ctx.fillRect(bx,sy+T2,T2/4|0,zh-T2*2);
+      ctx.fillStyle='#5a3a7a'; ctx.fillRect(bx+T2/4*3|0,sy+T2,T2/4|0,zh-T2*2);
+      for(let i=0;i<4;i++){
+        ctx.fillStyle='#333355'; ctx.fillRect(bx,sy+T2*(2+i*2),T2,T2/2|0);
+      }
+    });
+    // 경보등 (빨간 깜빡임)
+    const alarm=Math.abs(Math.sin(t/600));
+    ctx.globalAlpha=alarm*0.25;
+    ctx.fillStyle='#ff2222'; ctx.fillRect(sx,sy,zw,zh);
+    ctx.globalAlpha=1;
+    const alarmOn=Math.sin(t/600)>0;
+    ctx.fillStyle=alarmOn?'#ff4444':'#441111';
+    ctx.fillRect(sx+zw/2-T2|0,sy+T2,T2*2,T2);
+    // NPC 간부 (순찰)
+    const bob6=Math.sin(t/500)*0.5|0;
+    ctx.fillStyle='#ccaa88'; ctx.fillRect(sx+T2*3,sy+zh/2-T2*2+bob6,T2*2,T2*2);
+    ctx.fillStyle='#1a1a4a'; ctx.fillRect(sx+T2*3,sy+zh/2+bob6,T2*2,T2*3);
+    ctx.fillStyle='#cccccc'; ctx.fillRect(sx+T2*5,sy+zh/2+T2+bob6,2,T2*2);
   }
 }
 const TILE_BG=[
