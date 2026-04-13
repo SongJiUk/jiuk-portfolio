@@ -260,7 +260,12 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
 
 @media(max-width:900px){
   .map-pane{flex:1}
-  .side-panel{position:fixed;top:52px;right:0;bottom:0;width:88vw!important;max-width:400px;z-index:400;box-shadow:-8px 0 32px rgba(0,0,0,0.6);transform:translateX(100%)}
+  #explorer{height:auto;min-height:0;padding:72px 0 0}
+  .explorer-split{height:56vh;min-height:300px}
+  .explorer-header{padding:0 16px 10px}
+  .explorer-title{font-size:16px}
+  .explorer-hint{display:none}
+  .side-panel{position:fixed;top:52px;right:0;bottom:0;width:90vw!important;max-width:400px;z-index:400;box-shadow:-8px 0 32px rgba(0,0,0,0.7);transform:translateX(100%)}
   .side-panel.open{transform:translateX(0)}
   .about-inner,.detail-grid{grid-template-columns:1fr}
   nav{padding:0 16px}
@@ -268,6 +273,7 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
   #works-section,#skills-section,#about-section,#contact-section{padding:60px 20px}
   .detail-hero,.detail-body{padding:40px 20px}
   footer{flex-direction:column;gap:6px;text-align:center}
+  .works-grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -445,14 +451,14 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
 
 <script>
 // ══════════════════════════════════════════
-// REAL PROJECT DATA (from Notion)
+// PROJECT DATA (Notion 기반 실제 데이터)
 // ══════════════════════════════════════════
 const PROJECTS = [
   {
     id:'idle',
     name:'모바일 방치형 RPG',
     emoji:'⚔️',
-    subtitle:'개인 프로젝트 · 2025.11 ~ 2026.03 (최신)',
+    subtitle:'개인 프로젝트 · 2025.11 ~ 2026.03',
     color:'#f5c842',
     zoneColor:0xd4a800,
     year:'2025~2026',
@@ -505,6 +511,11 @@ const PROJECTS = [
     tags:['Unity 2022.3','C#','Firebase','UniTask','IAP','AdMob','GPGS','Localization','Object Pool'],
     github:'https://github.com/SongJiUk/IdleGame',
     youtube:'https://youtu.be/gLDDEcBPnWE',
+    images:[
+      'https://img.youtube.com/vi/gLDDEcBPnWE/maxresdefault.jpg',
+      'https://img.youtube.com/vi/gLDDEcBPnWE/hqdefault.jpg',
+      'https://img.youtube.com/vi/gLDDEcBPnWE/mqdefault.jpg',
+    ],
     zoneX:20, zoneY:15, zoneW:12, zoneH:10,
     // THEMED TILES: gold floor dungeon
     tileTheme:'gold'
@@ -529,8 +540,9 @@ const PROJECTS = [
       {icon:'🎮',name:'로그라이크 스킬 시스템',desc:'젬으로 레벨업, 랜덤 스킬 선택, 레벨5 진화 시스템, 히든 스테이지 구현.'},
     ],
     codeSnippets:[
-      {title:'ILoader 데이터 인터페이스',file:'Data.cs',
-       code:`<span class="kw">public interface</span> <span class="tp">ILoader</span>&lt;<span class="tp">TKey</span>, <span class="tp">TValue</span>&gt;
+      {title:'ILoader - Data-Driven 인터페이스',file:'Data.cs',
+       code:`<span class="cm">// 구글시트 → CSV → JSON → C# 객체로 변환</span>
+<span class="kw">public interface</span> <span class="tp">ILoader</span>&lt;<span class="tp">TKey</span>, <span class="tp">TValue</span>&gt;
 {
     <span class="tp">Dictionary</span>&lt;<span class="tp">TKey</span>, <span class="tp">TValue</span>&gt; <span class="fn">MakeDict</span>();
 }
@@ -540,14 +552,64 @@ const PROJECTS = [
     : <span class="tp">ILoader</span>&lt;<span class="tp">int</span>, <span class="tp">MonsterData</span>&gt;
 {
     <span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">MonsterData</span>&gt; monsters;
-
+    <span class="cm">// JSON List → Dictionary 변환으로 O(1) 탐색 최적화</span>
     <span class="kw">public</span> <span class="tp">Dictionary</span>&lt;<span class="tp">int</span>, <span class="tp">MonsterData</span>&gt; <span class="fn">MakeDict</span>()
         => monsters.<span class="fn">ToDictionary</span>(m => m.id, m => m);
+}`},
+      {title:'ObjectPool - OnCreate/Get/Release/Destroy',file:'PoolManager.cs',
+       code:`<span class="kw">public class</span> <span class="tp">PoolManager</span>
+{
+    <span class="tp">ObjectPool</span>&lt;<span class="tp">Monster</span>&gt; _monsterPool;
+
+    <span class="kw">public void</span> <span class="fn">Init</span>()
+    {
+        _monsterPool = <span class="kw">new</span> <span class="tp">ObjectPool</span>&lt;<span class="tp">Monster</span>&gt;(
+            createFunc:  () => <span class="fn">Instantiate</span>(_prefab),
+            actionOnGet: m => m.gameObject.<span class="fn">SetActive</span>(<span class="kw">true</span>),
+            actionOnRelease: m => m.gameObject.<span class="fn">SetActive</span>(<span class="kw">false</span>),
+            actionOnDestroy: m => <span class="fn">Destroy</span>(m.gameObject),
+            maxSize: <span class="nm">200</span>
+        );
+    }
+
+    <span class="kw">public</span> <span class="tp">Monster</span> <span class="fn">GetMonster</span>()
+        => _monsterPool.<span class="fn">Get</span>();
+
+    <span class="kw">public void</span> <span class="fn">ReleaseMonster</span>(<span class="tp">Monster</span> m)
+        => _monsterPool.<span class="fn">Release</span>(m);
+}`},
+      {title:'UI 자동 바인딩 (Enum 기반)',file:'UI_Base.cs',
+       code:`<span class="cm">// Enum으로 UI 컴포넌트 이름 정의</span>
+<span class="kw">enum</span> <span class="tp">Buttons</span> { BtnStart, BtnRetry, BtnClose }
+<span class="kw">enum</span> <span class="tp">Texts</span>   { TxtScore, TxtStage }
+
+<span class="kw">void</span> <span class="fn">Start</span>()
+{
+    <span class="fn">Bind</span>&lt;<span class="tp">Button</span>&gt;(<span class="kw">typeof</span>(<span class="tp">Buttons</span>));
+    <span class="fn">Bind</span>&lt;<span class="tp">Text</span>&gt;(<span class="kw">typeof</span>(<span class="tp">Texts</span>));
+    <span class="fn">GetButton</span>((<span class="tp">int</span>)<span class="tp">Buttons</span>.BtnStart)
+        .<span class="fn">onClick</span>.<span class="fn">AddListener</span>(OnClickStart);
+}
+
+<span class="cm">// FindChild로 자동 탐색 후 딕셔너리 저장</span>
+<span class="kw">protected void</span> <span class="fn">Bind</span>&lt;<span class="tp">T</span>&gt;(<span class="tp">Type</span> type)
+    <span class="kw">where</span> <span class="tp">T</span> : <span class="tp">UnityEngine.Object</span>
+{
+    <span class="kw">string</span>[] names = <span class="tp">Enum</span>.<span class="fn">GetNames</span>(type);
+    <span class="kw">var</span> objects = <span class="kw">new</span> <span class="tp">UnityEngine.Object</span>[names.Length];
+    _objects[<span class="kw">typeof</span>(<span class="tp">T</span>)] = objects;
+    <span class="kw">for</span> (<span class="tp">int</span> i = <span class="nm">0</span>; i < names.Length; i++)
+        objects[i] = <span class="fn">FindChild</span>&lt;<span class="tp">T</span>&gt;(gameObject, names[i]);
 }`},
     ],
     tags:['Unity','C#','Object Pooling','Data-Driven','JSON','UpdateManager','로그라이크'],
     github:null,
     youtube:'https://youtu.be/tz1HFhinCac',
+    images:[
+      'https://img.youtube.com/vi/tz1HFhinCac/maxresdefault.jpg',
+      'https://img.youtube.com/vi/tz1HFhinCac/hqdefault.jpg',
+      'https://img.youtube.com/vi/tz1HFhinCac/mqdefault.jpg',
+    ],
     zoneX:37, zoneY:4, zoneW:8, zoneH:7,
     tileTheme:'military'
   },
@@ -591,54 +653,87 @@ const PROJECTS = [
     tags:['Unity','C#','3D','Object Pool','퀘스트','상점','씬 전환'],
     github:null,
     youtube:'https://www.youtube.com/watch?v=_SKasgeYxo4',
-    zoneX:4, zoneY:4, zoneW:8, zoneH:7,
+    images:[
+      'https://img.youtube.com/vi/_SKasgeYxo4/maxresdefault.jpg',
+      'https://img.youtube.com/vi/_SKasgeYxo4/hqdefault.jpg',
+    ],
+    zoneX:4, zoneY:29, zoneW:8, zoneH:7,
     tileTheme:'castle'
   },
   {
     id:'collab',
     name:'3D RPG 협업 프로젝트',
     emoji:'🤝',
-    subtitle:'협업 3인 · 2022~2023',
+    subtitle:'협업 3인 · 2023.09 ~ 11',
     color:'#34d399',
     zoneColor:0x0f6b44,
-    year:'2022~2023',
+    year:'2023',
     platform:'PC',
-    duration:'팀 프로젝트',
+    duration:'약 2개월 · 3인 팀',
     isLatest:false,
-    shortDesc:'3인 협업으로 진행한 Unity 3D RPG 게임 프로젝트.',
-    desc:'3인 팀 협업으로 진행한 Unity 3D RPG 게임. Git을 통한 협업 워크플로우와 역할 분담을 경험했습니다.',
+    shortDesc:'3인 팀 협업 3D RPG. 몬스터 AI 제외 게임 시스템 전반 구현, 기여도 약 90%.',
+    desc:'3인 팀 협업으로 진행한 Unity 3D RPG 게임.\n몬스터 AI를 제외한 게임 시스템 전반을 담당(기여도 약 90%). GameManager, SceneManager, SoundManager 등 핵심 매니저 구현, 팀원(디자이너, 기획자) 작업물 Unity 연동 및 씬 통합 관리.',
     systems:[
-      {icon:'🤝',name:'Git 협업 워크플로우',desc:'브랜치 전략, PR 기반 코드 리뷰, 충돌 해결 경험.'},
-      {icon:'🎮',name:'인게임 시스템 분업',desc:'파트별 역할 분담 후 인터페이스 기반 통합.'},
-      {icon:'📦',name:'에셋 관리',desc:'Addressables 기반 에셋 로드로 메모리 최적화.'},
+      {icon:'🧩',name:'핵심 매니저 시스템',desc:'GameManager, SceneManager, SoundManager 등 싱글톤 기반 매니저 설계. 씬 전환 및 사운드 관리 일원화.'},
+      {icon:'⚔️',name:'플레이어 이동·전투·스탯',desc:'플레이어 이동, 전투, 스탯 관리 시스템 구현. 사냥터 이동 및 씬 전환 시 PlayerPrefs 기반 데이터 유지.'},
+      {icon:'💾',name:'데이터 저장 시스템',desc:'PlayerPrefs 및 JSON 기반 게임 데이터 저장/불러오기 구현.'},
+      {icon:'🤝',name:'팀 통합 관리',desc:'디자이너, 기획자 작업물을 Unity에 연동, 씬 통합 관리. Git 기반 협업 워크플로우.'},
     ],
-    codeSnippets:[],
-    tags:['Unity','C#','Git','협업','3D RPG','Addressables'],
+    codeSnippets:[
+      {title:'싱글톤 매니저 베이스',file:'Singleton.cs',
+       code:`<span class="kw">public class</span> <span class="tp">Singleton</span>&lt;<span class="tp">T</span>&gt; : <span class="tp">MonoBehaviour</span>
+    <span class="kw">where</span> <span class="tp">T</span> : <span class="tp">MonoBehaviour</span>
+{
+    <span class="kw">static</span> <span class="tp">T</span> _instance;
+
+    <span class="kw">public static</span> <span class="tp">T</span> Instance
+    {
+        <span class="kw">get</span>
+        {
+            <span class="kw">if</span> (_instance == <span class="kw">null</span>)
+                _instance = <span class="fn">FindObjectOfType</span>&lt;<span class="tp">T</span>&gt;();
+            <span class="kw">return</span> _instance;
+        }
+    }
+
+    <span class="kw">protected virtual void</span> <span class="fn">Awake</span>()
+    {
+        _instance = <span class="kw">this as</span> <span class="tp">T</span>;
+        <span class="fn">DontDestroyOnLoad</span>(gameObject);
+    }
+}`},
+    ],
+    tags:['Unity','C#','3D','RPG','협업','Git','Singleton','PlayerPrefs','JSON'],
     github:null,
-    youtube:null,
-    zoneX:4, zoneY:29, zoneW:8, zoneH:7,
+    youtube:'https://www.youtube.com/watch?v=IEsUX_KIpRA',
+    images:[
+      'https://img.youtube.com/vi/IEsUX_KIpRA/maxresdefault.jpg',
+      'https://img.youtube.com/vi/IEsUX_KIpRA/hqdefault.jpg',
+    ],
+    zoneX:4, zoneY:4, zoneW:8, zoneH:7,
     tileTheme:'forest'
   },
   {
     id:'company',
-    name:'도담게임즈 · 라이브 서비스',
-    emoji:'🏢',
-    subtitle:'재직 · 2022.03 ~ 2023.05',
+    name:'도담게임즈 · 실무',
+    emoji:'🎯',
+    subtitle:'재직 · 2022.03 ~ 2023.05 · 모바일 매치3 퍼즐',
     color:'#94a3b8',
     zoneColor:0x3a4a5a,
-    year:'2022~2023',
-    platform:'Mobile (Live Service)',
+    year:'2022 ~ 2023',
+    platform:'Android / iOS · 스토어 출시',
     duration:'약 1년 2개월',
     isLatest:false,
-    shortDesc:'5개 게임 개발 및 라이브 서비스. 인게임/아웃게임 시스템, 기존 게임 업데이트 대응.',
-    desc:'도담게임즈 재직 기간 동안 5개의 게임을 직접 개발하여 라이브 서비스를 진행했습니다. 기존 게임 라이브 서비스 및 업데이트, 클라이언트 인게임/아웃게임 시스템 작업을 담당했습니다.',
+    shortDesc:'모바일 3-match 퍼즐 게임 5개 개발 및 구글 플레이/앱스토어 출시. 라이브 서비스 운영.',
+    desc:'도담게임즈 재직 기간 동안 모바일 3-match 퍼즐 게임 5개를 개발하여 구글 플레이스토어/앱스토어에 출시했습니다.\n기존 출시 게임의 라이브 서비스 운영 및 콘텐츠 업데이트, 클라이언트 인게임/아웃게임 시스템 구현을 담당했습니다.',
     systems:[
-      {icon:'🚀',name:'5개 게임 라이브 서비스',desc:'개발부터 배포까지 전 과정 경험. 라이브 패치 대응, 긴급 버그 수정.'},
-      {icon:'🔧',name:'인게임 / 아웃게임 시스템',desc:'전투 시스템, UI/UX, 상점, 이벤트 등 다양한 피처 구현.'},
-      {icon:'📱',name:'모바일 최적화',desc:'실서비스 환경에서 성능 최적화, 메모리 관리 실무 경험.'},
+      {icon:'🚀',name:'5개 게임 개발 · 스토어 출시',desc:'모바일 3-match 퍼즐 게임 5개를 Google Play / App Store에 출시. 개발부터 배포까지 전 과정 실무 경험.'},
+      {icon:'🎮',name:'인게임 시스템 구현',desc:'매칭 로직, 특수 블럭 로직 변경, 아이템 효과, 스테이지 관리, 이벤트 레벨 제작 등 핵심 인게임 시스템 구현.'},
+      {icon:'🏪',name:'아웃게임 시스템 구현',desc:'로비, 상점, 사용자 데이터 연동, 수집 시스템, 시즌 패키지, 인앱 상품 구현.'},
+      {icon:'🔧',name:'라이브 서비스 운영',desc:'기존 출시 게임 라이브 서비스 운영, 콘텐츠 업데이트, 버그 수정 및 패치 대응.'},
     ],
     codeSnippets:[],
-    tags:['Unity','C#','Live Service','Mobile','인게임시스템','아웃게임시스템'],
+    tags:['Unity','C#','Match-3','Mobile','Live Service','Google Play','App Store','IAP','인게임','아웃게임'],
     github:null,
     youtube:null,
     zoneX:37, zoneY:29, zoneW:8, zoneH:7,
@@ -984,8 +1079,22 @@ PROJECTS.forEach(p=>{SS[p.id]=[0,1,2].map(v=>makePixelCanvas(p.id,v));});
 // ══════════════════════════════════════════
 // NAVIGATION
 // ══════════════════════════════════════════
-function goHome(){document.getElementById('main-view').classList.add('active');document.getElementById('detail-view').classList.remove('active');window.scrollTo(0,0);}
-function openDetail(pid){const p=PROJECTS.find(x=>x.id===pid);if(!p)return;document.getElementById('main-view').classList.remove('active');document.getElementById('detail-view').classList.add('active');renderDetail(p);window.scrollTo(0,0);}
+let _savedScrollY=0;
+function goHome(){
+  document.getElementById('main-view').classList.add('active');
+  document.getElementById('detail-view').classList.remove('active');
+  // 저장된 스크롤 위치로 복원
+  requestAnimationFrame(()=>window.scrollTo(0,_savedScrollY));
+}
+function openDetail(pid){
+  const p=PROJECTS.find(x=>x.id===pid);if(!p)return;
+  // 현재 스크롤 위치 저장
+  _savedScrollY=window.scrollY;
+  document.getElementById('main-view').classList.remove('active');
+  document.getElementById('detail-view').classList.add('active');
+  renderDetail(p);
+  window.scrollTo(0,0);
+}
 
 // ══════════════════════════════════════════
 // SIDE PANEL
@@ -1055,17 +1164,40 @@ function renderDetail(p){
   document.getElementById('d-subtitle').textContent=p.subtitle;
   document.getElementById('d-meta').innerHTML=[{k:'YEAR',v:p.year},{k:'PLATFORM',v:p.platform},{k:'DURATION',v:p.duration}]
     .map(m=>`<div class="dmeta"><div class="dmeta-k">${m.k}</div><div class="dmeta-v">${m.v}</div></div>`).join('');
+  // 스크린샷: 실제 이미지 있으면 img, 없으면 픽셀아트 canvas
   const imgs=SS[p.id];
+  const realImgs=p.images||[];
   const main=document.getElementById('d-ss-main');
-  main.width=240;main.height=160;main.getContext('2d').drawImage(imgs[0],0,0);main.style.width='100%';main.style.height='240px';
-  main.onclick=()=>openLB(imgs[0]);
-  const track=document.getElementById('d-ss-track');track.innerHTML='';
-  imgs.forEach((img,i)=>{
-    const c=document.createElement('canvas');c.width=240;c.height=160;c.className='ss-thumb'+(i===0?' active':'');
-    c.getContext('2d').drawImage(img,0,0);c.style.width='120px';c.style.height='80px';
-    c.addEventListener('click',()=>{main.getContext('2d').clearRect(0,0,main.width,main.height);main.getContext('2d').drawImage(img,0,0);track.querySelectorAll('.ss-thumb').forEach(x=>x.classList.remove('active'));c.classList.add('active');});
-    track.appendChild(c);
-  });
+  const track=document.getElementById('d-ss-track');
+  track.innerHTML='';
+
+  if(realImgs.length>0){
+    // 실제 이미지 모드
+    main.style.display='none';
+    const mainImg=document.createElement('img');
+    mainImg.src=realImgs[0];mainImg.alt='screenshot';
+    mainImg.style.cssText='width:100%;height:240px;object-fit:cover;border:1px solid var(--border);display:block;margin-bottom:9px;cursor:zoom-in;background:var(--bg3)';
+    mainImg.onclick=()=>{const lb=document.getElementById('lightbox');lb.innerHTML='';const lbimg=document.createElement('img');lbimg.src=mainImg.src;lbimg.style.cssText='max-width:90vw;max-height:80vh;border:1px solid var(--border2)';lb.appendChild(lbimg);lb.classList.add('show');lb.onclick=()=>lb.classList.remove('show');};
+    main.parentNode.insertBefore(mainImg,main);
+    realImgs.forEach((url,i)=>{
+      const thumb=document.createElement('img');
+      thumb.src=url;thumb.alt='';thumb.className='ss-thumb'+(i===0?' active':'');
+      thumb.style.cssText='flex-shrink:0;width:120px;height:80px;object-fit:cover;cursor:pointer;border:1px solid var(--border);transition:border-color .15s';
+      thumb.addEventListener('click',()=>{mainImg.src=url;track.querySelectorAll('.ss-thumb').forEach(x=>x.classList.remove('active'));thumb.classList.add('active');});
+      track.appendChild(thumb);
+    });
+  } else {
+    // 픽셀아트 폴백
+    main.style.display='block';
+    main.width=240;main.height=160;main.getContext('2d').drawImage(imgs[0],0,0);main.style.width='100%';main.style.height='240px';
+    main.onclick=()=>openLB(imgs[0]);
+    imgs.forEach((img,i)=>{
+      const c=document.createElement('canvas');c.width=240;c.height=160;c.className='ss-thumb'+(i===0?' active':'');
+      c.getContext('2d').drawImage(img,0,0);c.style.width='120px';c.style.height='80px';
+      c.addEventListener('click',()=>{main.getContext('2d').clearRect(0,0,main.width,main.height);main.getContext('2d').drawImage(img,0,0);track.querySelectorAll('.ss-thumb').forEach(x=>x.classList.remove('active'));c.classList.add('active');});
+      track.appendChild(c);
+    });
+  }
   document.getElementById('d-systems').innerHTML=p.systems.map(s=>`
     <div class="sys-item"><div class="sys-icon">${s.icon}</div>
     <div><div class="sys-name">${s.name}</div><div class="sys-desc">${s.desc}</div></div></div>`).join('');
@@ -1366,69 +1498,114 @@ function drawZoneProps(p){
   }
 }
 const TILE_BG=[
-  [0x1a2a14,0x223318], // 0 grass
-  [0x1e1e38,0x282848], // 1 wall
-  [0x4a3c28,0x56462e], // 2 path
-  [0x0f3a0f,0x0f3a0f], // 3 tree
-  [0x0a2a4a,0x0e3460], // 4 water
+  [0x1a2a14,0x223318],
+  [0x1e1e38,0x282848],
+  [0x4a3c28,0x56462e],
+  [0x0f3a0f,0x0f3a0f],
+  [0x0a2a4a,0x0e3460],
 ];
-
 function hexStr(h){return`rgb(${(h>>16)&255},${(h>>8)&255},${h&255})`;}
-
 const torchFrame=()=>Math.floor(Date.now()/180)%3;
 
 function dTile(tx,ty){
   const t=gT(tx,ty);
-  const sx=tx*TILE-camX|0,sy=ty*TILE-camY|0;
-  if(sx+TILE<0||sx>VW||sy+TILE<0||sy>VH)return;
+  // 픽셀 정렬: 카메라 좌표계를 정수로 스냅해서 타일 간 gap 제거
+  const camXi=camX|0, camYi=camY|0;
+  const sx=tx*TILE-camXi;
+  const sy=ty*TILE-camYi;
+  const sz=TILE;
+  if(sx+sz<=-1||sx>VW||sy+sz<=-1||sy>VH)return;
   const dk=(tx+ty)%2===0;
 
   if(t===5){
     const zi=zm[ty*MW+tx];
-    if(zi>=0){const c=PROJECTS[zi].zoneColor;const r=(c>>16)&255,g=(c>>8)&255,b=c&255;ctx.fillStyle=`rgba(${r},${g},${b},${dk?.52:.42})`;ctx.fillRect(sx,sy,TILE,TILE);}
+    if(zi>=0){
+      const c=PROJECTS[zi].zoneColor;
+      const r=(c>>16)&255,g=(c>>8)&255,b=c&255;
+      // 어두운 베이스
+      ctx.fillStyle=`rgb(${r*0.2|0},${g*0.2|0},${b*0.2|0})`;
+      ctx.fillRect(sx,sy,sz,sz);
+      // 구역 색 오버레이 (체크 패턴)
+      ctx.fillStyle=`rgba(${r},${g},${b},${dk?0.48:0.36})`;
+      ctx.fillRect(sx,sy,sz,sz);
+      // 타일 구분선 (매우 얇게)
+      ctx.fillStyle=`rgba(${r},${g},${b},0.12)`;
+      ctx.fillRect(sx,sy,sz,1);
+      ctx.fillRect(sx,sy,1,sz);
+    }
     return;
   }
   if(t===6){
-    let zi=-1;
-    for(const[nx,ny]of[[-1,0],[1,0],[0,-1],[0,1]]){const z=zm[(ty+ny)*MW+(tx+nx)];if(z>=0){zi=z;break;}}
-    if(zi<0)zi=zm[ty*MW+tx];
-    if(zi>=0){const c=PROJECTS[zi].zoneColor;ctx.fillStyle=hexStr(c);}else ctx.fillStyle='#aaa';
-    ctx.fillRect(sx,sy,TILE,TILE);
-    // 안쪽에 어두운 테두리 느낌
-    ctx.fillStyle='rgba(0,0,0,0.3)';
-    ctx.fillRect(sx+1,sy+1,TILE-2,TILE-2);
+    let zi=zm[ty*MW+tx];
+    if(zi<0){
+      for(const[nx,ny]of[[-1,0],[1,0],[0,-1],[0,1]]){
+        const z=zm[(ty+ny)*MW+(tx+nx)];if(z>=0){zi=z;break;}
+      }
+    }
+    if(zi>=0){
+      const c=PROJECTS[zi].zoneColor;
+      const r=(c>>16)&255,g=(c>>8)&255,b=c&255;
+      // 밝은 경계선
+      ctx.fillStyle=`rgb(${Math.min(255,r+50)},${Math.min(255,g+50)},${Math.min(255,b+50)})`;
+      ctx.fillRect(sx,sy,sz,sz);
+      // 내부 음영
+      ctx.fillStyle='rgba(0,0,0,0.32)';
+      ctx.fillRect(sx+1,sy+1,sz-2,sz-2);
+      // 코너 하이라이트
+      ctx.fillStyle='rgba(255,255,255,0.22)';
+      ctx.fillRect(sx,sy,2,2);
+      ctx.fillRect(sx+sz-2,sy,2,2);
+    } else {
+      ctx.fillStyle='#666';ctx.fillRect(sx,sy,sz,sz);
+    }
     return;
   }
   if(t===11){
-    // torch: animated flicker
     const fr=torchFrame();
-    ctx.fillStyle='#3a2000';ctx.fillRect(sx+4,sy+4,8,10);
-    const flames=['#ff6600','#ff9900','#ffcc00'];
-    ctx.fillStyle=flames[fr];ctx.fillRect(sx+3,sy,10,8);
-    ctx.fillStyle=flames[(fr+1)%3];ctx.fillRect(sx+5,sy+2,6,4);
-    // glow
-    const zi2=gZ(tx,ty);const gcolor=zi2>=0?PROJECTS[zi2].color:'#ff9900';
-    ctx.fillStyle=gcolor.replace('#','rgba(')+'40)'.replace('rgba(','rgba(');
-    // simple glow square
-    ctx.globalAlpha=0.3+Math.sin(Date.now()/300)*0.1;
-    ctx.fillStyle=`rgba(255,160,0,0.12)`;ctx.fillRect(sx-8,sy-8,TILE+16,TILE+16);
+    // 막대
+    ctx.fillStyle='#3a2000';ctx.fillRect(sx+5,sy+6,6,10);
+    // 불꽃 (3프레임)
+    const flames=['#ff6600','#ff8800','#ffaa00'];
+    ctx.fillStyle=flames[fr];   ctx.fillRect(sx+3,sy+1,10,6);
+    ctx.fillStyle=flames[(fr+1)%3];ctx.fillRect(sx+5,sy,6,4);
+    ctx.fillStyle='#ffee88';    ctx.fillRect(sx+6,sy+1,4,2);
+    // 글로우
+    ctx.globalAlpha=0.18+Math.sin(Date.now()/260)*0.07;
+    ctx.fillStyle='#ff8800';ctx.fillRect(sx-4,sy-4,sz+8,sz+8);
     ctx.globalAlpha=1;
     return;
   }
 
   const tc=TILE_BG[t];
-  if(!tc){ctx.fillStyle='#0a0a14';ctx.fillRect(sx,sy,TILE,TILE);return;}
-  ctx.fillStyle=hexStr(dk?tc[0]:tc[1]);ctx.fillRect(sx,sy,TILE,TILE);
+  if(!tc){ctx.fillStyle='#0a0a14';ctx.fillRect(sx,sy,sz,sz);return;}
+  ctx.fillStyle=hexStr(dk?tc[0]:tc[1]);
+  ctx.fillRect(sx,sy,sz,sz);
 
   if(t===3){
-    ctx.fillStyle='#0f4a0f';ctx.fillRect(sx+2,sy+2,TILE-4,TILE-4);
-    ctx.fillStyle='#1a6a1a';ctx.fillRect(sx+4,sy+4,TILE-8,TILE-8);
-    ctx.fillStyle='#0a3a0a';ctx.fillRect(sx+6,sy+6,TILE-12,TILE-12);
+    // 나무: 레이어드 픽셀
+    ctx.fillStyle='#0f4a0f';ctx.fillRect(sx+2,sy+2,sz-4,sz-4);
+    ctx.fillStyle='#1a6a1a';ctx.fillRect(sx+4,sy+4,sz-8,sz-8);
+    ctx.fillStyle='rgba(100,200,80,0.2)';ctx.fillRect(sx+3,sy+3,3,3);
   }
   if(t===4){
-    const wf=Math.sin(Date.now()/1200+tx*0.3)*1.5|0;
-    ctx.fillStyle=`rgba(30,100,180,0.5)`;ctx.fillRect(sx+wf,sy,TILE,TILE);
-    ctx.fillStyle='rgba(100,180,255,0.2)';ctx.fillRect(sx,sy+wf,TILE,4);
+    // 물: 웨이브 애니메이션
+    const wf=(Math.sin(Date.now()/1100+tx*0.6)*1.5)|0;
+    ctx.fillStyle='rgba(20,90,180,0.55)';ctx.fillRect(sx,sy+wf,sz,sz);
+    ctx.fillStyle='rgba(100,190,255,0.22)';ctx.fillRect(sx,sy+3+wf,sz,3);
+    ctx.fillStyle='rgba(100,190,255,0.12)';ctx.fillRect(sx,sy+9+wf,sz,2);
+  }
+  if(t===2){
+    // 길: 돌 질감
+    if((tx*2+ty*3)%4===0){
+      ctx.fillStyle='rgba(0,0,0,0.18)';ctx.fillRect(sx+1,sy+1,sz-2,sz-2);
+    }
+  }
+  if(t===0){
+    // 잔디: 풀잎 디테일
+    if((tx*3+ty*7)%5===0){
+      ctx.fillStyle='rgba(50,110,30,0.28)';
+      ctx.fillRect(sx+sz/2-1,sy+3,2,sz/2);
+    }
   }
 }
 
