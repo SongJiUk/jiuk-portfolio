@@ -1962,16 +1962,22 @@ function drawZoneProps(p){
     ctx.fillStyle='#cccccc'; ctx.fillRect(sx+T2*5,sy+zh/2+T2+bob6,2,T2*2);
   }
   else if(p.tileTheme==='construction'){
-    // 경고 테이프 (깜빡이는 노란/검정)
-    const tp=Math.floor(t/500)%2;
-    ctx.globalAlpha=0.55;
-    for(let i=0;i<(zw/T2)|0;i++){
-      ctx.fillStyle=(i+tp)%2===0?'#f5c842':'#1a1a2a';
-      ctx.fillRect(sx+i*T2,sy,T2,T2);
-    }
-    ctx.globalAlpha=1;
+    // 꼬깔 픽셀 헬퍼
+    const cone=(cx,cy)=>{
+      ctx.fillStyle='#ff6600';
+      ctx.fillRect(cx+(T2*0.4)|0, cy,              (T2*0.2)|0, (T2*0.4)|0);
+      ctx.fillRect(cx+(T2*0.3)|0, cy+(T2*0.4)|0,  (T2*0.4)|0, (T2*0.3)|0);
+      ctx.fillStyle='#eeeeee';
+      ctx.fillRect(cx+(T2*0.2)|0, cy+(T2*0.7)|0,  (T2*0.6)|0, (T2*0.2)|0);
+      ctx.fillStyle='#ff6600';
+      ctx.fillRect(cx+(T2*0.1)|0, cy+(T2*0.9)|0,  (T2*0.8)|0, (T2*0.4)|0);
+      ctx.fillStyle='#cc4400';
+      ctx.fillRect(cx,            cy+(T2*1.3)|0,   T2,         (T2*0.2)|0);
+    };
+    // 상단 꼬깔 줄
+    for(let i=0;i*T2*2<zw-T2;i++) cone(sx+T2+i*T2*2, sy);
     // 비계 기둥 (4개)
-    [[sx+T2,sy+T2],[sx+zw-T2*2,sy+T2],[sx+T2,sy+zh-T2*4],[sx+zw-T2*2,sy+zh-T2*4]].forEach(([bx,by])=>{
+    [[sx+T2,sy+T2*2],[sx+zw-T2*2,sy+T2*2],[sx+T2,sy+zh-T2*4],[sx+zw-T2*2,sy+zh-T2*4]].forEach(([bx,by])=>{
       ctx.fillStyle='#888899'; ctx.fillRect(bx,by,T2/3|0,T2*3);
     });
     // 크로스빔
@@ -1979,26 +1985,20 @@ function drawZoneProps(p){
     // 공사중 표지판
     ctx.fillStyle='#cc3300'; ctx.fillRect(sx+zw/2-T2*2|0,sy+T2*2,T2*4,T2*2);
     ctx.fillStyle='#f5c842'; ctx.fillRect(sx+zw/2-T2*2+2|0,sy+T2*2+2,T2*4-4,T2*2-4);
-    // 안전모 NPC (공사 작업)
+    // 안전모 NPC
     const bob7=Math.sin(t/700)*1|0;
     ctx.fillStyle='#f5c842'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2-T2*3+bob7,T2*2,T2);
     ctx.fillStyle='#ffcc99'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2-T2*2+bob7,T2*2,T2*2);
     ctx.fillStyle='#ff6600'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2+bob7,T2*2,T2*3);
-    // 망치 (위아래 흔들기)
+    // 망치
     const swing=Math.sin(t/200)*T2*0.5|0;
     ctx.fillStyle='#888888'; ctx.fillRect(sx+zw/2+T2|0,sy+zh/2-T2+swing,2,T2*2);
     ctx.fillStyle='#555566'; ctx.fillRect(sx+zw/2+T2-2|0,sy+zh/2-T2+swing,T2,T2/2|0);
-    // 네모 배리어 (구역 둘레 전체)
-    const ph=Math.floor(t/600)%2;
-    for(let i=0;i*T2*2<zw-T2;i++){
-      ctx.fillStyle=(i+ph)%2===0?'#f5c842':'#cc3300';
-      ctx.fillRect(sx+T2+i*T2*2,sy+1,T2,T2-2);         // 상단
-      ctx.fillRect(sx+T2+i*T2*2,sy+zh-T2+1,T2,T2-2);   // 하단
-    }
+    // 둘레 꼬깔 (하단·좌측·우측)
+    for(let i=0;i*T2*2<zw-T2;i++) cone(sx+T2+i*T2*2, sy+zh-T2*2);
     for(let i=1;i*T2*2<zh-T2*2;i++){
-      ctx.fillStyle=(i+ph)%2===0?'#f5c842':'#cc3300';
-      ctx.fillRect(sx+1,sy+T2+i*T2*2,T2-2,T2);           // 좌측
-      ctx.fillRect(sx+zw-T2+1,sy+T2+i*T2*2,T2-2,T2);     // 우측
+      cone(sx+1,          sy+T2+i*T2*2);
+      cone(sx+zw-T2+1,    sy+T2+i*T2*2);
     }
   }
   ctx.restore();
