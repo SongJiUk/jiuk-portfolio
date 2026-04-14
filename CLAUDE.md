@@ -106,4 +106,3 @@ jiuk-portfolio/
 
 - Email: wldnr1014@naver.com
 - GitHub: https://github.com/SongJiUk
-- Notion CV: https://www.notion.so/273ea58668dd80769e87e65dcd3aca42

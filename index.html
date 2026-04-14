@@ -425,7 +425,6 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
     <div class="contact-row">
       <a href="mailto:wldnr1014@naver.com" class="btn btn-primary">✉ EMAIL ME</a>
       <a href="https://github.com/SongJiUk" target="_blank" class="btn btn-outline">◈ GITHUB</a>
-      <a href="https://www.notion.so/273ea58668dd80769e87e65dcd3aca42" target="_blank" class="btn btn-outline">▶ NOTION CV</a>
     </div>
   </div>
 </section>
@@ -470,22 +469,80 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
 
 <script>
 // ══════════════════════════════════════════
-// PROJECT DATA (Notion 기반 실제 데이터)
+// PROJECT DATA
 // ══════════════════════════════════════════
 const PROJECTS = [
+  {
+    id:'tower',
+    name:'3D 로그라이크 타워디펜스',
+    emoji:'🗼',
+    subtitle:'개인 프로젝트 · 2026.04 ~ 개발 진행 중',
+    color:'#22c55e',
+    zoneColor:0x1a4a2a,
+    year:'2026',
+    platform:'PC',
+    duration:'🚧 개발 진행 중',
+    isLatest:true,
+    shortDesc:'웨이브마다 랜덤 스킬/타워를 선택하는 3D 로그라이크 타워디펜스. UniTask 웨이브 시스템, ITickable 중앙 업데이트 루프, 숲·사막·겨울·던전 4개 테마.',
+    desc:'3D 2.5D 시점의 로그라이크 타워디펜스. 웨이브 클리어 시 랜덤 스킬/타워 선택, UniTask 기반 웨이브 타이밍, ITickable 중앙 업데이트 루프, ObjectPool·ScriptableObject 적용. 숲·사막·겨울·던전 4개 테마.',
+    systems:[
+      {icon:'🔄',name:'ITickable 중앙 업데이트 루프',desc:'MonoBehaviour.Update() 남용 방지. HashSet 기반 ITickable/IUnScaledTickable로 scaled/unscaled 틱 분리. 순회 중 null 컴포넌트 자동 제거.'},
+      {icon:'🌊',name:'UniTask 웨이브 시스템',desc:'WaveData ScriptableObject로 웨이브별 적 구성 정의. UniTask async/await 기반 스폰 타이밍 제어.'},
+      {icon:'🗺',name:'A* 경로탐색',desc:'타워 배치에 따라 적이 동적으로 경로를 재탐색. 그리드 기반 A* 알고리즘 구현.'},
+      {icon:'🎲',name:'로그라이크 선택 시스템',desc:'웨이브 클리어 후 랜덤 스킬/타워 3개 중 1개 선택. 버프 ScriptableObject로 즉시 적용.'},
+      {icon:'♻️',name:'ObjectPool (적/투사체)',desc:'Unity ObjectPool<T>로 적·투사체 반복 생성 최적화. Destroy 없이 pool.Release() 반환.'},
+    ],
+    codeSnippets:[
+      {title:'ITickable 중앙 업데이트 루프',file:'UpdateManager.cs',
+       code:`<span class="kw">public interface</span> <span class="tp">ITickable</span>
+{
+    <span class="kw">void</span> <span class="fn">Tick</span>(<span class="kw">float</span> _deltaTime);
+}
+
+<span class="kw">public class</span> <span class="tp">UpdateManager</span> : <span class="tp">MonoBehaviour</span>
+{
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; tickables = <span class="kw">new</span>();
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toAdd = <span class="kw">new</span>();
+    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toRemove = <span class="kw">new</span>();
+
+    <span class="kw">private void</span> <span class="fn">Update</span>()
+    {
+        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toAdd) tickables.<span class="fn">Add</span>(t);
+        toAdd.<span class="fn">Clear</span>();
+        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toRemove) tickables.<span class="fn">Remove</span>(t);
+        toRemove.<span class="fn">Clear</span>();
+
+        <span class="kw">foreach</span> (<span class="kw">var</span> tick <span class="kw">in</span> tickables)
+        {
+            <span class="kw">if</span> (tick <span class="kw">is</span> <span class="tp">Component</span> c && c == <span class="kw">null</span>)
+            { toRemove.<span class="fn">Add</span>(tick); <span class="kw">continue</span>; }
+            tick.<span class="fn">Tick</span>(<span class="tp">Time</span>.deltaTime);
+        }
+    }
+}`},
+    ],
+    tags:['Unity','C#','UniTask','A*','로그라이크','ObjectPool','ScriptableObject','DOTween'],
+    github:'https://github.com/SongJiUk/TowerDefense',
+    youtube:null,
+    images:[
+      'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/TowerDefense/UnderDevelopment.png',
+    ],
+    zoneX:15, zoneY:4, zoneW:8, zoneH:7,
+    tileTheme:'construction'
+  },
   {
     id:'prison',
     name:'Prison Life',
     emoji:'🏢',
-    subtitle:'슈퍼센트 Ad-Dev 과제 · 2026.03 ~ 04',
+    subtitle:'회사 채용 과제 · 2026.03 ~ 04',
     color:'#a78bfa',
     zoneColor:0x3a1a4a,
     year:'2026',
     platform:'PC',
     duration:'1주일',
-    isLatest:true,
+    isLatest:false,
     shortDesc:'광석 채굴부터 수감자 수용까지 자동화. UniTask async/await 기반 NPC 자동화 루프와 IHandCuff 인터페이스로 구현한 아이들 경영 시뮬레이션.',
-    desc:'슈퍼센트 Ad-Dev 클라이언트 개발자(인턴) 채용 과제. 광부→수갑 제작→간부 운반→수감자 수용 흐름을 UniTask async/await로 완전 자동화. IHandCuff 인터페이스로 수갑 전달 시스템 설계, ObjectPool·DOTween·ScriptableObject 적용.',
+    desc:'회사 채용 과제. 광부→수갑 제작→간부 운반→수감자 수용 흐름을 UniTask async/await로 완전 자동화. IHandCuff 인터페이스로 수갑 전달 시스템 설계, ObjectPool·DOTween·ScriptableObject 적용.',
     systems:[
       {icon:'⚡',name:'UniTask NPC 자동화 루프',desc:'코루틴 없이 async/await 패턴으로 광부·간부 NPC의 이동·대기·전달을 while(true) 루프로 처리. CancellationToken으로 OnDisable 시 안전 해제.'},
       {icon:'🔗',name:'IHandCuff 인터페이스 설계',desc:'IHandCuffGiver / IHandCuffReceiver 분리로 수갑 전달 시스템 결합도 최소화. NPC 간 직접 참조 없이 인터페이스만으로 통신.'},
@@ -538,7 +595,6 @@ const PROJECTS = [
 }`},
     ],
     tags:['Unity','C#','UniTask','DOTween','ScriptableObject','ObjectPool'],
-    notion:'https://www.notion.so/341ea58668dd819fa009eec04dd07362',
     github:'https://github.com/SongJiUk/AssignmentGame',
     youtube:'https://youtu.be/eDnIBZUNspc',
     images:[
@@ -547,63 +603,6 @@ const PROJECTS = [
     ],
     zoneX:26, zoneY:29, zoneW:8, zoneH:7,
     tileTheme:'prison'
-  },
-  {
-    id:'tower',
-    name:'3D 로그라이크 타워디펜스',
-    emoji:'🗼',
-    subtitle:'개인 프로젝트 · 2026.04 ~ 개발 진행 중',
-    color:'#22c55e',
-    zoneColor:0x1a4a2a,
-    year:'2026',
-    platform:'PC',
-    duration:'🚧 개발 진행 중',
-    isLatest:false,
-    shortDesc:'웨이브마다 랜덤 스킬/타워를 선택하는 3D 로그라이크 타워디펜스. UniTask 웨이브 시스템, ITickable 중앙 업데이트 루프, 숲·사막·겨울·던전 4개 테마.',
-    desc:'3D 2.5D 시점의 로그라이크 타워디펜스. 웨이브 클리어 시 랜덤 스킬/타워 선택, UniTask 기반 웨이브 타이밍, ITickable 중앙 업데이트 루프, ObjectPool·ScriptableObject 적용. 숲·사막·겨울·던전 4개 테마.',
-    systems:[
-      {icon:'🔄',name:'ITickable 중앙 업데이트 루프',desc:'MonoBehaviour.Update() 남용 방지. HashSet 기반 ITickable/IUnScaledTickable로 scaled/unscaled 틱 분리. 순회 중 null 컴포넌트 자동 제거.'},
-      {icon:'🌊',name:'UniTask 웨이브 시스템',desc:'WaveData ScriptableObject로 웨이브별 적 구성 정의. UniTask async/await 기반 스폰 타이밍 제어.'},
-      {icon:'🗺',name:'A* 경로탐색',desc:'타워 배치에 따라 적이 동적으로 경로를 재탐색. 그리드 기반 A* 알고리즘 구현.'},
-      {icon:'🎲',name:'로그라이크 선택 시스템',desc:'웨이브 클리어 후 랜덤 스킬/타워 3개 중 1개 선택. 버프 ScriptableObject로 즉시 적용.'},
-      {icon:'♻️',name:'ObjectPool (적/투사체)',desc:'Unity ObjectPool<T>로 적·투사체 반복 생성 최적화. Destroy 없이 pool.Release() 반환.'},
-    ],
-    codeSnippets:[
-      {title:'ITickable 중앙 업데이트 루프',file:'UpdateManager.cs',
-       code:`<span class="kw">public interface</span> <span class="tp">ITickable</span>
-{
-    <span class="kw">void</span> <span class="fn">Tick</span>(<span class="kw">float</span> _deltaTime);
-}
-
-<span class="kw">public class</span> <span class="tp">UpdateManager</span> : <span class="tp">MonoBehaviour</span>
-{
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; tickables = <span class="kw">new</span>();
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toAdd = <span class="kw">new</span>();
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toRemove = <span class="kw">new</span>();
-
-    <span class="kw">private void</span> <span class="fn">Update</span>()
-    {
-        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toAdd) tickables.<span class="fn">Add</span>(t);
-        toAdd.<span class="fn">Clear</span>();
-        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toRemove) tickables.<span class="fn">Remove</span>(t);
-        toRemove.<span class="fn">Clear</span>();
-
-        <span class="kw">foreach</span> (<span class="kw">var</span> tick <span class="kw">in</span> tickables)
-        {
-            <span class="kw">if</span> (tick <span class="kw">is</span> <span class="tp">Component</span> c && c == <span class="kw">null</span>)
-            { toRemove.<span class="fn">Add</span>(tick); <span class="kw">continue</span>; }
-            tick.<span class="fn">Tick</span>(<span class="tp">Time</span>.deltaTime);
-        }
-    }
-}`},
-    ],
-    tags:['Unity','C#','UniTask','A*','로그라이크','ObjectPool','ScriptableObject','DOTween'],
-    notion:null,
-    github:'https://github.com/SongJiUk/TowerDefense',
-    youtube:null,
-    images:[],
-    zoneX:15, zoneY:4, zoneW:8, zoneH:7,
-    tileTheme:'castle'
   },
   {
     id:'idle',
@@ -686,15 +685,13 @@ const PROJECTS = [
 }`},
     ],
     tags:['Unity 2022.3','C#','Firebase','UniTask','IAP','AdMob','GPGS','Localization','Object Pool'],
-    notion:'https://www.notion.so/RPG-325ea58668dd81d1a463eaea62627482',
     github:'https://github.com/SongJiUk/IdleGame',
     youtube:'https://youtu.be/gLDDEcBPnWE',
     images:[
       'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/IdleGame/IdleGame_1.jpeg',
       'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/IdleGame/IdleGame_2.jpeg',
     ],
-    zoneX:20, zoneY:15, zoneW:12, zoneH:10,
-    // THEMED TILES: gold floor dungeon
+    zoneX:20, zoneY:15, zoneW:8, zoneH:7,
     tileTheme:'gold'
   },
   {
@@ -790,7 +787,6 @@ const PROJECTS = [
 }`},
     ],
     tags:['Unity','C#','Object Pooling','Data-Driven','JSON','UpdateManager','로그라이크'],
-    notion:'https://www.notion.so/273ea58668dd81668644fb8fb223093e',
     github:'https://github.com/SongJiUk/likeTangTang',
     youtube:'https://youtu.be/tz1HFhinCac',
     images:[
@@ -845,7 +841,6 @@ const PROJECTS = [
 }`},
     ],
     tags:['Unity','C#','3D','RPG','협업','Git','Singleton','PlayerPrefs','JSON'],
-    notion:'https://www.notion.so/3D-RPG-273ea58668dd810ebc97c5202a8cb26f',
     github:'https://github.com/SongJiUk/Project',
     youtube:'https://www.youtube.com/watch?v=IEsUX_KIpRA',
     images:[
@@ -876,7 +871,6 @@ const PROJECTS = [
     ],
     codeSnippets:[],
     tags:['Unity','C#','Match-3','Mobile','Live Service','Google Play','App Store','IAP','인게임','아웃게임'],
-    notion:'https://www.notion.so/273ea58668dd816f8300e9fd527a388c',
     github:null,
     youtube:null,
     images:[
@@ -955,7 +949,6 @@ const PROJECTS = [
 }`},
     ],
     tags:['Unity','C#','3D','Object Pool','퀘스트','상점','씬 전환'],
-    notion:'https://www.notion.so/3D-273ea58668dd815e83bdef248542b8f2',
     github:null,
     youtube:'https://www.youtube.com/watch?v=_SKasgeYxo4',
     images:[
@@ -983,10 +976,32 @@ const SKILLS=[
 // ══════════════════════════════════════════
 // PIXEL ART — THEMED GENERATORS (DETAILED)
 // ══════════════════════════════════════════
+function drawConstruction(x,w,h,T,variant){
+  // 바닥: 콘크리트
+  for(let ry=0;ry<h/T;ry++) for(let rx=0;rx<w/T;rx++){
+    x.fillStyle=(rx+ry)%2===0?'#333344':'#2a2a38'; x.fillRect(rx*T,ry*T,T,T);
+  }
+  // 경고 테이프 (상단)
+  for(let i=0;i<Math.ceil(w/T);i++){
+    x.fillStyle=i%2===0?'#f5c842':'#1a1a2a'; x.fillRect(i*T,0,T,T*2);
+  }
+  // 비계 기둥
+  x.fillStyle='#888899'; x.fillRect(T*2,T*2,T/2|0,h-T*3);
+  x.fillStyle='#888899'; x.fillRect(w-T*3,T*2,T/2|0,h-T*3);
+  // 크로스빔
+  x.fillStyle='#666677'; x.fillRect(T*2,(h/2-T/2)|0,w-T*5,T/2|0);
+  // 공사중 표지판
+  x.fillStyle='#cc3300'; x.fillRect(T,h-T*4,w-T*2,T*2);
+  x.fillStyle='#f5c842'; x.fillRect(T+2,h-T*4+2,w-T*2-4,T*2-4);
+  // 안전모 NPC
+  x.fillStyle='#f5c842'; x.fillRect(w/2-T|0,h/2-T,T*2,T/2|0);
+  x.fillStyle='#ffcc99'; x.fillRect(w/2-T|0,h/2-T/2|0,T*2,T*2);
+  x.fillStyle='#ff6600'; x.fillRect(w/2-T|0,h/2+T,T*2,T*2);
+}
 function makePixelCanvas(id, variant, w=240, h=160){
   const c=document.createElement('canvas'); c.width=w; c.height=h;
   const x=c.getContext('2d'), T=8;
-  const themes={gold:drawGoldDungeon,military:drawMilitary,castle:drawCastle,forest:drawForest,city:drawCity};
+  const themes={gold:drawGoldDungeon,military:drawMilitary,castle:drawCastle,forest:drawForest,city:drawCity,construction:drawConstruction};
   const proj=PROJECTS.find(p=>p.id===id);
   const theme=proj?.tileTheme||'gold';
   (themes[theme]||drawGoldDungeon)(x,w,h,T,variant);
@@ -1372,7 +1387,7 @@ function openPanel(pid){
       </div>`).join('')}</div>
     <div class="panel-tags">${p.tags.map(t=>`<span class="ptag">${t}</span>`).join('')}</div>
     <div class="panel-actions">
-      <button class="panel-btn primary" onclick="openDetail('${p.id}')">
+      <button class="panel-btn primary" onclick="const _m={prison:'projects/prison-life.html',tower:'projects/tower-defense.html',idle:'projects/idle-game.html',shooter:'projects/top-down-shooting.html',collab:'projects/collab-rpg.html',company:'projects/company.html',rpg3d:'projects/rpg3d.html'};if(_m['${p.id}'])window.location.href=_m['${p.id}'];else openDetail('${p.id}')">
         <span class="pbtn-icon">▶</span> 상세 페이지 보기 <span class="pbtn-arr">→</span>
       </button>
       ${p.youtube?`<a href="${p.youtube}" target="_blank" class="panel-btn"><span class="pbtn-icon">▷</span> 플레이 영상 보기 <span class="pbtn-arr">↗</span></a>`:''}
@@ -1474,7 +1489,6 @@ function renderDetail(p){
   const dl=document.getElementById('d-links');dl.innerHTML='';
   if(p.youtube){const a=document.createElement('a');a.className='side-link yt';a.href=p.youtube;a.target='_blank';a.innerHTML=`<span>▶</span> 플레이 영상 보기<span class="la">↗</span>`;dl.appendChild(a);}
   if(p.github){const a=document.createElement('a');a.className='side-link gh';a.href=p.github;a.target='_blank';a.innerHTML=`<span>◈</span> GitHub Repository<span class="la">↗</span>`;dl.appendChild(a);}
-  if(p.notion){const n=document.createElement('a');n.className='side-link';n.href=p.notion;n.target='_blank';n.innerHTML=`<span>📋</span> Notion 포트폴리오<span class="la">↗</span>`;dl.appendChild(n);}
 }
 
 function openLB(img){const lb=document.getElementById('lightbox'),c=document.getElementById('lb-img');c.width=img.width;c.height=img.height;c.getContext('2d').drawImage(img,0,0);c.style.width=Math.min(img.width*3,window.innerWidth*.85)+'px';lb.classList.add('show');}
@@ -1719,7 +1733,7 @@ function drawZoneProps(p){
   }
   else if(p.tileTheme==='forest'){
     // 나무들
-    [[sx+T2,sy+T2],[sx+zw-T2*4,sy+T2],[sx+T2*2,sy+zh-T2*8]].forEach(([tx,ty])=>{
+    [[sx+T2,sy+T2],[sx+zw-T2*4,sy+T2],[sx+T2*2,sy+T2*3]].forEach(([tx,ty])=>{
       ctx.fillStyle='#0a2e0a'; ctx.fillRect(tx+T2,ty+T2*4,T2,T2*4);
       ctx.fillStyle='#0f4a0f'; ctx.fillRect(tx,ty+T2*2,T2*3,T2*4);
       ctx.fillStyle='#145a14'; ctx.fillRect(tx+T2/2|0,ty,T2*2,T2*3);
@@ -1795,6 +1809,34 @@ function drawZoneProps(p){
     ctx.fillStyle='#ccaa88'; ctx.fillRect(sx+T2*3,sy+zh/2-T2*2+bob6,T2*2,T2*2);
     ctx.fillStyle='#1a1a4a'; ctx.fillRect(sx+T2*3,sy+zh/2+bob6,T2*2,T2*3);
     ctx.fillStyle='#cccccc'; ctx.fillRect(sx+T2*5,sy+zh/2+T2+bob6,2,T2*2);
+  }
+  else if(p.tileTheme==='construction'){
+    // 경고 테이프 (깜빡이는 노란/검정)
+    const tp=Math.floor(t/500)%2;
+    ctx.globalAlpha=0.55;
+    for(let i=0;i<(zw/T2)|0;i++){
+      ctx.fillStyle=(i+tp)%2===0?'#f5c842':'#1a1a2a';
+      ctx.fillRect(sx+i*T2,sy,T2,T2);
+    }
+    ctx.globalAlpha=1;
+    // 비계 기둥 (4개)
+    [[sx+T2,sy+T2],[sx+zw-T2*2,sy+T2],[sx+T2,sy+zh-T2*4],[sx+zw-T2*2,sy+zh-T2*4]].forEach(([bx,by])=>{
+      ctx.fillStyle='#888899'; ctx.fillRect(bx,by,T2/3|0,T2*3);
+    });
+    // 크로스빔
+    ctx.fillStyle='#666677'; ctx.fillRect(sx+T2,sy+zh/2-2,zw-T2*2,4);
+    // 공사중 표지판
+    ctx.fillStyle='#cc3300'; ctx.fillRect(sx+zw/2-T2*2|0,sy+T2*2,T2*4,T2*2);
+    ctx.fillStyle='#f5c842'; ctx.fillRect(sx+zw/2-T2*2+2|0,sy+T2*2+2,T2*4-4,T2*2-4);
+    // 안전모 NPC (공사 작업)
+    const bob7=Math.sin(t/700)*1|0;
+    ctx.fillStyle='#f5c842'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2-T2*3+bob7,T2*2,T2);
+    ctx.fillStyle='#ffcc99'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2-T2*2+bob7,T2*2,T2*2);
+    ctx.fillStyle='#ff6600'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2+bob7,T2*2,T2*3);
+    // 망치 (위아래 흔들기)
+    const swing=Math.sin(t/200)*T2*0.5|0;
+    ctx.fillStyle='#888888'; ctx.fillRect(sx+zw/2+T2|0,sy+zh/2-T2+swing,2,T2*2);
+    ctx.fillStyle='#555566'; ctx.fillRect(sx+zw/2+T2-2|0,sy+zh/2-T2+swing,T2,T2/2|0);
   }
 }
 const TILE_BG=[
@@ -1961,6 +2003,16 @@ function dMini(){
   mctx.strokeStyle='rgba(167,139,250,0.5)';mctx.lineWidth=.5;
   mctx.strokeRect((rCamX/TILE)*sw|0,(rCamY/TILE)*sh|0,(VW/TILE)*sw|0,(VH/TILE)*sh|0);
 }
+// 미니맵 클릭으로 순간이동
+mc.style.cursor='pointer';
+mc.addEventListener('click',e=>{
+  const rect=mc.getBoundingClientRect();
+  px=((e.clientX-rect.left)/rect.width)*MW*TILE;
+  py=((e.clientY-rect.top)/rect.height)*MH*TILE;
+  px=Math.max(TILE,Math.min((MW-1)*TILE,px));
+  py=Math.max(TILE,Math.min((MH-1)*TILE,py));
+  camX=px-VW/2; camY=py-VH/2;
+});
 
 // curZone: 현재 밟고 있는 구역 인덱스 (-1 = 없음)
 // lastOpenedZone: 마지막으로 패널을 열었던 구역 (구역 재진입 감지용)
