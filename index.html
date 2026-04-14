@@ -86,7 +86,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 /* PROFILE PHOTO */
 .profile-head{display:flex;align-items:center;gap:18px;margin-bottom:24px}
-.profile-photo{width:72px;height:90px;object-fit:cover;object-position:center top;border:2px solid var(--border2);filter:grayscale(20%)}
+.profile-photo{width:100px;height:125px;object-fit:cover;object-position:center top;border:2px solid var(--border2);filter:grayscale(15%)}
 .profile-head-text .section-eyebrow{margin-bottom:6px}
 .profile-head-text .section-title{margin-bottom:0}
 
@@ -1844,11 +1844,17 @@ function drawZoneProps(p){
     ctx.fillStyle='#8b5e1a'; ctx.fillRect(sx+T2*2,sy+zh-T2*3,T2*2,T2*2);
     ctx.fillStyle='#c9880c'; ctx.fillRect(sx+T2*2,sy+zh-T2*3,T2*2,T2);
     ctx.fillStyle='#ffd700'; ctx.fillRect(sx+T2*2+T2/2,sy+zh-T2*3,T2/2,2);
-    // NPC 상인 (박동하는 느낌)
-    const bob=Math.sin(t/600)*1|0;
-    ctx.fillStyle='#ffbb88'; ctx.fillRect(sx+zw/2-T2,sy+zh/2-T2*3+bob,T2*2,T2*2);
-    ctx.fillStyle='#4a2200'; ctx.fillRect(sx+zw/2-T2,sy+zh/2-T2+bob,T2*2,T2*2);
-    ctx.fillStyle='#ffd700'; ctx.fillRect(sx+zw/2-T2,sy+zh/2-T2*4+bob,T2*2,T2/2);
+    // 책상 + 골드 테마 모니터
+    const dx=sx+zw/2-T2*2|0, dy=sy+zh/2-T2*3;
+    ctx.fillStyle='#2a1a00'; ctx.fillRect(dx+T2,dy,T2*2,T2*2);        // 모니터 테두리
+    ctx.fillStyle='#ffd700'; ctx.fillRect(dx+T2+1,dy+1,T2*2-2,T2-2);  // 화면 상단 (골드 글로우)
+    ctx.fillStyle='#aa8800'; ctx.fillRect(dx+T2+1,dy+T2,T2*2-2,T2/2|0); // 화면 하단
+    const mg=0.12+Math.abs(Math.sin(t/900))*0.08;
+    ctx.globalAlpha=mg; ctx.fillStyle='#ffd700'; ctx.fillRect(dx,dy-T2,T2*4,T2*5); ctx.globalAlpha=1;
+    ctx.fillStyle='#5a3e00'; ctx.fillRect(dx+T2+T2/2|0,dy+T2*2,T2/2|0,T2/2|0); // 스탠드
+    ctx.fillStyle='#3a2a00'; ctx.fillRect(dx,dy+T2*2+T2/2|0,T2*4,T2/2|0);       // 책상 상판
+    ctx.fillStyle='#2a1a00'; ctx.fillRect(dx+2,dy+T2*3,3,T2*2); ctx.fillRect(dx+T2*4-5,dy+T2*3,3,T2*2); // 다리
+    ctx.fillStyle='#4a3000'; ctx.fillRect(dx+T2/2|0,dy+T2*3,T2*3,T2/4|0);       // 키보드
   }
   else if(p.tileTheme==='military'){
     // 드럼통
@@ -1866,11 +1872,17 @@ function drawZoneProps(p){
     ctx.fillRect(cx2-T2*2,cy2-1,T2,2); ctx.fillRect(cx2+T2,cy2-1,T2,2);
     ctx.fillRect(cx2-1,cy2-T2*2,2,T2); ctx.fillRect(cx2-1,cy2+T2,2,T2);
     ctx.globalAlpha=1;
-    // NPC 병사
-    const bob2=Math.sin(t/500)*0.5|0;
-    ctx.fillStyle='#ccaa88'; ctx.fillRect(sx+T2*2,sy+zh/2-T2*2+bob2,T2*2,T2*2);
-    ctx.fillStyle='#3a4a20'; ctx.fillRect(sx+T2*2,sy+zh/2+bob2,T2*2,T2*3);
-    ctx.fillStyle='#2a3a18'; ctx.fillRect(sx+T2*2-1,sy+zh/2-T2*3+bob2,T2*2+2,T2);
+    // 듀얼 모니터 전술 셋업
+    const dx2=sx+zw/2-T2*3|0, dy2=sy+zh/2-T2*3;
+    [0,T2*3].forEach(offset=>{
+      ctx.fillStyle='#1a2010'; ctx.fillRect(dx2+offset,dy2,T2*2,T2*2);
+      ctx.fillStyle='#334422'; ctx.fillRect(dx2+offset+1,dy2+1,T2*2-2,T2-2);
+      ctx.fillStyle='#ff3333'; ctx.fillRect(dx2+offset+1,dy2+T2,T2*2-2,T2/3|0);
+      ctx.fillStyle='#2a3a18'; ctx.fillRect(dx2+offset+T2/2|0,dy2+T2*2,T2/2|0,T2/2|0);
+    });
+    ctx.fillStyle='#1a2010'; ctx.fillRect(dx2-T2/2|0,dy2+T2*2+T2/2|0,T2*7,T2/2|0); // 책상
+    ctx.fillStyle='#0f1a08'; ctx.fillRect(dx2,dy2+T2*3,3,T2*2); ctx.fillRect(dx2+T2*6-3,dy2+T2*3,3,T2*2);
+    ctx.fillStyle='#223318'; ctx.fillRect(dx2+T2/2|0,dy2+T2*3,T2*5,T2/4|0); // 키보드
   }
   else if(p.tileTheme==='castle'){
     // 횃불 (4개, 깜빡임)
@@ -1884,14 +1896,18 @@ function drawZoneProps(p){
       ctx.fillStyle='rgba(255,120,0,0.5)'; ctx.fillRect(tx-T2,ty-T2,T2*3,T2*3);
       ctx.globalAlpha=1;
     });
-    // NPC 기사
-    const bob3=Math.sin(t/700)*0.5|0;
-    ctx.fillStyle='#bbaacc'; ctx.fillRect(sx+T2*2,sy+zh/2-T2*2+bob3,T2*2,T2*2);
-    ctx.fillStyle='#3a3a6a'; ctx.fillRect(sx+T2*2,sy+zh/2+bob3,T2*2,T2*3);
-    ctx.fillStyle='#5a5a9a'; ctx.fillRect(sx+T2*2-1,sy+zh/2-T2*3+bob3,T2*2+2,T2);
-    // 검
-    ctx.fillStyle='#cccccc'; ctx.fillRect(sx+T2*4,sy+zh/2+bob3,2,T2*3);
-    ctx.fillStyle='#885500'; ctx.fillRect(sx+T2*3+4,sy+zh/2+T2+bob3,T2+4,2);
+    // 책상 + 모니터 (고성 느낌 - 나무 책상)
+    const dx3=sx+zw/2-T2*2|0, dy3=sy+zh/2-T2*3;
+    ctx.fillStyle='#1a1a3a'; ctx.fillRect(dx3+T2,dy3,T2*2,T2*2);
+    ctx.fillStyle='#a78bfa'; ctx.fillRect(dx3+T2+1,dy3+1,T2*2-2,T2-2);
+    ctx.fillStyle='#6040b0'; ctx.fillRect(dx3+T2+1,dy3+T2,T2*2-2,T2/2|0);
+    ctx.fillStyle='#333355'; ctx.fillRect(dx3+T2+T2/2|0,dy3+T2*2,T2/2|0,T2/2|0);
+    ctx.fillStyle='#3a2a10'; ctx.fillRect(dx3,dy3+T2*2+T2/2|0,T2*4,T2/2|0); // 나무 책상
+    ctx.fillStyle='#2a1a08'; ctx.fillRect(dx3+2,dy3+T2*3,3,T2*2); ctx.fillRect(dx3+T2*4-5,dy3+T2*3,3,T2*2);
+    // 책들 (옆에)
+    [[sx+T2*3,'#885500'],[sx+T2*3+5,'#553300'],[sx+T2*3+10,'#774400']].forEach(([bx,bc])=>{
+      ctx.fillStyle=bc; ctx.fillRect(bx,dy3+T2,4,T2*2);
+    });
   }
   else if(p.tileTheme==='forest'){
     // 나무들
@@ -1912,14 +1928,16 @@ function drawZoneProps(p){
       ctx.fillStyle='#ccff88'; ctx.fillRect(bx-2,by-2,7,7);
       ctx.globalAlpha=1;
     }
-    // NPC 마법사
-    const bob4=Math.sin(t/600)*1|0;
-    ctx.fillStyle='#ddbbaa'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2-T2*2+bob4,T2*2,T2*2);
-    ctx.fillStyle='#5530a0'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2+bob4,T2*2,T2*2);
-    ctx.fillStyle='#7040c0'; ctx.fillRect(sx+zw/2-T2-2|0,sy+zh/2-T2*4+bob4,T2*2+4,T2*3);
-    // 마법 파티클
-    if(Math.random()<0.05){
-      spawnParticles((sx+zw/2)*1+(camX)|0,(sy+zh/2+camY)|0,'#aa66ff');
+    // 나무 그루터기 위 노트북
+    const dx4=sx+zw/2-T2*2|0, dy4=sy+zh/2-T2*2;
+    ctx.fillStyle='#3a2a10'; ctx.fillRect(dx4,dy4+T2*2,T2*4,T2);    // 그루터기
+    ctx.fillStyle='#4a3a18'; ctx.fillRect(dx4+2,dy4+T2*2+2,T2*4-4,T2-4);
+    ctx.fillStyle='#1a1a2e'; ctx.fillRect(dx4+T2/2|0,dy4,T2*3,T2*2); // 노트북 화면
+    ctx.fillStyle='#22c55e'; ctx.fillRect(dx4+T2/2+1|0,dy4+1,T2*3-2,T2*2-2); // 화면 (초록)
+    ctx.fillStyle='#16a34a'; ctx.fillRect(dx4+T2/2+1|0,dy4+T2,T2*3-2,T2/2|0);
+    ctx.fillStyle='#0f172a'; ctx.fillRect(dx4+T2/4|0,dy4+T2*2,T2*3+T2/2|0,T2/3|0); // 키보드
+    if(Math.random()<0.03){
+      spawnParticles((sx+zw/2)*1+(camX)|0,(sy+zh/2+camY)|0,'#22c55e');
     }
   }
   else if(p.tileTheme==='city'){
@@ -1938,15 +1956,16 @@ function drawZoneProps(p){
       ctx.globalAlpha=glow2; ctx.fillStyle='#ffe8aa';
       ctx.fillRect(lx-T2*2,sy,T2*4,zh); ctx.globalAlpha=1;
     });
-    // NPC 개발자 (타이핑 모션)
-    const frame=Math.floor(t/300)%3;
-    const bob5=[0,-1,0][frame];
-    ctx.fillStyle='#ffcc99'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2-T2*2+bob5,T2*2,T2*2);
-    ctx.fillStyle='#2a2a4a'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2+bob5,T2*2,T2*2);
-    ctx.fillStyle='#1a1a3a'; ctx.fillRect(sx+zw/2-T2-1|0,sy+zh/2-T2*3+bob5,T2*2+2,T2);
-    // 노트북 (앞에)
-    ctx.fillStyle='#222233'; ctx.fillRect(sx+zw/2-T2*2|0,sy+zh/2+T2*2,T2*4,T2);
-    ctx.fillStyle='#00d4ff'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2+T2*2+1,T2*2,T2-2);
+    // 오피스 책상 + 모니터 + 노트북
+    const dx5=sx+zw/2-T2*3|0, dy5=sy+zh/2-T2*3;
+    ctx.fillStyle='#1a1a30'; ctx.fillRect(dx5+T2,dy5,T2*3,T2*2);        // 모니터
+    ctx.fillStyle='#00d4ff'; ctx.fillRect(dx5+T2+1,dy5+1,T2*3-2,T2-2);
+    ctx.fillStyle='#0088aa'; ctx.fillRect(dx5+T2+1,dy5+T2,T2*3-2,T2/2|0);
+    ctx.fillStyle='#222233'; ctx.fillRect(dx5+T2*2+T2/2|0,dy5+T2*2,T2/2|0,T2/2|0);
+    ctx.fillStyle='#1e1e38'; ctx.fillRect(dx5,dy5+T2*2+T2/2|0,T2*6,T2/2|0); // 책상
+    ctx.fillStyle='#14142a'; ctx.fillRect(dx5+2,dy5+T2*3,3,T2*2); ctx.fillRect(dx5+T2*6-5,dy5+T2*3,3,T2*2);
+    ctx.fillStyle='#111122'; ctx.fillRect(dx5+T2/2|0,dy5+T2*3,T2*5,T2/4|0); // 키보드
+    ctx.fillStyle='#0a0a1e'; ctx.fillRect(dx5+T2*4,dy5+T2*2,T2*2,T2/3|0);   // 노트북
   }
   else if(p.tileTheme==='prison'){
     // 철창 (좌우)
@@ -1966,11 +1985,15 @@ function drawZoneProps(p){
     const alarmOn=Math.sin(t/600)>0;
     ctx.fillStyle=alarmOn?'#ff4444':'#441111';
     ctx.fillRect(sx+zw/2-T2|0,sy+T2,T2*2,T2);
-    // NPC 간부 (순찰)
-    const bob6=Math.sin(t/500)*0.5|0;
-    ctx.fillStyle='#ccaa88'; ctx.fillRect(sx+T2*3,sy+zh/2-T2*2+bob6,T2*2,T2*2);
-    ctx.fillStyle='#1a1a4a'; ctx.fillRect(sx+T2*3,sy+zh/2+bob6,T2*2,T2*3);
-    ctx.fillStyle='#cccccc'; ctx.fillRect(sx+T2*5,sy+zh/2+T2+bob6,2,T2*2);
+    // 책상 + 모니터 (철창 안)
+    const dx6=sx+zw/2-T2*2|0, dy6=sy+zh/2-T2*3;
+    ctx.fillStyle='#1a1a2e'; ctx.fillRect(dx6+T2,dy6,T2*2,T2*2);
+    ctx.fillStyle='#a78bfa'; ctx.fillRect(dx6+T2+1,dy6+1,T2*2-2,T2-2);
+    ctx.fillStyle='#663399'; ctx.fillRect(dx6+T2+1,dy6+T2,T2*2-2,T2/2|0);
+    ctx.fillStyle='#111122'; ctx.fillRect(dx6+T2+T2/2|0,dy6+T2*2,T2/2|0,T2/2|0);
+    ctx.fillStyle='#1a1a30'; ctx.fillRect(dx6,dy6+T2*2+T2/2|0,T2*4,T2/2|0);
+    ctx.fillStyle='#0f0f20'; ctx.fillRect(dx6+2,dy6+T2*3,3,T2*2); ctx.fillRect(dx6+T2*4-5,dy6+T2*3,3,T2*2);
+    ctx.fillStyle='#222244'; ctx.fillRect(dx6+T2/2|0,dy6+T2*3,T2*3,T2/4|0);
   }
   else if(p.tileTheme==='construction'){
     // 꼬깔 픽셀 헬퍼
@@ -1996,15 +2019,14 @@ function drawZoneProps(p){
     // 공사중 표지판
     ctx.fillStyle='#cc3300'; ctx.fillRect(sx+zw/2-T2*2|0,sy+T2*2,T2*4,T2*2);
     ctx.fillStyle='#f5c842'; ctx.fillRect(sx+zw/2-T2*2+2|0,sy+T2*2+2,T2*4-4,T2*2-4);
-    // 안전모 NPC
-    const bob7=Math.sin(t/700)*1|0;
-    ctx.fillStyle='#f5c842'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2-T2*3+bob7,T2*2,T2);
-    ctx.fillStyle='#ffcc99'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2-T2*2+bob7,T2*2,T2*2);
-    ctx.fillStyle='#ff6600'; ctx.fillRect(sx+zw/2-T2|0,sy+zh/2+bob7,T2*2,T2*3);
-    // 망치
-    const swing=Math.sin(t/200)*T2*0.5|0;
-    ctx.fillStyle='#888888'; ctx.fillRect(sx+zw/2+T2|0,sy+zh/2-T2+swing,2,T2*2);
-    ctx.fillStyle='#555566'; ctx.fillRect(sx+zw/2+T2-2|0,sy+zh/2-T2+swing,T2,T2/2|0);
+    // 작업대 + 노트북 (공사장)
+    const dx7=sx+zw/2-T2*2|0, dy7=sy+zh/2-T2*2;
+    ctx.fillStyle='#2a2a1a'; ctx.fillRect(dx7,dy7+T2*2,T2*4,T2/2|0);  // 작업대
+    ctx.fillStyle='#1a1a0a'; ctx.fillRect(dx7+2,dy7+T2*2+T2/2|0,3,T2*2); ctx.fillRect(dx7+T2*4-5,dy7+T2*2+T2/2|0,3,T2*2);
+    ctx.fillStyle='#1a1a2e'; ctx.fillRect(dx7+T2/2|0,dy7,T2*3,T2*2);   // 노트북 화면
+    ctx.fillStyle='#f5c842'; ctx.fillRect(dx7+T2/2+1|0,dy7+1,T2*3-2,T2*2-2);
+    ctx.fillStyle='#cc9900'; ctx.fillRect(dx7+T2/2+1|0,dy7+T2,T2*3-2,T2/2|0);
+    ctx.fillStyle='#0f0f1a'; ctx.fillRect(dx7+T2/4|0,dy7+T2*2,T2*3+T2/2|0,T2/4|0);
     // 둘레 꼬깔 (하단·좌측·우측)
     for(let i=0;i*T2*2<zw-T2;i++) cone(sx+T2+i*T2*2, sy+zh-T2*2);
     for(let i=1;i*T2*2<zh-T2*2;i++){
@@ -2126,17 +2148,22 @@ function dTile(tx,ty){
 
 function dPlayer(){
   const sx=Math.round(px)-rCamX,sy=Math.round(py)-rCamY;
-  // shadow
-  ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(sx-5,sy+8,10,4);
-  // body
-  ctx.fillStyle='#a78bfa';ctx.fillRect(sx-5,sy-2,10,10);
-  // head
-  ctx.fillStyle='#ffcc88';ctx.fillRect(sx-4,sy-9,8,8);
-  // eyes
-  ctx.fillStyle='#333';ctx.fillRect(sx-2,sy-7,2,2);ctx.fillRect(sx+1,sy-7,2,2);
-  // legs anim
   const fr=Math.floor(Date.now()/160)%2;
-  ctx.fillStyle='#7c5cbf';
+  // 그림자
+  ctx.fillStyle='rgba(0,0,0,0.3)';ctx.fillRect(sx-5,sy+8,10,4);
+  // 후드 (어두운 남색)
+  ctx.fillStyle='#1e2240';ctx.fillRect(sx-5,sy-2,10,10);
+  // 후드 포켓 라인
+  ctx.fillStyle='#14182e';ctx.fillRect(sx-2,sy+4,4,4);
+  // 피부 (얼굴)
+  ctx.fillStyle='#f0c080';ctx.fillRect(sx-3,sy-9,7,7);
+  // 검은 머리
+  ctx.fillStyle='#1a1a1a';ctx.fillRect(sx-4,sy-11,8,4);
+  ctx.fillRect(sx-4,sy-9,2,3); // 옆머리
+  // 눈
+  ctx.fillStyle='#1a1a1a';ctx.fillRect(sx-2,sy-7,2,2);ctx.fillRect(sx+1,sy-7,2,2);
+  // 다리 (어두운 청바지)
+  ctx.fillStyle='#0e1428';
   if(fr===0){ctx.fillRect(sx-5,sy+8,4,7);ctx.fillRect(sx+1,sy+8,4,7);}
   else{ctx.fillRect(sx-5,sy+10,4,7);ctx.fillRect(sx+1,sy+10,4,7);}
 }
