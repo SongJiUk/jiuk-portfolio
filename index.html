@@ -2152,18 +2152,18 @@ function dLabel(p){
   const zx=(p.zoneX+p.zoneW/2)*TILE-rCamX, zy=(p.zoneY+1)*TILE-rCamY;
   if(zx<-100||zx>VW+100||zy<-20||zy>VH+20)return;
   ctx.save();
-  ctx.font=`bold ${p.isLatest?8:7}px "Press Start 2P",monospace`;
+  ctx.font=`bold ${p.isLatest?11:10}px "Press Start 2P",monospace`;
   ctx.textAlign='center';
   const tw=ctx.measureText(p.name).width;
-  ctx.fillStyle='rgba(8,8,20,0.85)';
-  ctx.fillRect(zx-tw/2-6,zy-11,tw+12,15);
+  ctx.fillStyle='rgba(8,8,20,0.88)';
+  ctx.fillRect(zx-tw/2-8,zy-14,tw+16,18);
   if(p.isLatest){
     ctx.fillStyle='rgba(245,200,66,0.15)';
-    ctx.fillRect(zx-tw/2-8,zy-13,tw+16,19);
+    ctx.fillRect(zx-tw/2-10,zy-16,tw+20,22);
   }
   ctx.fillStyle=p.color;
   ctx.fillText(p.name,zx,zy);
-  if(p.isLatest){ctx.font='6px "Press Start 2P"';ctx.fillStyle='#f5c842';ctx.fillText('★ LATEST',zx,zy+11);}
+  if(p.isLatest){ctx.font='7px "Press Start 2P"';ctx.fillStyle='#f5c842';ctx.fillText('★ LATEST',zx,zy+13);}
   ctx.restore();
 }
 
