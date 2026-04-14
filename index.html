@@ -691,7 +691,7 @@ const PROJECTS = [
       'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/IdleGame/IdleGame_1.jpeg',
       'https://raw.githubusercontent.com/SongJiUk/jiuk-portfolio/refs/heads/main/images/IdleGame/IdleGame_2.jpeg',
     ],
-    zoneX:20, zoneY:15, zoneW:8, zoneH:7,
+    zoneX:4, zoneY:15, zoneW:8, zoneH:7,
     tileTheme:'gold'
   },
   {
@@ -1668,6 +1668,7 @@ function drawZoneProps(p){
   const sx=zx-rCamX, sy=zy-rCamY;
   if(sx+zw<0||sx>VW||sy+zh<0||sy>VH) return;
   const T2=TILE, t=Date.now();
+  ctx.save(); ctx.beginPath(); ctx.rect(sx,sy,zw,zh); ctx.clip();
 
   if(p.tileTheme==='gold'){
     // 황금 기둥 반짝임
@@ -1837,7 +1838,16 @@ function drawZoneProps(p){
     const swing=Math.sin(t/200)*T2*0.5|0;
     ctx.fillStyle='#888888'; ctx.fillRect(sx+zw/2+T2|0,sy+zh/2-T2+swing,2,T2*2);
     ctx.fillStyle='#555566'; ctx.fillRect(sx+zw/2+T2-2|0,sy+zh/2-T2+swing,T2,T2/2|0);
+    // 꼬깔 (교통 콘) 4개
+    [[sx+T2,sy+zh-T2*2],[sx+T2*3,sy+zh-T2*2],[sx+zw-T2*3,sy+zh-T2*2],[sx+zw-T2*5,sy+zh-T2*2]].forEach(([cx,cy])=>{
+      ctx.fillStyle='#ff4400'; ctx.fillRect(cx+(T2*0.3)|0,cy,T2*0.4|0,T2*0.6|0);
+      ctx.fillStyle='#ff6622'; ctx.fillRect(cx+(T2*0.25)|0,cy+(T2*0.25)|0,T2*0.5|0,T2*0.35|0);
+      ctx.fillStyle='#ffffff'; ctx.fillRect(cx+(T2*0.28)|0,cy+(T2*0.42)|0,T2*0.44|0,T2*0.13|0);
+      ctx.fillStyle='#cc3300'; ctx.fillRect(cx+(T2*0.35)|0,cy+(T2*0.55)|0,T2*0.3|0,T2*0.18|0);
+      ctx.fillStyle='#555566'; ctx.fillRect(cx+(T2*0.15)|0,cy+(T2*0.75)|0,T2*0.7|0,T2*0.25|0);
+    });
   }
+  ctx.restore();
 }
 const TILE_BG=[
   [0x1a2a14,0x223318],
