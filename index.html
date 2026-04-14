@@ -6,6 +6,45 @@
 <title>JIUK SONG · Game Developer</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<!-- Firebase SDK -->
+<script type="module">
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+  import { getDatabase, ref, runTransaction, onValue } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js';
+
+  // ⚠️ 아래 config를 본인의 Firebase 프로젝트 설정으로 교체하세요
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+
+  // 오늘 날짜 키
+  const today = new Date().toISOString().slice(0,10);
+  const todayKey = 'visited_' + today;
+
+  // 총 방문자: 항상 증가
+  const totalRef = ref(db, 'visitors/total');
+  runTransaction(totalRef, v => (v||0) + 1);
+  onValue(totalRef, snap => {
+    const el = document.getElementById('visitor-total');
+    if(el) el.textContent = (snap.val()||0).toLocaleString();
+  });
+
+  // 오늘 방문자: 하루 1회만 증가 (localStorage 기준)
+  const todayRef = ref(db, 'visitors/' + today);
+  if(!localStorage.getItem(todayKey)){
+    localStorage.setItem(todayKey, '1');
+    runTransaction(todayRef, v => (v||0) + 1);
+  }
+  onValue(todayRef, snap => {
+    const el = document.getElementById('visitor-today');
+    if(el) el.textContent = (snap.val()||0).toLocaleString();
+  });
+</script>
 <style>
 :root {
   --bg:      #080814;
@@ -35,6 +74,30 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
 .view{display:none}
 .view.active{display:block}
+
+/* VISITOR COUNTER */
+.visitor-bar{display:flex;align-items:center;justify-content:center;gap:24px;padding:10px 28px;background:var(--bg2);border-top:1px solid var(--border);font-size:11px;color:var(--muted);font-family:var(--mono)}
+.visitor-item{display:flex;align-items:center;gap:7px}
+.visitor-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.2s step-end infinite}
+.visitor-num{color:var(--gold);font-weight:600;font-size:12px}
+
+/* CAREER TIMELINE */
+.timeline{margin-top:28px;position:relative;padding-left:18px}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:18px}
+.tl-item::before{content:'';position:absolute;left:-15px;top:5px;width:8px;height:8px;border-radius:50%;background:var(--border2);border:2px solid var(--bg2)}
+.tl-item.active::before{background:var(--green)}
+.tl-item.work::before{background:var(--cyan)}
+.tl-item.gap::before{background:var(--dim)}
+.tl-period{font-size:10px;color:var(--muted);font-family:var(--mono);margin-bottom:2px}
+.tl-title{font-size:12px;font-weight:600;color:var(--text)}
+.tl-sub{font-size:11px;color:var(--muted);margin-top:2px}
+.tl-item.gap .tl-title{color:var(--dim)}
+.tl-item.gap .tl-period{color:var(--dim)}
+
+/* COMMENTS */
+#comment-section{padding:60px 40px;background:var(--bg);border-top:1px solid var(--border)}
+#comment-section .comment-inner{max-width:900px;margin:0 auto}
 
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(8,8,20,0.94);border-bottom:1px solid var(--border);backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
@@ -287,6 +350,8 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
   .detail-hero,.detail-body{padding:40px 20px}
   footer{flex-direction:column;gap:6px;text-align:center}
   .works-grid{grid-template-columns:1fr}
+  .visitor-bar{flex-direction:column;gap:8px}
+  #comment-section{padding:40px 20px}
   .detail-hero{padding:20px 16px;}
   .detail-title{font-size:22px;}
   .detail-subtitle{font-size:12px;}
@@ -392,6 +457,44 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
       <p>Unity 모바일 게임 클라이언트 개발자입니다. <b>도담게임즈</b>에서 5개의 게임을 직접 개발하며 라이브 서비스 경험을 쌓았고, 이후 개인 프로젝트를 통해 기술적 깊이를 더해왔습니다.</p>
       <p><b>비동기 시스템(UniTask), Firebase 백엔드 연동, 모바일 최적화</b>(GC, DrawCall, Sprite Atlas) 에 특히 강점을 가지고 있습니다.</p>
       <p>게임이 좋아서 시작한 개발 — <b>플레이어가 즐거움을 느끼는 순간을 직접 설계하고 구현</b>하는 것에 보람을 느낍니다.</p>
+
+      <div class="timeline">
+        <div class="tl-item active">
+          <div class="tl-period">2026.03 ~ 04</div>
+          <div class="tl-title">Prison Life (슈퍼센트 과제)</div>
+          <div class="tl-sub">UniTask · DOTween · ScriptableObject</div>
+        </div>
+        <div class="tl-item active">
+          <div class="tl-period">2025.11 ~ 2026.03</div>
+          <div class="tl-title">모바일 방치형 RPG</div>
+          <div class="tl-sub">Firebase · IAP · AdMob · UniTask</div>
+        </div>
+        <div class="tl-item active">
+          <div class="tl-period">2025.05 ~ 06</div>
+          <div class="tl-title">탑다운 슈팅게임 (탕탕특공대 모작)</div>
+          <div class="tl-sub">Object Pool · Data-Driven · 로그라이크</div>
+        </div>
+        <div class="tl-item gap">
+          <div class="tl-period">2023.12 ~ 2025.04</div>
+          <div class="tl-title">// 개인 사정으로 인한 공백</div>
+          <div class="tl-sub">Unity · C# 독학 지속</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-period">2023.09 ~ 11</div>
+          <div class="tl-title">3D RPG 협업 프로젝트 (3인)</div>
+          <div class="tl-sub">팀장 · 시스템 설계 90%</div>
+        </div>
+        <div class="tl-item work">
+          <div class="tl-period">2022.03 ~ 2023.05</div>
+          <div class="tl-title">도담게임즈 재직</div>
+          <div class="tl-sub">Match-3 퍼즐 5개 출시 · 라이브 서비스</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-period">2021.05 ~ 10</div>
+          <div class="tl-title">3D RPG 개인 프로젝트</div>
+          <div class="tl-sub">Unity 첫 3D 프로젝트</div>
+        </div>
+      </div>
     </div>
     <div class="terminal">
       <div class="t-bar">
@@ -429,10 +532,50 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
   </div>
 </section>
 
+<!-- COMMENTS -->
+<section id="comment-section">
+  <div class="comment-inner">
+    <p class="section-eyebrow">// COMMENTS</p>
+    <h2 class="section-title" style="margin-bottom:28px">방명록</h2>
+    <!-- Giscus 댓글 위젯 -->
+    <!-- ⚠️ 아래 data-repo, data-repo-id, data-category-id를 본인 것으로 교체하세요 -->
+    <!-- 설정 방법: https://giscus.app/ko 에서 본인 repo 입력 후 코드 복사 -->
+    <script src="https://giscus.app/client.js"
+      data-repo="SongJiUk/jiuk-portfolio"
+      data-repo-id="R_kgDOSApDIQ"
+      data-category="General"
+      data-category-id="[ENTER CATEGORY ID HERE]"
+      data-mapping="pathname"
+      data-strict="0"
+      data-reactions-enabled="1"
+      data-emit-metadata="0"
+      data-input-position="bottom"
+      data-theme="preferred_color_scheme"
+      data-lang="ko"
+      crossorigin="anonymous"
+      async>
+    </script>
+  </div>
+</section>
+
 <footer>
   <div class="footer-logo">JIUK.DEV</div>
   <div class="footer-copy">© 2026 Jiuk Song · Unity Client Developer</div>
 </footer>
+
+<!-- 방문자 카운터 -->
+<div class="visitor-bar">
+  <div class="visitor-item">
+    <div class="visitor-dot"></div>
+    <span>오늘 방문자</span>
+    <span class="visitor-num" id="visitor-today">-</span>
+  </div>
+  <span style="color:var(--border)">|</span>
+  <div class="visitor-item">
+    <span>총 방문자</span>
+    <span class="visitor-num" id="visitor-total">-</span>
+  </div>
+</div>
 
 </div><!-- /main-view -->
 
