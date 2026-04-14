@@ -1567,9 +1567,14 @@ function gT(x,y){if(x<0||x>=MW||y<0||y>=MH)return 1;return map[y*MW+x];}
    [2,14],[2,15],[2,25],[2,26],[49,14],[49,15],[49,25],[49,26],
    [15,16],[16,16],[15,25],[34,16],[35,16],[34,25]
   ].forEach(([tx,ty])=>sT(tx,ty,3));
-  // water feature center-ish
-  for(let wx=23;wx<=28;wx++){sT(wx,13,4);sT(wx,14,4);}
-  for(let wy=13;wy<=14;wy++){sT(23,wy,4);sT(24,wy,4);sT(27,wy,4);sT(28,wy,4);}
+  // 자연 연못 (중앙 우측 빈 공간 — 길과 구역에서 떨어진 위치)
+  [[30,23],[31,22],[32,22],[33,22],[34,23],
+   [30,24],[31,23],[32,23],[33,23],[34,24],
+   [30,25],[31,24],[32,24],[33,24],
+   [31,25],[32,25]
+  ].forEach(([wx,wy])=>sT(wx,wy,4));
+  // 연못 주변 나무·갈대
+  [[29,22],[30,21],[32,21],[34,21],[35,22],[35,24],[35,25],[29,25],[29,26],[31,26],[33,26]].forEach(([tx,ty])=>sT(tx,ty,3));
 
   PROJECTS.forEach((p,i)=>{
     const tt=p.tileTheme;
@@ -1838,14 +1843,18 @@ function drawZoneProps(p){
     const swing=Math.sin(t/200)*T2*0.5|0;
     ctx.fillStyle='#888888'; ctx.fillRect(sx+zw/2+T2|0,sy+zh/2-T2+swing,2,T2*2);
     ctx.fillStyle='#555566'; ctx.fillRect(sx+zw/2+T2-2|0,sy+zh/2-T2+swing,T2,T2/2|0);
-    // 꼬깔 (교통 콘) 4개
-    [[sx+T2,sy+zh-T2*2],[sx+T2*3,sy+zh-T2*2],[sx+zw-T2*3,sy+zh-T2*2],[sx+zw-T2*5,sy+zh-T2*2]].forEach(([cx,cy])=>{
-      ctx.fillStyle='#ff4400'; ctx.fillRect(cx+(T2*0.3)|0,cy,T2*0.4|0,T2*0.6|0);
-      ctx.fillStyle='#ff6622'; ctx.fillRect(cx+(T2*0.25)|0,cy+(T2*0.25)|0,T2*0.5|0,T2*0.35|0);
-      ctx.fillStyle='#ffffff'; ctx.fillRect(cx+(T2*0.28)|0,cy+(T2*0.42)|0,T2*0.44|0,T2*0.13|0);
-      ctx.fillStyle='#cc3300'; ctx.fillRect(cx+(T2*0.35)|0,cy+(T2*0.55)|0,T2*0.3|0,T2*0.18|0);
-      ctx.fillStyle='#555566'; ctx.fillRect(cx+(T2*0.15)|0,cy+(T2*0.75)|0,T2*0.7|0,T2*0.25|0);
-    });
+    // 네모 배리어 (구역 둘레 전체)
+    const ph=Math.floor(t/600)%2;
+    for(let i=0;i*T2*2<zw-T2;i++){
+      ctx.fillStyle=(i+ph)%2===0?'#f5c842':'#cc3300';
+      ctx.fillRect(sx+T2+i*T2*2,sy+1,T2,T2-2);         // 상단
+      ctx.fillRect(sx+T2+i*T2*2,sy+zh-T2+1,T2,T2-2);   // 하단
+    }
+    for(let i=1;i*T2*2<zh-T2*2;i++){
+      ctx.fillStyle=(i+ph)%2===0?'#f5c842':'#cc3300';
+      ctx.fillRect(sx+1,sy+T2+i*T2*2,T2-2,T2);           // 좌측
+      ctx.fillRect(sx+zw-T2+1,sy+T2+i*T2*2,T2-2,T2);     // 우측
+    }
   }
   ctx.restore();
 }
