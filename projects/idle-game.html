@@ -322,17 +322,53 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
       </div>
 
       <div class="sys-item">
-        <div class="sys-head">Firebase 자동 저장 시스템</div>
+        <div class="sys-head">Firebase Auth + 자동 저장 시스템</div>
         <div class="sys-body">
           <ul class="sys-desc">
-            <li>10초 인터벌로 Firebase Realtime Database에 자동 저장</li>
-            <li>4개 노드(DATA / CHARACTER / ITEM / SMELT)를 단일 쓰기로 묶어 원자성 보장</li>
-            <li>CancellationToken으로 중복 저장 요청 취소 → 항상 최신 데이터만 저장</li>
-            <li>네트워크 오류 대비 최대 3회 재시도 로직</li>
+            <li>Google 소셜 로그인 + 게스트 계정 연동</li>
+            <li>UpdateChildrenAsync로 4노드(DATA · CHARACTER · ITEM · SMELT)를 단일 쓰기로 묶어 부분 저장 방지</li>
+            <li>10초 인터벌 자동 저장, CancellationToken으로 중복 요청 취소 → 항상 최신 데이터만 저장</li>
+            <li>지수 백오프(1→2→4초) 최대 3회 재시도. 최종 실패 시 로컬 캐시 유지 + 재연결 시 타임스탬프 비교로 자동 동기화</li>
           </ul>
           <div class="img-single">
             <img src="../images/IdleGame/IdleGame_27.png" alt="Firebase 자동 저장 시스템">
           </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head">🛡 Edge Case 대응</div>
+        <div class="sys-body">
+          <ul class="sys-desc">
+            <li>[✓] 저장 중 네트워크 끊김 → CancellationToken 취소 후 재시도 큐</li>
+            <li>[✓] 저장 중 앱 강제 종료 → 앱 재시작 시 로컬·클라우드 타임스탬프 비교 후 최신 우선</li>
+            <li>[✓] 동시 저장 요청 → 이전 요청 취소, 최신 데이터만 반영</li>
+            <li>[✓] 비동기 작업 중 씬 전환 → UniTask.WaitUntil()로 작업 완료 대기 후 전환</li>
+            <li>[✓] 오브젝트 풀 고갈 → maxSize 도달 시 가장 오래된 객체 재활용</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head">🏗 시스템 아키텍처</div>
+        <div class="sys-body">
+          <ul class="sys-desc">
+            <li>GameManager(싱글톤) 상태머신: Init → Loading → InGame → Pause</li>
+            <li>ITickable 중앙 루프로 PlayerBehaviour · MonsterAI · UIAnimation 일괄 관리</li>
+            <li>DataManager: GoogleSheet→CSV→JSON→Dictionary 파이프라인 + Firebase 단일 쓰기 저장</li>
+            <li>상태 전환 시 각 Manager에 이벤트 브로드캐스트</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head">🚀 향후 개선 계획</div>
+        <div class="sys-body">
+          <ul class="sys-desc">
+            <li>[1] Firebase Transaction API 교체 — UpdateChildrenAsync는 원자성 보장하나, 충돌 감지·롤백 제어를 위해 Transaction()으로 교체 예정</li>
+            <li>[2] Unity Profiler 정량화 — 오브젝트 풀링 전후 GC Alloc·FPS 수치 측정 미완료, 향후 벤치마크 추가</li>
+            <li>[3] 서버 검증 도입 — Firebase 직접 접근 구조상 클라이언트 위변조 방어 불가, 게임서버 도입 필요</li>
+          </ul>
         </div>
       </div>
 
