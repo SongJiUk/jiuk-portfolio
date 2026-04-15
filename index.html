@@ -468,8 +468,8 @@ pre::before{content:attr(data-lang);position:absolute;top:6px;right:9px;font-siz
           <h2 class="section-title">PROFILE</h2>
         </div>
       </div>
-      <p>Unity 모바일 게임 클라이언트 개발자입니다. <b>도담게임즈</b>에서 5개의 게임을 직접 개발하며 라이브 서비스 경험을 쌓았고, 이후 개인 프로젝트를 통해 기술적 깊이를 더해왔습니다.</p>
-      <p><b>비동기 시스템(UniTask), Firebase 백엔드 연동, 모바일 최적화</b>(GC, DrawCall, Sprite Atlas) 에 특히 강점을 가지고 있습니다.</p>
+      <p>Unity 모바일 게임 클라이언트 개발자입니다. <b>도담게임즈</b>에서 5개의 게임을 직접 개발하며 라이브 서비스 운영·버그 대응·콘텐츠 업데이트 전 과정을 경험했고, 이후 개인 프로젝트를 통해 기술적 깊이를 더해왔습니다.</p>
+      <p><b>비동기 시스템(UniTask), Firebase 백엔드 연동, 모바일 최적화</b>(GC, DrawCall, Sprite Atlas) 에 특히 강점을 가지고 있습니다. 엣지 케이스(부분 저장 실패, 동시 요청 충돌, 씬 전환 중 비동기)를 설계 단계에서 고려하는 것을 중요하게 생각합니다.</p>
       <p>게임이 좋아서 시작한 개발 — <b>플레이어가 즐거움을 느끼는 순간을 직접 설계하고 구현</b>하는 것에 보람을 느낍니다.</p>
 
       <div class="timeline">
@@ -774,11 +774,14 @@ const PROJECTS = [
     shortDesc:'Firebase, UniTask, IAP/AdMob 등 실서비스 수준 SDK를 직접 연동한 1인 개발 방치형 RPG.',
     desc:'Unity C#으로 개발한 1인 개발 모바일 방치형 RPG. 자동 전투, 강화, 던전, 가챠 등 핵심 콘텐츠 구현과 함께 Firebase, IAP, AdMob 등 실서비스 수준의 외부 SDK를 직접 연동했습니다.',
     systems:[
-      {icon:'🔐',name:'Firebase Auth + 자동 저장',desc:'Google 소셜 로그인 + 게스트 계정. 10초 인터벌 자동 저장, 4노드 원자적 쓰기, 최대 3회 재시도.'},
-      {icon:'⚡',name:'ITickable 커스텀 Update 루프',desc:'MonoBehaviour.Update() 남용 방지. HashSet 기반 중복 등록 방지, scaled/unscaled 틱 분리.'},
-      {icon:'🎲',name:'Data-Driven 설계',desc:'구글시트 → CSV → JSON. ILoader<TKey,TValue> 인터페이스 + MakeDict()로 런타임 Dictionary 변환.'},
+      {icon:'🔐',name:'Firebase Auth + 자동 저장',desc:'Google 소셜 로그인 + 게스트 계정. UpdateChildrenAsync로 4노드(DATA·CHARACTER·ITEM·SMELT)를 단일 쓰기로 묶어 부분 저장 방지. 10초 인터벌 자동 저장, CancellationToken으로 중복 요청 취소, 지수 백오프(1→2→4초) 최대 3회 재시도. 최종 실패 시 로컬 캐시 유지 + 재연결 시 타임스탬프 비교로 자동 동기화.'},
+      {icon:'🛡',name:'Edge Case 대응',desc:'[✓] 저장 중 네트워크 끊김 → CancellationToken 취소 후 재시도 큐 / [✓] 저장 중 앱 강제 종료 → 앱 재시작 시 로컬·클라우드 타임스탬프 비교 후 최신 우선 / [✓] 동시 저장 요청 → 이전 요청 취소, 최신 데이터만 반영 / [✓] 비동기 작업 중 씬 전환 → UniTask.WaitUntil()로 작업 완료 대기 후 전환 / [✓] 오브젝트 풀 고갈 → maxSize 도달 시 가장 오래된 객체 재활용'},
+      {icon:'🏗',name:'시스템 아키텍처',desc:'GameManager(싱글톤) 상태머신: Init → Loading → InGame → Pause. ITickable 중앙 루프로 PlayerBehaviour·MonsterAI·UIAnimation 일괄 관리. UIManager는 Enum 바인딩으로 드래그앤드랍 에러 차단. DataManager: GoogleSheet→CSV→JSON→Dictionary 파이프라인 + Firebase 단일 쓰기 저장. 상태 전환 시 각 Manager에 이벤트 브로드캐스트.'},
+      {icon:'⚡',name:'ITickable 커스텀 Update 루프',desc:'MonoBehaviour.Update() 남용 방지. HashSet 기반 중복 등록 방지, scaled/unscaled 틱 분리. 순회 중 null 컴포넌트 자동 제거.'},
+      {icon:'🎲',name:'Data-Driven 설계',desc:'구글시트 → CSV → JSON. ILoader<TKey,TValue> 인터페이스 + MakeDict()로 런타임 Dictionary 변환. 조회 성능 O(n)→O(1). 밸런스 수치는 코드 변경 없이 시트 수정만으로 반영.'},
       {icon:'💳',name:'IAP + AdMob',desc:'Unity IAP 연동. 광고 제거 / 다이아 패키지 구매. Android 실기기 결제 테스트 완료.'},
-      {icon:'🌐',name:'UI 자동 바인딩 + 다국어',desc:'Enum 기반 UI_Base Bind<T>() 자동 탐색. 한/영 2개 언어, JSON 기반 런타임 즉시 갱신.'},
+      {icon:'🌐',name:'UI 자동 바인딩 + 다국어',desc:'Enum 기반 UI_Base Bind<T>() 자동 탐색. 드래그앤드랍 휴먼에러 원천 차단. 한/영 2개 언어, JSON 기반 런타임 즉시 갱신.'},
+      {icon:'🚀',name:'향후 개선 계획',desc:'[1] Firebase 트랜잭션 API 도입 — UpdateChildrenAsync는 내부적으로 원자성을 보장하나, 충돌 감지·롤백 제어를 위해 Transaction()으로 교체 예정. [2] Unity Profiler 정량화 — 오브젝트 풀링 전후 GC Alloc·FPS 수치 측정 미완료, 향후 벤치마크 추가. [3] 서버 검증 — Firebase 직접 접근 구조상 클라이언트 위변조 방어 불가, 게임서버 도입 필요.'},
     ],
     codeSnippets:[
       {title:'ITickable 커스텀 Update',file:'UpdateManager.cs',
@@ -800,18 +803,36 @@ const PROJECTS = [
             t.<span class="fn">Tick</span>(Time.deltaTime);
     }
 }`},
-      {title:'Firebase 원자적 저장',file:'SaveSystem.cs',
+      {title:'Firebase 저장 + 재시도 로직',file:'SaveSystem.cs',
        code:`<span class="kw">public async</span> <span class="tp">UniTask</span> <span class="fn">SaveAllAsync</span>(<span class="tp">CancellationToken</span> ct)
 {
+    <span class="cm">// 저장 실패 대비 로컬 스냅샷 보관</span>
+    <span class="kw">long</span> localTs = <span class="tp">DateTimeOffset</span>.UtcNow.ToUnixTimeSeconds();
+
     <span class="kw">var</span> updates = <span class="kw">new</span> <span class="tp">Dictionary</span>&lt;<span class="tp">string</span>, <span class="tp">object</span>&gt;
     {
         [<span class="st">"DATA"</span>]      = _userData,
         [<span class="st">"CHARACTER"</span>] = _charData,
         [<span class="st">"ITEM"</span>]      = _itemData,
         [<span class="st">"SMELT"</span>]     = _smeltData,
+        [<span class="st">"savedAt"</span>]   = localTs,   <span class="cm">// 충돌 감지용 타임스탬프</span>
     };
-    <span class="kw">await</span> _ref.<span class="fn">UpdateChildrenAsync</span>(updates)
-               .<span class="fn">WithCancellation</span>(ct);
+
+    <span class="cm">// 지수 백오프 재시도 (1s → 2s → 4s)</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="nm">0</span>; i &lt; <span class="nm">3</span>; i++)
+    {
+        <span class="kw">try</span>
+        {
+            <span class="kw">await</span> _ref.<span class="fn">UpdateChildrenAsync</span>(updates).<span class="fn">WithCancellation</span>(ct);
+            <span class="kw">return</span>;
+        }
+        <span class="kw">catch</span> (<span class="tp">Exception</span>)
+        {
+            <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">Delay</span>((<span class="nm">1</span> &lt;&lt; i) * <span class="nm">1000</span>, cancellationToken: ct);
+        }
+    }
+    <span class="cm">// 3회 실패 → 로컬 유지, 재연결 시 savedAt 비교로 동기화</span>
+    _pendingSync = <span class="kw">true</span>;
 }`},
       {title:'ILoader - Data-Driven 인터페이스',file:'Data.cs',
        code:`<span class="cm">// 구글시트 → CSV → JSON → C# 런타임 Dictionary</span>
@@ -1018,12 +1039,13 @@ const PROJECTS = [
     duration:'약 1년 2개월',
     isLatest:false,
     shortDesc:'모바일 3-match 퍼즐 게임 5개 개발 및 구글 플레이/앱스토어 출시. 라이브 서비스 운영.',
-    desc:'도담게임즈 재직 기간 동안 모바일 3-match 퍼즐 게임 5개를 개발하여 구글 플레이스토어/앱스토어에 출시했습니다.\n기존 출시 게임의 라이브 서비스 운영 및 콘텐츠 업데이트, 클라이언트 인게임/아웃게임 시스템 구현을 담당했습니다.',
+    desc:'도담게임즈 재직 기간 동안 모바일 3-match 퍼즐 게임 5개를 개발하여 구글 플레이스토어/앱스토어에 출시했습니다.\n신규 게임 개발과 함께 출시 게임의 라이브 서비스 운영을 병행하며, 콘텐츠 추가·밸런스 조정·버그 패치 등 실제 운영 사이클을 직접 경험했습니다.',
     systems:[
-      {icon:'🚀',name:'5개 게임 개발 · 스토어 출시',desc:'모바일 3-match 퍼즐 게임 5개를 Google Play / App Store에 출시. 개발부터 배포까지 전 과정 실무 경험.'},
-      {icon:'🎮',name:'인게임 시스템 구현',desc:'매칭 로직, 특수 블럭 로직 변경, 아이템 효과, 스테이지 관리, 이벤트 레벨 제작 등 핵심 인게임 시스템 구현.'},
-      {icon:'🏪',name:'아웃게임 시스템 구현',desc:'로비, 상점, 사용자 데이터 연동, 수집 시스템, 시즌 패키지, 인앱 상품 구현.'},
-      {icon:'🔧',name:'라이브 서비스 운영',desc:'기존 출시 게임 라이브 서비스 운영, 콘텐츠 업데이트, 버그 수정 및 패치 대응.'},
+      {icon:'🚀',name:'5개 게임 개발 · 스토어 출시',desc:'모바일 3-match 퍼즐 게임 5개를 Google Play / App Store에 출시. 개발부터 빌드·심사·배포까지 전 과정 실무 경험.'},
+      {icon:'🎮',name:'인게임 시스템 구현',desc:'매칭 로직, 특수 블럭 생성 조건 및 콤보 계산식 변경, 아이템 효과, 스테이지 관리, 이벤트 레벨 설계 및 제작. 게임 밸런스 조정 시 기획팀과 협력하여 플레이어 클리어율 기반으로 수치 검토.'},
+      {icon:'🏪',name:'아웃게임 시스템 구현',desc:'로비, 상점, 사용자 데이터 연동, 수집 시스템, 시즌 패키지, 인앱 결제 상품 구현.'},
+      {icon:'🔧',name:'라이브 서비스 운영 · 버그 대응',desc:'출시 게임 실시간 이슈 모니터링 및 핫픽스 대응. 네트워크 불안정 환경의 저장 오류, 스테이지 클리어 조건 버그 등 신고된 문제를 재현 → 원인 분석 → 패치 배포 사이클로 처리.'},
+      {icon:'📋',name:'데이터 기반 콘텐츠 관리',desc:'스테이지·밸런스 데이터를 외부 시트로 관리하여 코드 수정 없이 수치 조정 가능한 파이프라인 유지. 이벤트 레벨 난이도 기획 시 클리어율 지표를 기준으로 조정 범위 결정.'},
     ],
     codeSnippets:[],
     tags:['Unity','C#','Match-3','Mobile','Live Service','Google Play','App Store','IAP','인게임','아웃게임'],
