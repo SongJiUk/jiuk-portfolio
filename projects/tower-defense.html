@@ -29,6 +29,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 .meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
 .badge{font-size:11px;font-weight:500;padding:4px 12px;border:1px solid var(--border2);border-radius:2px;color:var(--dim)}
 .badge.hi{border-color:var(--gold);color:var(--gold);background:rgba(245,200,66,.07)}
+.badge.green{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.07)}
 .link-row{display:flex;gap:10px}
 .btn{font-size:12px;font-weight:600;padding:9px 20px;border-radius:2px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all .2s;border:none;cursor:pointer}
 .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
@@ -70,7 +71,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 .theme-card .icon{font-size:24px;margin-bottom:8px;display:block}
 .theme-card .name{font-size:12px;font-weight:600;margin-bottom:4px}
 .theme-card .status{font-size:10px;color:var(--muted)}
-.theme-card.current{border-color:var(--gold)}
+.theme-card.done{border-color:var(--green)}
+.trouble-list{display:flex;flex-direction:column;gap:14px}
+.trouble-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px 20px}
+.trouble-q{font-size:13px;font-weight:600;color:var(--coral);margin-bottom:6px}
+.trouble-a{font-size:13px;color:var(--muted);line-height:1.7}
 .footer-nav{padding:44px 0 60px;display:flex;justify-content:center}
 .footer-nav a{font-family:var(--pixel);font-size:7px;color:var(--purple);text-decoration:none;letter-spacing:2px;transition:color .2s}.footer-nav a:hover{color:var(--gold)}
 </style>
@@ -92,12 +97,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     <div class="project-label">INDIVIDUAL PROJECT</div>
     <div class="wip-banner"><span class="wip-dot"></span>개발 진행 중</div>
     <h1 class="project-title">3D 로그라이크 타워디펜스</h1>
-    <p class="project-subtitle">2.5D 카메라 · 웨이브 시스템 · 로그라이크 스킬 선택 · UniTask 비동기</p>
+    <p class="project-subtitle">2.5D 카메라 · A* 경로탐색 · 타워 6종 · 시너지·카드·스킬 시스템 · Firebase 저장</p>
     <div class="meta-row">
       <span class="badge hi">2026.04 ~ 개발 진행 중</span>
       <span class="badge">Unity 2022.3 LTS</span>
       <span class="badge">1인 개발</span>
-      <span class="badge">PC (URP)</span>
+      <span class="badge">Android (모바일)</span>
+      <span class="badge green">URP</span>
     </div>
     <div class="link-row">
       <a href="https://github.com/SongJiUk/TowerDefense" target="_blank" class="btn btn-outline">⌥ GitHub</a>
@@ -107,14 +113,17 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
   <section class="section">
     <h2 class="sec-title">🎮 프로젝트 개요</h2>
     <div class="overview-quote">
-      3D 환경에서 2.5D(카메라 45도 고정) 시점으로 진행하는 <strong>로그라이크 타워디펜스</strong>입니다.<br>
-      웨이브마다 랜덤 스킬/타워를 선택하며 전략을 발전시켜 나가는 런 기반 플레이를 목표로 개발 중입니다.
+      3D 환경에서 2.5D(카메라 45도 고정) 시점으로 진행하는 <strong>로그라이크 타워디펜스 모바일 게임</strong>입니다.<br>
+      A* 경로탐색을 직접 구현하고, 타워 6종·적 6종·버프 시스템·시너지·카드·스킬 시스템까지 설계·구현했습니다.<br>
+      UniTask 비동기, ObjectPool, ScriptableObject, Firebase 저장 연동을 핵심 기술로 적용했습니다.
     </div>
     <div class="meta-grid">
-      <div class="meta-card"><div class="lbl">PLATFORM</div><div class="val">PC (Unity URP)</div></div>
+      <div class="meta-card"><div class="lbl">PLATFORM</div><div class="val">Android (모바일)</div></div>
       <div class="meta-card"><div class="lbl">STATUS</div><div class="val" style="color:var(--gold)">개발 진행 중</div></div>
       <div class="meta-card"><div class="lbl">TEAM</div><div class="val">1인 개발</div></div>
       <div class="meta-card"><div class="lbl">CAMERA</div><div class="val">2.5D (45도 고정)</div></div>
+      <div class="meta-card"><div class="lbl">STAGES</div><div class="val">4개 테마 × 10웨이브</div></div>
+      <div class="meta-card"><div class="lbl">TOWERS</div><div class="val">6종 (업그레이드 3단계)</div></div>
     </div>
   </section>
 
@@ -129,7 +138,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
       <span class="loop-arrow">→</span>
       <span class="loop-step">웨이브 클리어</span>
       <span class="loop-arrow">→</span>
-      <span class="loop-step">랜덤 스킬 / 타워 선택</span>
+      <span class="loop-step">랜덤 카드 / 스킬 선택</span>
       <span class="loop-arrow">→</span>
       <span class="loop-step">코어 HP 0 → 런 종료</span>
     </div>
@@ -140,20 +149,41 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     <div class="progress-block">
       <div class="progress-title">✅ 완료</div>
       <div class="progress-list">
-        <div class="progress-item done"><span class="dot"></span>Managers 싱글톤 패턴 구축</div>
+        <div class="progress-item done"><span class="dot"></span>Managers 싱글톤 · 15개 서브매니저 모듈화 (DontDestroyOnLoad)</div>
         <div class="progress-item done"><span class="dot"></span>ITickable / UpdateManager 중앙 집중식 업데이트 시스템</div>
+        <div class="progress-item done"><span class="dot"></span>A* 경로탐색 직접 구현 (GridSystem + GridNode + PathFinder)</div>
+        <div class="progress-item done"><span class="dot"></span>타워 설치 시 경로 차단 여부 검증 (RecalculatePath 이벤트)</div>
+        <div class="progress-item done"><span class="dot"></span>타워 6종 (Basic / Cannon / Slow / Sniper / Poison / Lightning)</div>
+        <div class="progress-item done"><span class="dot"></span>타워 업그레이드 3단계 (Damage / Range / Speed)</div>
+        <div class="progress-item done"><span class="dot"></span>적 6종 (일반 / 빠름 / 탱커 / 부활 / 중간보스 / 최종보스)</div>
+        <div class="progress-item done"><span class="dot"></span>부활 적: 사망 시 소형 적 2마리 스폰</div>
+        <div class="progress-item done"><span class="dot"></span>IBuff 인터페이스 + BuffHandler 버프/디버프 다중 스택 시스템</div>
+        <div class="progress-item done"><span class="dot"></span>StatModifier 패턴으로 슬로우·독·동결·공격강화 최종 스탯 연산</div>
+        <div class="progress-item done"><span class="dot"></span>EffectManager Pool 기반 이펙트 일원화 (Play / PlayLine)</div>
+        <div class="progress-item done"><span class="dot"></span>번개 체인 이펙트 (ChainLightningEffect · UniTask 순서 제어)</div>
+        <div class="progress-item done"><span class="dot"></span>ObjectPool 전면 적용 (투사체·이펙트·사운드·FloatingText)</div>
+        <div class="progress-item done"><span class="dot"></span>Addressables PreLoad 방식 에셋 비동기 관리</div>
+        <div class="progress-item done"><span class="dot"></span>로그라이크 카드 시스템 (A 전투강화 / B 경제 / C 특수 / D 스킬)</div>
+        <div class="progress-item done"><span class="dot"></span>스킬 5종 · 마스터 레벨 3 · 최대 3개 보유·교체 (SkillManager)</div>
+        <div class="progress-item done"><span class="dot"></span>시너지 시스템 (SynergyManager · 타워 조합 보너스)</div>
+        <div class="progress-item done"><span class="dot"></span>Firebase Authentication 익명 로그인 + Firestore 저장 연동</div>
+        <div class="progress-item done"><span class="dot"></span>SaveManager: PlayerPrefs + Firebase 이중 저장 · 앱 백그라운드 자동 Sync</div>
+        <div class="progress-item done"><span class="dot"></span>스테이지 선택 (4개) + 난이도 선택 (쉬움·보통·어려움 HP 배율)</div>
+        <div class="progress-item done"><span class="dot"></span>데미지 FloatingText (일반·치명타·독·슬로우 색상 구분)</div>
+        <div class="progress-item done"><span class="dot"></span>보스 HP바 UI 이벤트 연동 (OnBossSpawned / OnDeath)</div>
+        <div class="progress-item done"><span class="dot"></span>업적 시스템 (AchievementManager · 달성 팝업)</div>
+        <div class="progress-item done"><span class="dot"></span>설정창 (BGM/SFX 슬라이더 · 그래픽 품질 · PlayerPrefs 저장)</div>
+        <div class="progress-item done"><span class="dot"></span>배속 (x1/x2) · 일시정지 팝업</div>
+        <div class="progress-item done"><span class="dot"></span>웨이브 예고 UI (일반·중간보스·최종보스 아이콘)</div>
       </div>
     </div>
     <div class="progress-block">
-      <div class="progress-title">🔄 예정</div>
+      <div class="progress-title">🔄 진행 중 / 예정</div>
       <div class="progress-list">
-        <div class="progress-item todo"><span class="dot"></span>A* 경로탐색</div>
-        <div class="progress-item todo"><span class="dot"></span>UniTask 기반 웨이브 시스템</div>
-        <div class="progress-item todo"><span class="dot"></span>타워 배치 / 업그레이드</div>
-        <div class="progress-item todo"><span class="dot"></span>로그라이크 스킬/타워 선택 UI</div>
-        <div class="progress-item todo"><span class="dot"></span>ObjectPool (적 / 투사체)</div>
-        <div class="progress-item todo"><span class="dot"></span>ScriptableObject 데이터 관리</div>
-        <div class="progress-item todo"><span class="dot"></span>Enum 기반 UI 자동 바인딩</div>
+        <div class="progress-item todo"><span class="dot"></span>타워 공격·적 사망·웨이브 SFX 연결</div>
+        <div class="progress-item todo"><span class="dot"></span>타이틀씬 배경 + 게임 로고 배치</div>
+        <div class="progress-item todo"><span class="dot"></span>Android APK 빌드 (ETC2 텍스처 · 60fps 프레임 캡)</div>
+        <div class="progress-item todo"><span class="dot"></span>실기기 테스트 + 메모리 프로파일링</div>
       </div>
     </div>
   </section>
@@ -163,40 +193,234 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     <div class="sys-list">
 
       <div class="sys-item">
-        <div class="sys-head"><span class="sys-num">01</span><span class="sys-name">ITickable / UpdateManager</span></div>
+        <div class="sys-head"><span class="sys-num">01</span><span class="sys-name">A* 경로탐색 + 동적 재탐색</span></div>
         <div class="sys-body">
           <p class="sys-desc">
-            개별 MonoBehaviour의 Update() 대신 중앙 UpdateManager가 ITickable 구현체를 일괄 호출합니다.
-            toAdd / toRemove 버퍼를 사용해 이터레이션 중 컬렉션 수정 문제를 안전하게 처리합니다.
+            A* 알고리즘을 직접 구현. 타워 설치 시 <code>RecalculatePath()</code> 이벤트로 모든 적이 현재 위치에서 즉시 경로를 재계산합니다.
+            경로가 완전히 막히면 설치를 취소해 적이 코어로 도달할 경로를 항상 보장합니다.
+            맨해튼 거리 휴리스틱, 탐색 후 G/H/Parent 초기화로 다음 호출 오염을 방지합니다.
           </p>
           <div class="code-block">
-            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">UpdateManager.cs</span></div>
-            <div class="code-body"><pre><span class="kw">public interface</span> <span class="tp">ITickable</span>
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">PathFinder.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Vector3</span>&gt; <span class="fn">FindPath</span>(<span class="tp">Vector3</span> startPos, <span class="tp">Vector3</span> endPos)
 {
-    <span class="kw">void</span> <span class="fn">Tick</span>(<span class="kw">float</span> _deltaTime);
+    <span class="tp">GridNode</span> startNode = <span class="tp">Managers</span>.Grid.<span class="fn">GetNode</span>(startPos);
+    <span class="tp">GridNode</span> endNode   = <span class="tp">Managers</span>.Grid.<span class="fn">GetNode</span>(endPos);
+
+    <span class="kw">var</span> open    = <span class="kw">new</span> <span class="tp">List</span>&lt;<span class="tp">GridNode</span>&gt;();
+    <span class="kw">var</span> closed  = <span class="kw">new</span> <span class="tp">HashSet</span>&lt;<span class="tp">GridNode</span>&gt;();
+    <span class="kw">var</span> visited = <span class="kw">new</span> <span class="tp">List</span>&lt;<span class="tp">GridNode</span>&gt;();
+
+    startNode.G = <span class="nu">0</span>;
+    startNode.H = <span class="fn">GetHeuristic</span>(startNode, endNode); <span class="cm">// 맨해튼 거리</span>
+    open.<span class="fn">Add</span>(startNode);
+
+    <span class="kw">while</span> (open.Count > <span class="nu">0</span>)
+    {
+        <span class="tp">GridNode</span> current = <span class="fn">GetLowestF</span>(open);
+        <span class="kw">if</span> (current == endNode)
+        {
+            <span class="tp">List</span>&lt;<span class="tp">Vector3</span>&gt; path = <span class="fn">TracePath</span>(endNode);
+            <span class="fn">ResetNodes</span>(visited); <span class="cm">// G·H·Parent 초기화</span>
+            LastPath = path;
+            <span class="kw">return</span> path;
+        }
+
+        open.<span class="fn">Remove</span>(current);
+        closed.<span class="fn">Add</span>(current);
+
+        <span class="kw">foreach</span> (<span class="kw">var</span> (dx, dz) <span class="kw">in</span> _directions) <span class="cm">// 상하좌우 4방향</span>
+        {
+            <span class="tp">GridNode</span> nb = grid.<span class="fn">GetNode</span>(current.GridX + dx, current.GridZ + dz);
+            <span class="kw">if</span> (nb == <span class="kw">null</span> || !nb.CanWalk || closed.<span class="fn">Contains</span>(nb)) <span class="kw">continue</span>;
+            <span class="kw">int</span> newG = current.G + <span class="nu">1</span>;
+            <span class="kw">if</span> (!open.<span class="fn">Contains</span>(nb)) { nb.G = newG; nb.H = <span class="fn">GetHeuristic</span>(nb, endNode); open.<span class="fn">Add</span>(nb); }
+            <span class="kw">else if</span> (newG &lt; nb.G) nb.G = newG;
+        }
+    }
+    <span class="kw">return null</span>; <span class="cm">// 경로 없음 → 타워 설치 취소</span>
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">02</span><span class="sys-name">버프/디버프 시스템 (BuffHandler)</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            <code>IBuff</code> 인터페이스 + <code>BuffHandler</code> 컴포넌트로 슬로우·독·동결·공격강화를 다중 스택 관리합니다.
+            <code>AllowStack</code> 플래그로 중복 시 Refresh/스택 분기를 결정하고,
+            <code>StatModifier</code> 패턴으로 여러 버프가 중첩된 최종 스탯을 연산합니다.
+            ITickable로 등록해 별도 코루틴 없이 매 프레임 만료를 체크합니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">BuffHandler.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public void</span> <span class="fn">AddEffect</span>(<span class="tp">BuffEffect</span> effect)
+{
+    <span class="kw">if</span> (!effect.AllowStack)
+    {
+        <span class="kw">foreach</span> (<span class="kw">var</span> e <span class="kw">in</span> _effects)
+        {
+            <span class="kw">if</span> (e <span class="kw">is</span> <span class="tp">BuffEffect</span> existing && existing.EffectType == effect.EffectType)
+            { existing.<span class="fn">Refresh</span>(); <span class="kw">return</span>; } <span class="cm">// 중복 시 지속시간만 갱신</span>
+        }
+    }
+    _effects.<span class="fn">Add</span>(effect);
+    effect.<span class="fn">OnApply</span>(<span class="kw">this</span>);
 }
 
-<span class="kw">public class</span> <span class="tp">UpdateManager</span> : <span class="tp">MonoBehaviour</span>
+<span class="cm">// ITickable.Tick: 만료 효과를 버퍼에 모아 한 번에 제거 (순회 중 컬렉션 수정 방지)</span>
+<span class="kw">public void</span> <span class="fn">Tick</span>(<span class="kw">float</span> dt)
 {
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; tickables = <span class="kw">new</span>();
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toAdd = <span class="kw">new</span>();
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toRemove = <span class="kw">new</span>();
+    <span class="kw">foreach</span> (<span class="kw">var</span> e <span class="kw">in</span> _effects)
+    { e.<span class="fn">Tick</span>(dt); <span class="kw">if</span> (e.IsExpired) _expiredBuffer.<span class="fn">Add</span>(e); }
 
-    <span class="kw">public void</span> <span class="fn">Register</span>(<span class="tp">ITickable</span> _tickable)   => toAdd.<span class="fn">Add</span>(_tickable);
-    <span class="kw">public void</span> <span class="fn">UnRegister</span>(<span class="tp">ITickable</span> _tickable) => toRemove.<span class="fn">Add</span>(_tickable);
+    <span class="kw">foreach</span> (<span class="kw">var</span> e <span class="kw">in</span> _expiredBuffer)
+    { e.<span class="fn">OnRemove</span>(<span class="kw">this</span>); _effects.<span class="fn">Remove</span>(e); }
+    _expiredBuffer.<span class="fn">Clear</span>();
+}
 
-    <span class="kw">private void</span> <span class="fn">Update</span>()
+<span class="cm">// StatModifier로 최종 스탯 계산 (배율·덧셈 조합)</span>
+<span class="kw">public float</span> <span class="fn">GetStat</span>(<span class="tp">Define</span>.StatType statType, <span class="kw">float</span> baseValue)
+{
+    <span class="kw">foreach</span> (<span class="kw">var</span> m <span class="kw">in</span> _modifiers)
+        <span class="kw">if</span> (m.StatType == statType) baseValue = m.<span class="fn">Apply</span>(baseValue);
+    <span class="kw">return</span> baseValue;
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">03</span><span class="sys-name">EffectManager - Pool 기반 이펙트 일원화</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            투사체 착탄·사망·버프·스킬·타워 설치·번개 체인 등 모든 이펙트를 <code>EffectManager</code> 한 곳으로 통일했습니다.
+            <code>Play(key, pos)</code>는 위치 이펙트, <code>PlayLine(key, from, to)</code>는 방향성 이펙트(번개 등)에 사용합니다.
+            <code>async void</code> 대신 <code>UniTaskVoid</code>를 사용해 예외 안전성을 확보하고, duration 후 자동으로 풀에 반환합니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">EffectManager.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public void</span> <span class="fn">Play</span>(<span class="kw">string</span> key, <span class="tp">Vector3</span> pos, <span class="kw">float</span> duration = <span class="nu">2f</span>)
+{
+    <span class="tp">GameObject</span> go = <span class="tp">Managers</span>.PoolM.<span class="fn">Pop</span>(key);
+    <span class="kw">if</span> (go == <span class="kw">null</span>) <span class="kw">return</span>;
+    go.transform.position = pos;
+    <span class="fn">ReturnAsync</span>(go, duration).<span class="fn">Forget</span>();
+}
+
+<span class="cm">// 번개 체인처럼 시작→목표 방향으로 향하는 방향성 이펙트</span>
+<span class="kw">public void</span> <span class="fn">PlayLine</span>(<span class="kw">string</span> key, <span class="tp">Vector3</span> from, <span class="tp">Vector3</span> to, <span class="kw">float</span> dur = <span class="nu">0.3f</span>)
+{
+    <span class="tp">GameObject</span> go = <span class="tp">Managers</span>.PoolM.<span class="fn">Pop</span>(key);
+    <span class="kw">if</span> (go == <span class="kw">null</span>) <span class="kw">return</span>;
+    go.transform.position = from;
+    go.transform.rotation = <span class="tp">Quaternion</span>.<span class="fn">LookRotation</span>(to - from);
+    <span class="fn">ReturnAsync</span>(go, dur).<span class="fn">Forget</span>();
+}
+
+<span class="kw">private async</span> <span class="tp">UniTaskVoid</span> <span class="fn">ReturnAsync</span>(<span class="tp">GameObject</span> go, <span class="kw">float</span> duration)
+{
+    <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">Delay</span>(<span class="tp">TimeSpan</span>.<span class="fn">FromSeconds</span>(duration));
+    <span class="kw">if</span> (go != <span class="kw">null</span> && go.activeSelf) <span class="tp">Managers</span>.PoolM.<span class="fn">Push</span>(go);
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">04</span><span class="sys-name">타워 6종 + 시너지 시스템</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            Basic·Cannon·Slow·Sniper·Poison·Lightning 각각 독립 Controller로 구현했습니다.
+            타워를 배치하면 <code>SynergyManager</code>가 조합을 감지해 <code>OnSynergyChanged</code> 이벤트를 발행하고,
+            모든 타워가 구독해 스탯을 자동 재계산합니다. 카드 효과도 <code>OnCardApplied</code> 이벤트로 동일하게 반영됩니다.
+            업그레이드 수치는 ScriptableObject에 분리해 코드 변경 없이 밸런싱이 가능합니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">TowerController.cs</span></div>
+            <div class="code-body"><pre><span class="kw">void</span> <span class="fn">OnEnable</span>()
+{
+    <span class="cm">// 카드 효과·시너지 변경 시 스탯 자동 재계산</span>
+    <span class="tp">Managers</span>.GameM.OnCardApplied     += <span class="fn">ApplyStats</span>;
+    <span class="tp">Managers</span>.SynergyM.OnSynergyChanged += <span class="fn">ApplyStats</span>;
+}
+
+<span class="kw">void</span> <span class="fn">OnDisable</span>()
+{
+    <span class="tp">Managers</span>.GameM.OnCardApplied     -= <span class="fn">ApplyStats</span>;
+    <span class="tp">Managers</span>.SynergyM.OnSynergyChanged -= <span class="fn">ApplyStats</span>;
+    <span class="tp">Managers</span>.SynergyM.<span class="fn">Unregister</span>(Data.towerType);
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">05</span><span class="sys-name">Managers 싱글톤 아키텍처</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            <code>@Managers</code> GameObject를 자동 생성 후 DontDestroyOnLoad로 유지합니다.
+            Pool·Resource·Effect·UI·Game·Card·Skill·Synergy·Sound·Save·Firebase 등
+            15개 서브매니저를 모듈화해 씬 어디서든 <code>Managers.PoolM</code>, <code>Managers.SkillM</code>으로 접근합니다.
+            씬 전환 시 <code>Managers.Clear()</code>로 Pool·Resource·UI·Synergy를 일괄 초기화합니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">Managers.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public class</span> <span class="tp">Managers</span> : <span class="tp">MonoBehaviour</span>
+{
+    <span class="kw">readonly</span> <span class="tp">PoolManager</span>     poolManager     = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">EffectManager</span>   effectManager   = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">SkillManager</span>    skillManager    = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">SynergyManager</span>  synergyManager  = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">SaveManager</span>     saveManager     = <span class="kw">new</span>();
+    <span class="cm">// ... 15개 서브매니저</span>
+
+    <span class="kw">void</span> <span class="fn">OnApplicationPause</span>(<span class="kw">bool</span> pause)
     {
-        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toAdd) tickables.<span class="fn">Add</span>(t);
-        toAdd.<span class="fn">Clear</span>();
-        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toRemove) tickables.<span class="fn">Remove</span>(t);
-        toRemove.<span class="fn">Clear</span>();
+        <span class="kw">if</span> (pause) SaveM?.<span class="fn">SyncToFirebase</span>(); <span class="cm">// 백그라운드 진입 시 자동 저장</span>
+    }
 
-        <span class="kw">foreach</span> (<span class="kw">var</span> tick <span class="kw">in</span> tickables)
-            tick.<span class="fn">Tick</span>(<span class="tp">Time</span>.deltaTime);
+    <span class="kw">public static void</span> <span class="fn">Clear</span>()
+    {
+        PoolM.<span class="fn">Clear</span>(); ResourceM.<span class="fn">Clear</span>();
+        UIM.<span class="fn">Clear</span>();  SynergyM.<span class="fn">Clear</span>();
     }
 }</pre></div>
           </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">06</span><span class="sys-name">로그라이크 카드 · 스킬 시스템</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            웨이브 클리어 후 카드 3장 중 1장을 선택합니다. 카드 카테고리는 A(전투강화) / B(경제) / C(특수) / D(스킬)로 구분됩니다.
+            스킬은 5종, 마스터 레벨 3, 최대 3개 보유·교체 가능합니다. 교체 시 레벨이 초기화됩니다.
+            모든 카드·스킬 데이터는 ScriptableObject로 분리해 하드코딩이 없습니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">07</span><span class="sys-name">Firebase 저장 연동</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            Firebase Authentication 익명 로그인 + Firestore 세이브 데이터 저장을 연동했습니다.
+            <code>SaveManager</code>는 PlayerPrefs와 Firebase 이중 저장 구조이며,
+            <code>OnApplicationPause</code>에서 앱 백그라운드 진입 시 자동으로 Firebase에 동기화합니다.
+          </p>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">08</span><span class="sys-name">업적 · 난이도 · 설정 시스템</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            <code>AchievementManager</code>로 업적 달성 시 팝업 알림을 표시합니다.
+            난이도는 쉬움·보통·어려움 3단계로 적 HP 배율을 적용합니다.
+            설정창은 BGM/SFX 슬라이더, 그래픽 품질(Low/Medium/High)을 제공하며 PlayerPrefs에 저장합니다.
+          </p>
         </div>
       </div>
 
@@ -204,27 +428,57 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
   </section>
 
   <section class="section">
+    <h2 class="sec-title">🐛 트러블슈팅</h2>
+    <div class="trouble-list">
+      <div class="trouble-item">
+        <div class="trouble-q">Q. 타워 설치 후 적이 완전히 막혀 코어로 이동 불가</div>
+        <div class="trouble-a">
+          설치 전 A*로 경로를 미리 탐색해 경로가 <code>null</code>이면 설치를 취소합니다. 경로 재계산은 이벤트(<code>RecalculatePath</code>)로 모든 적에게 브로드캐스트해 각자 현재 위치에서 재탐색합니다.
+        </div>
+      </div>
+      <div class="trouble-item">
+        <div class="trouble-q">Q. 웨이브 시작 버튼을 눌러도 적이 스폰되지 않음</div>
+        <div class="trouble-a">
+          <code>Object_WaveAnnounce</code> 오브젝트가 없어서 <code>BeginSpawning()</code>이 미호출되는 버그. <code>OnWaveStart</code>에서 직접 호출하도록 수정해 오브젝트 의존성을 제거했습니다.
+        </div>
+      </div>
+      <div class="trouble-item">
+        <div class="trouble-q">Q. 스테이지 로드 시 stageKey 불일치로 StageData가 null</div>
+        <div class="trouble-a">
+          Addressables 키를 <code>"Stage{n}"</code>으로 등록했지만 코드에서 <code>"Stage{n}Data"</code>로 조회해 발생. 키 명명 규칙을 <code>"Stage{n}Data"</code>로 통일해 해결했습니다.
+        </div>
+      </div>
+      <div class="trouble-item">
+        <div class="trouble-q">Q. UI_ForceClose 팝업이 이중으로 닫혀 Pool double-release 오류</div>
+        <div class="trouble-a">
+          <code>_closed</code> bool 플래그를 추가해 첫 Close 호출 이후 중복 호출을 무시하도록 처리했습니다.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
     <h2 class="sec-title">🗺️ 스테이지 테마</h2>
     <div class="theme-grid">
-      <div class="theme-card current">
+      <div class="theme-card done">
         <span class="icon">🌲</span>
         <div class="name">숲 (Forest)</div>
-        <div class="status" style="color:var(--gold)">현재 개발 중</div>
+        <div class="status" style="color:var(--green)">데이터 구성 완료</div>
       </div>
-      <div class="theme-card">
+      <div class="theme-card done">
         <span class="icon">🏜️</span>
         <div class="name">사막 (Desert)</div>
-        <div class="status">예정</div>
+        <div class="status" style="color:var(--green)">데이터 구성 완료</div>
       </div>
-      <div class="theme-card">
+      <div class="theme-card done">
         <span class="icon">❄️</span>
         <div class="name">겨울 (Winter)</div>
-        <div class="status">예정</div>
+        <div class="status" style="color:var(--green)">데이터 구성 완료</div>
       </div>
-      <div class="theme-card">
-        <span class="icon">🔥</span>
-        <div class="name">던전 (Dungeon)</div>
-        <div class="status">예정</div>
+      <div class="theme-card done">
+        <span class="icon">🏰</span>
+        <div class="name">악마성 (Dungeon)</div>
+        <div class="status" style="color:var(--green)">데이터 구성 완료</div>
       </div>
     </div>
   </section>

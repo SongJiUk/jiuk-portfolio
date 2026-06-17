@@ -632,53 +632,104 @@ const PROJECTS = [
   {
     id:'tower',
     name:'3D 로그라이크 타워디펜스',
-    emoji:'🗼',
+    emoji:'🏰',
     subtitle:'개인 프로젝트 · 2026.04 ~ 개발 진행 중',
     color:'#22c55e',
     zoneColor:0x1a4a2a,
     year:'2026',
-    platform:'PC',
+    platform:'Android (모바일)',
     duration:'🚧 개발 진행 중',
     isLatest:true,
-    shortDesc:'웨이브마다 랜덤 스킬/타워를 선택하는 3D 로그라이크 타워디펜스. UniTask 웨이브 시스템, ITickable 중앙 업데이트 루프, 숲·사막·겨울·던전 4개 테마.',
-    desc:'3D 2.5D 시점의 로그라이크 타워디펜스. 웨이브 클리어 시 랜덤 스킬/타워 선택, UniTask 기반 웨이브 타이밍, ITickable 중앙 업데이트 루프, ObjectPool·ScriptableObject 적용. 숲·사막·겨울·던전 4개 테마.',
+    shortDesc:'A* 경로탐색 직접 구현, ObjectPool, ScriptableObject, Firebase 저장 연동을 적용한 3D 로그라이크 타워디펜스. 타워 6종·적 6종·버프·시너지·카드·스킬 시스템, 업적·난이도 선택까지 갖춘 1인 개발 모바일 게임.',
+    desc:'3D 2.5D 시점 로그라이크 타워디펜스 모바일 게임. A* 경로탐색 직접 구현, 타워 설치 시 동적 재탐색. UniTask 비동기, ObjectPool, ScriptableObject, Firebase 저장 연동 적용. 타워 6종·적 6종·버프/디버프·시너지·카드·스킬 시스템 설계·구현. 숲·사막·겨울·악마성 4개 테마 스테이지.',
     systems:[
-      {icon:'🔄',name:'ITickable 중앙 업데이트 루프',desc:'MonoBehaviour.Update() 남용 방지. HashSet 기반 ITickable/IUnScaledTickable로 scaled/unscaled 틱 분리. 순회 중 null 컴포넌트 자동 제거.'},
-      {icon:'🌊',name:'UniTask 웨이브 시스템',desc:'WaveData ScriptableObject로 웨이브별 적 구성 정의. UniTask async/await 기반 스폰 타이밍 제어.'},
-      {icon:'🗺',name:'A* 경로탐색',desc:'타워 배치에 따라 적이 동적으로 경로를 재탐색. 그리드 기반 A* 알고리즘 구현.'},
-      {icon:'🎲',name:'로그라이크 선택 시스템',desc:'웨이브 클리어 후 랜덤 스킬/타워 3개 중 1개 선택. 버프 ScriptableObject로 즉시 적용.'},
-      {icon:'♻️',name:'ObjectPool (적/투사체)',desc:'Unity ObjectPool<T>로 적·투사체 반복 생성 최적화. Destroy 없이 pool.Release() 반환.'},
+      {icon:'🗺️',name:'A* 경로탐색 + 동적 재탐색',desc:'A* 알고리즘 직접 구현. 타워 설치 시 RecalculatePath() 이벤트로 모든 적이 현재 위치에서 즉시 재탐색. 경로가 완전히 막히면 설치 취소. 맨해튼 거리 휴리스틱, 탐색 후 G/H/Parent 초기화로 오염 방지.'},
+      {icon:'🛡️',name:'버프/디버프 시스템 (BuffHandler)',desc:'IBuff 인터페이스 + BuffHandler로 슬로우·독·동결·공격강화 다중 스택 관리. AllowStack 플래그로 중복 시 Refresh/스택 분기. StatModifier 패턴으로 최종 스탯 연산. ITickable 등록으로 별도 코루틴 없이 만료 체크.'},
+      {icon:'🏰',name:'타워 6종 + 시너지 시스템',desc:'Basic/Cannon/Slow/Sniper/Poison/Lightning 각각 독립 Controller. SynergyManager가 조합 감지 후 OnSynergyChanged 이벤트 발행, 모든 타워가 구독해 스탯 자동 재계산. 업그레이드 3단계 ScriptableObject 관리.'},
+      {icon:'♻️',name:'EffectManager + ObjectPool',desc:'총알·이펙트·사운드·FloatingText 전부 ObjectPool<T> 풀링. EffectManager.Play(key,pos)/PlayLine(key,from,to)로 일원화. UniTaskVoid로 duration 후 자동 풀 반환.'},
+      {icon:'🎲',name:'로그라이크 카드·스킬 시스템',desc:'웨이브 클리어 후 카드 3장 중 1장 선택 (A 전투강화/B 경제/C 특수/D 스킬). 스킬 5종 마스터 레벨 3, 최대 3개 보유·교체 가능. 교체 시 레벨 초기화. ScriptableObject 기반 데이터 설계.'},
+      {icon:'🔐',name:'Firebase 저장 연동',desc:'Firebase Authentication 익명 로그인 + Firestore 세이브. 앱 백그라운드 진입(OnApplicationPause)에서 자동 SyncToFirebase. SaveManager: PlayerPrefs + Firebase 이중 저장.'},
+      {icon:'🏆',name:'업적·난이도·설정 시스템',desc:'AchievementManager: 달성 시 팝업 알림. 난이도 3종(쉬움/보통/어려움) HP 배율 적용. 설정창: BGM/SFX 슬라이더, 그래픽 품질 Low/Medium/High, PlayerPrefs 저장.'},
     ],
     codeSnippets:[
-      {title:'ITickable 중앙 업데이트 루프',file:'UpdateManager.cs',
-       code:`<span class="kw">public interface</span> <span class="tp">ITickable</span>
+      {title:'A* 경로탐색 FindPath',file:'PathFinder.cs',
+       code:`<span class="kw">public</span> <span class="tp">List</span>&lt;<span class="tp">Vector3</span>&gt; <span class="fn">FindPath</span>(<span class="tp">Vector3</span> startPos, <span class="tp">Vector3</span> endPos)
 {
-    <span class="kw">void</span> <span class="fn">Tick</span>(<span class="kw">float</span> _deltaTime);
-}
+    <span class="tp">GridNode</span> startNode = <span class="tp">Managers</span>.Grid.<span class="fn">GetNode</span>(startPos);
+    <span class="tp">GridNode</span> endNode   = <span class="tp">Managers</span>.Grid.<span class="fn">GetNode</span>(endPos);
+    <span class="kw">var</span> open   = <span class="kw">new</span> <span class="tp">List</span>&lt;<span class="tp">GridNode</span>&gt;();
+    <span class="kw">var</span> closed = <span class="kw">new</span> <span class="tp">HashSet</span>&lt;<span class="tp">GridNode</span>&gt;();
 
-<span class="kw">public class</span> <span class="tp">UpdateManager</span> : <span class="tp">MonoBehaviour</span>
-{
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; tickables = <span class="kw">new</span>();
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toAdd = <span class="kw">new</span>();
-    <span class="kw">private readonly</span> <span class="tp">HashSet</span>&lt;<span class="tp">ITickable</span>&gt; toRemove = <span class="kw">new</span>();
+    startNode.G = <span class="nu">0</span>;
+    startNode.H = <span class="fn">GetHeuristic</span>(startNode, endNode); <span class="cm">// 맨해튼 거리</span>
+    open.<span class="fn">Add</span>(startNode);
 
-    <span class="kw">private void</span> <span class="fn">Update</span>()
+    <span class="kw">while</span> (open.Count > <span class="nu">0</span>)
     {
-        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toAdd) tickables.<span class="fn">Add</span>(t);
-        toAdd.<span class="fn">Clear</span>();
-        <span class="kw">foreach</span> (<span class="kw">var</span> t <span class="kw">in</span> toRemove) tickables.<span class="fn">Remove</span>(t);
-        toRemove.<span class="fn">Clear</span>();
+        <span class="tp">GridNode</span> current = <span class="fn">GetLowestF</span>(open);
+        <span class="kw">if</span> (current == endNode) <span class="kw">return</span> <span class="fn">TracePath</span>(endNode);
 
-        <span class="kw">foreach</span> (<span class="kw">var</span> tick <span class="kw">in</span> tickables)
+        open.<span class="fn">Remove</span>(current); closed.<span class="fn">Add</span>(current);
+
+        <span class="kw">foreach</span> (<span class="kw">var</span> (dx, dz) <span class="kw">in</span> _directions)
         {
-            <span class="kw">if</span> (tick <span class="kw">is</span> <span class="tp">Component</span> c && c == <span class="kw">null</span>)
-            { toRemove.<span class="fn">Add</span>(tick); <span class="kw">continue</span>; }
-            tick.<span class="fn">Tick</span>(<span class="tp">Time</span>.deltaTime);
+            <span class="tp">GridNode</span> nb = grid.<span class="fn">GetNode</span>(current.GridX+dx, current.GridZ+dz);
+            <span class="kw">if</span> (nb == <span class="kw">null</span> || !nb.CanWalk || closed.<span class="fn">Contains</span>(nb)) <span class="kw">continue</span>;
+            <span class="kw">int</span> newG = current.G + <span class="nu">1</span>;
+            <span class="kw">if</span> (!open.<span class="fn">Contains</span>(nb)) { nb.G=newG; nb.H=<span class="fn">GetHeuristic</span>(nb,endNode); open.<span class="fn">Add</span>(nb); }
+            <span class="kw">else if</span> (newG &lt; nb.G) nb.G = newG;
         }
     }
+    <span class="kw">return null</span>; <span class="cm">// 경로 없음 → 타워 설치 취소</span>
+}`},
+      {title:'BuffHandler - 버프/디버프 다중 스택',file:'BuffHandler.cs',
+       code:`<span class="kw">public void</span> <span class="fn">AddEffect</span>(<span class="tp">BuffEffect</span> effect)
+{
+    <span class="kw">if</span> (!effect.AllowStack)
+    {
+        <span class="kw">foreach</span> (<span class="kw">var</span> e <span class="kw">in</span> _effects)
+            <span class="kw">if</span> (e <span class="kw">is</span> <span class="tp">BuffEffect</span> ex && ex.EffectType == effect.EffectType)
+            { ex.<span class="fn">Refresh</span>(); <span class="kw">return</span>; } <span class="cm">// 중복 시 지속시간만 갱신</span>
+    }
+    _effects.<span class="fn">Add</span>(effect);
+    effect.<span class="fn">OnApply</span>(<span class="kw">this</span>);
+}
+
+<span class="cm">// ITickable: 만료 효과를 버퍼에 모아 한 번에 제거</span>
+<span class="kw">public void</span> <span class="fn">Tick</span>(<span class="kw">float</span> dt)
+{
+    <span class="kw">foreach</span> (<span class="kw">var</span> e <span class="kw">in</span> _effects)
+    { e.<span class="fn">Tick</span>(dt); <span class="kw">if</span> (e.IsExpired) _expiredBuffer.<span class="fn">Add</span>(e); }
+    <span class="kw">foreach</span> (<span class="kw">var</span> e <span class="kw">in</span> _expiredBuffer)
+    { e.<span class="fn">OnRemove</span>(<span class="kw">this</span>); _effects.<span class="fn">Remove</span>(e); }
+    _expiredBuffer.<span class="fn">Clear</span>();
+}`},
+      {title:'EffectManager - Pool 기반 이펙트',file:'EffectManager.cs',
+       code:`<span class="kw">public void</span> <span class="fn">Play</span>(<span class="kw">string</span> key, <span class="tp">Vector3</span> pos, <span class="kw">float</span> duration = <span class="nu">2f</span>)
+{
+    <span class="tp">GameObject</span> go = <span class="tp">Managers</span>.PoolM.<span class="fn">Pop</span>(key);
+    <span class="kw">if</span> (go == <span class="kw">null</span>) <span class="kw">return</span>;
+    go.transform.position = pos;
+    <span class="fn">ReturnAsync</span>(go, duration).<span class="fn">Forget</span>();
+}
+
+<span class="cm">// 번개 체인 등 방향성 이펙트</span>
+<span class="kw">public void</span> <span class="fn">PlayLine</span>(<span class="kw">string</span> key, <span class="tp">Vector3</span> from, <span class="tp">Vector3</span> to, <span class="kw">float</span> dur = <span class="nu">0.3f</span>)
+{
+    <span class="tp">GameObject</span> go = <span class="tp">Managers</span>.PoolM.<span class="fn">Pop</span>(key);
+    <span class="kw">if</span> (go == <span class="kw">null</span>) <span class="kw">return</span>;
+    go.transform.position = from;
+    go.transform.rotation = <span class="tp">Quaternion</span>.<span class="fn">LookRotation</span>(to - from);
+    <span class="fn">ReturnAsync</span>(go, dur).<span class="fn">Forget</span>();
+}
+
+<span class="kw">private async</span> <span class="tp">UniTaskVoid</span> <span class="fn">ReturnAsync</span>(<span class="tp">GameObject</span> go, <span class="kw">float</span> duration)
+{
+    <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">Delay</span>(<span class="tp">TimeSpan</span>.<span class="fn">FromSeconds</span>(duration));
+    <span class="kw">if</span> (go != <span class="kw">null</span> && go.activeSelf) <span class="tp">Managers</span>.PoolM.<span class="fn">Push</span>(go);
 }`},
     ],
-    tags:['Unity','C#','UniTask','A*','로그라이크','ObjectPool','ScriptableObject','DOTween'],
+    tags:['Unity 2022.3','C#','UniTask','A*','ObjectPool','ScriptableObject','Firebase','DOTween','Addressables','URP'],
     github:'https://github.com/SongJiUk/TowerDefense',
     youtube:null,
     images:[
