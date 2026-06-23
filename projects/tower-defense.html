@@ -21,15 +21,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 .project-hero{padding:96px 0 56px;border-bottom:1px solid var(--border)}
 .project-emoji{font-size:48px;margin-bottom:16px;display:block}
 .project-label{font-family:var(--pixel);font-size:6px;letter-spacing:4px;color:var(--gold);margin-bottom:12px}
-.wip-banner{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--gold);border-radius:2px;background:rgba(245,200,66,.08);font-family:var(--pixel);font-size:7px;color:var(--gold);letter-spacing:1px;margin-bottom:16px}
-.wip-dot{width:7px;height:7px;background:var(--gold);border-radius:50%;animation:blink 1.2s step-end infinite}
-@keyframes blink{50%{opacity:0}}
+.complete-banner{display:inline-flex;align-items:center;gap:8px;padding:6px 14px;border:1px solid var(--green);border-radius:2px;background:rgba(34,197,94,.08);font-family:var(--pixel);font-size:7px;color:var(--green);letter-spacing:1px;margin-bottom:16px}
+.complete-dot{width:7px;height:7px;background:var(--green);border-radius:50%}
 .project-title{font-size:clamp(22px,4.5vw,38px);font-weight:700;letter-spacing:-.5px;line-height:1.2;margin-bottom:10px}
 .project-subtitle{font-size:14px;color:var(--muted);margin-bottom:22px}
 .meta-row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
 .badge{font-size:11px;font-weight:500;padding:4px 12px;border:1px solid var(--border2);border-radius:2px;color:var(--dim)}
 .badge.hi{border-color:var(--gold);color:var(--gold);background:rgba(245,200,66,.07)}
 .badge.green{border-color:var(--green);color:var(--green);background:rgba(34,197,94,.07)}
+.badge.purple{border-color:var(--purple);color:var(--purple);background:rgba(167,139,250,.07)}
 .link-row{display:flex;gap:10px}
 .btn{font-size:12px;font-weight:600;padding:9px 20px;border-radius:2px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:all .2s;border:none;cursor:pointer}
 .btn-outline{background:transparent;color:var(--text);border:1px solid var(--border2)}.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
@@ -41,14 +41,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 .meta-card .lbl{font-size:10px;color:var(--muted);margin-bottom:4px}
 .meta-card .val{font-size:13px;font-weight:600}
 .progress-block{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:20px;margin-bottom:16px}
-.progress-title{font-size:13px;font-weight:600;margin-bottom:12px;color:var(--gold)}
+.progress-title{font-size:13px;font-weight:600;margin-bottom:12px;color:var(--green)}
 .progress-list{display:flex;flex-direction:column;gap:8px}
 .progress-item{display:flex;align-items:center;gap:10px;font-size:13px}
 .progress-item .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
 .progress-item.done .dot{background:var(--green)}
-.progress-item.todo .dot{background:var(--border2)}
 .progress-item.done{color:var(--text)}
-.progress-item.todo{color:var(--muted)}
 .game-loop{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px}
 .loop-step{font-size:12px;padding:6px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:2px;color:var(--muted)}
 .loop-arrow{color:var(--border2);font-size:14px}
@@ -72,6 +70,24 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 .theme-card .name{font-size:12px;font-weight:600;margin-bottom:4px}
 .theme-card .status{font-size:10px;color:var(--muted)}
 .theme-card.done{border-color:var(--green)}
+.diff-table{width:100%;border-collapse:collapse;margin-top:16px;font-size:13px}
+.diff-table th{padding:10px 14px;background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:600;text-align:left}
+.diff-table td{padding:10px 14px;border:1px solid var(--border);background:var(--bg2);vertical-align:middle}
+.diff-table tr.easy td{border-left:3px solid var(--green)}
+.diff-table tr.normal td{border-left:3px solid var(--cyan)}
+.diff-table tr.hard td{border-left:3px solid var(--coral)}
+.diff-table tr.hell td{border-left:3px solid var(--purple)}
+.tag{display:inline-block;font-size:9px;padding:3px 9px;border-radius:2px;font-weight:600;font-family:var(--pixel);letter-spacing:1px}
+.tag-green{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3)}
+.tag-cyan{background:rgba(0,212,255,.10);color:var(--cyan);border:1px solid rgba(0,212,255,.3)}
+.tag-coral{background:rgba(255,107,107,.10);color:var(--coral);border:1px solid rgba(255,107,107,.3)}
+.tag-purple{background:rgba(167,139,250,.10);color:var(--purple);border:1px solid rgba(167,139,250,.3)}
+.ai-box{background:var(--bg2);border:1px solid var(--border2);border-radius:6px;padding:22px 24px}
+.ai-title{font-size:13px;font-weight:700;color:var(--purple);margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.ai-desc{font-size:13px;color:var(--muted);line-height:1.8}
+.ai-list{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+.ai-item{font-size:12px;color:var(--muted);padding-left:16px;position:relative;line-height:1.7}
+.ai-item::before{content:'→';position:absolute;left:0;color:var(--purple)}
 .trouble-list{display:flex;flex-direction:column;gap:14px}
 .trouble-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px 20px}
 .trouble-q{font-size:13px;font-weight:600;color:var(--coral);margin-bottom:6px}
@@ -95,15 +111,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
   <section class="project-hero">
     <span class="project-emoji">🏰</span>
     <div class="project-label">INDIVIDUAL PROJECT</div>
-    <div class="wip-banner"><span class="wip-dot"></span>개발 진행 중</div>
+    <div class="complete-banner"><span class="complete-dot"></span>개발 완성</div>
     <h1 class="project-title">3D 로그라이크 타워디펜스</h1>
-    <p class="project-subtitle">2.5D 카메라 · A* 경로탐색 · 타워 6종 · 시너지·카드·스킬 시스템 · Firebase 저장</p>
+    <p class="project-subtitle">2.5D 카메라 · A* 경로탐색 · 타워 6종 · 적 7종 · 난이도 4단계 · 시너지·카드·스킬 시스템 · Firebase 저장</p>
     <div class="meta-row">
-      <span class="badge hi">2026.04 ~ 개발 진행 중</span>
+      <span class="badge hi">2026.04 ~ 2026.06</span>
       <span class="badge">Unity 2022.3 LTS</span>
       <span class="badge">1인 개발</span>
       <span class="badge">Android (모바일)</span>
       <span class="badge green">URP</span>
+      <span class="badge purple">AI 보조 개발</span>
     </div>
     <div class="link-row">
       <a href="https://github.com/SongJiUk/TowerDefense" target="_blank" class="btn btn-outline">⌥ GitHub</a>
@@ -114,16 +131,19 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     <h2 class="sec-title">🎮 프로젝트 개요</h2>
     <div class="overview-quote">
       3D 환경에서 2.5D(카메라 45도 고정) 시점으로 진행하는 <strong>로그라이크 타워디펜스 모바일 게임</strong>입니다.<br>
-      A* 경로탐색을 직접 구현하고, 타워 6종·적 6종·버프 시스템·시너지·카드·스킬 시스템까지 설계·구현했습니다.<br>
+      A* 경로탐색을 직접 구현하고, 타워 6종·적 7종·버프 시스템·시너지·카드·스킬 시스템까지 설계·구현했습니다.<br>
+      난이도 4단계(Easy→Hell)에 따라 웨이브 수·적 능력치·코어 HP·골드 배율이 모두 달라지며,<br>
       UniTask 비동기, ObjectPool, ScriptableObject, Firebase 저장 연동을 핵심 기술로 적용했습니다.
     </div>
     <div class="meta-grid">
       <div class="meta-card"><div class="lbl">PLATFORM</div><div class="val">Android (모바일)</div></div>
-      <div class="meta-card"><div class="lbl">STATUS</div><div class="val" style="color:var(--gold)">개발 진행 중</div></div>
+      <div class="meta-card"><div class="lbl">STATUS</div><div class="val" style="color:var(--green)">완성</div></div>
       <div class="meta-card"><div class="lbl">TEAM</div><div class="val">1인 개발</div></div>
       <div class="meta-card"><div class="lbl">CAMERA</div><div class="val">2.5D (45도 고정)</div></div>
-      <div class="meta-card"><div class="lbl">STAGES</div><div class="val">4개 테마 × 10웨이브</div></div>
+      <div class="meta-card"><div class="lbl">STAGES</div><div class="val">4개 테마 / 난이도별 10~25웨이브</div></div>
       <div class="meta-card"><div class="lbl">TOWERS</div><div class="val">6종 (업그레이드 3단계)</div></div>
+      <div class="meta-card"><div class="lbl">ENEMIES</div><div class="val">7종 (보스 2종 포함)</div></div>
+      <div class="meta-card"><div class="lbl">DIFFICULTY</div><div class="val">4단계 (Easy / Normal / Hard / Hell)</div></div>
     </div>
   </section>
 
@@ -145,9 +165,66 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
   </section>
 
   <section class="section">
-    <h2 class="sec-title">📋 개발 현황</h2>
+    <h2 class="sec-title">🎯 난이도 시스템</h2>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px">Easy만 기본 해금 상태로 시작하며, 스테이지 클리어 시 다음 난이도가 순차 해금됩니다. 해금 상태는 Firebase에 동기화되어 기기를 바꿔도 유지됩니다.</p>
+    <table class="diff-table">
+      <thead>
+        <tr>
+          <th>난이도</th>
+          <th>웨이브</th>
+          <th>적 HP</th>
+          <th>적 속도</th>
+          <th>골드</th>
+          <th>코어 HP</th>
+          <th>중간보스 등장</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="easy">
+          <td><span class="tag tag-green">EASY</span></td>
+          <td>10웨이브</td>
+          <td style="color:var(--green)">×0.80</td>
+          <td style="color:var(--green)">×0.90</td>
+          <td style="color:var(--green)">×1.20</td>
+          <td style="color:var(--green)">×1.50</td>
+          <td>웨이브 8~</td>
+        </tr>
+        <tr class="normal">
+          <td><span class="tag tag-cyan">NORMAL</span></td>
+          <td>15웨이브</td>
+          <td>×1.00</td>
+          <td>×1.00</td>
+          <td>×1.00</td>
+          <td>×1.00</td>
+          <td>웨이브 5~</td>
+        </tr>
+        <tr class="hard">
+          <td><span class="tag tag-coral">HARD</span></td>
+          <td>20웨이브</td>
+          <td style="color:var(--coral)">×1.30</td>
+          <td style="color:var(--coral)">×1.15</td>
+          <td style="color:var(--coral)">×0.90</td>
+          <td style="color:var(--coral)">×0.80</td>
+          <td>웨이브 3~</td>
+        </tr>
+        <tr class="hell">
+          <td><span class="tag tag-purple">HELL</span></td>
+          <td>25웨이브</td>
+          <td style="color:var(--purple)">×1.70</td>
+          <td style="color:var(--purple)">×1.30</td>
+          <td style="color:var(--purple)">×0.75</td>
+          <td style="color:var(--purple)">×0.50</td>
+          <td>웨이브 1~ (처음부터)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:11px;color:var(--muted);margin-top:10px">* 스테이지 HP 배율도 별도 적용됩니다 — 숲 ×1.0 / 사막 ×1.6 / 겨울 ×2.5 / 악마성 ×3.8</p>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">📋 개발 완료 현황</h2>
     <div class="progress-block">
-      <div class="progress-title">✅ 완료</div>
+      <div class="progress-title">✅ 전체 완료</div>
       <div class="progress-list">
         <div class="progress-item done"><span class="dot"></span>Managers 싱글톤 · 15개 서브매니저 모듈화 (DontDestroyOnLoad)</div>
         <div class="progress-item done"><span class="dot"></span>ITickable / UpdateManager 중앙 집중식 업데이트 시스템</div>
@@ -155,8 +232,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
         <div class="progress-item done"><span class="dot"></span>타워 설치 시 경로 차단 여부 검증 (RecalculatePath 이벤트)</div>
         <div class="progress-item done"><span class="dot"></span>타워 6종 (Basic / Cannon / Slow / Sniper / Poison / Lightning)</div>
         <div class="progress-item done"><span class="dot"></span>타워 업그레이드 3단계 (Damage / Range / Speed)</div>
-        <div class="progress-item done"><span class="dot"></span>적 6종 (일반 / 빠름 / 탱커 / 부활 / 중간보스 / 최종보스)</div>
-        <div class="progress-item done"><span class="dot"></span>부활 적: 사망 시 소형 적 2마리 스폰</div>
+        <div class="progress-item done"><span class="dot"></span>적 7종 (일반 / 빠름 / 탱커 / 분열 / 부활 / 중간보스 / 최종보스)</div>
+        <div class="progress-item done"><span class="dot"></span>분열 적(Split): 사망 시 소형 적 소환 / 부활 적(Revive): 사망 후 재기동</div>
         <div class="progress-item done"><span class="dot"></span>IBuff 인터페이스 + BuffHandler 버프/디버프 다중 스택 시스템</div>
         <div class="progress-item done"><span class="dot"></span>StatModifier 패턴으로 슬로우·독·동결·공격강화 최종 스탯 연산</div>
         <div class="progress-item done"><span class="dot"></span>EffectManager Pool 기반 이펙트 일원화 (Play / PlayLine)</div>
@@ -166,24 +243,22 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
         <div class="progress-item done"><span class="dot"></span>로그라이크 카드 시스템 (A 전투강화 / B 경제 / C 특수 / D 스킬)</div>
         <div class="progress-item done"><span class="dot"></span>스킬 5종 · 마스터 레벨 3 · 최대 3개 보유·교체 (SkillManager)</div>
         <div class="progress-item done"><span class="dot"></span>시너지 시스템 (SynergyManager · 타워 조합 보너스)</div>
+        <div class="progress-item done"><span class="dot"></span>난이도 4단계 (Easy / Normal / Hard / Hell) · 클리어 시 순차 해금</div>
         <div class="progress-item done"><span class="dot"></span>Firebase Authentication 익명 로그인 + Firestore 저장 연동</div>
         <div class="progress-item done"><span class="dot"></span>SaveManager: PlayerPrefs + Firebase 이중 저장 · 앱 백그라운드 자동 Sync</div>
-        <div class="progress-item done"><span class="dot"></span>스테이지 선택 (4개) + 난이도 선택 (쉬움·보통·어려움 HP 배율)</div>
+        <div class="progress-item done"><span class="dot"></span>스테이지 선택 (4개) + 난이도 선택 팝업 (UI_DifficultySelectPopup)</div>
         <div class="progress-item done"><span class="dot"></span>데미지 FloatingText (일반·치명타·독·슬로우 색상 구분)</div>
         <div class="progress-item done"><span class="dot"></span>보스 HP바 UI 이벤트 연동 (OnBossSpawned / OnDeath)</div>
         <div class="progress-item done"><span class="dot"></span>업적 시스템 (AchievementManager · 달성 팝업)</div>
-        <div class="progress-item done"><span class="dot"></span>설정창 (BGM/SFX 슬라이더 · 그래픽 품질 · PlayerPrefs 저장)</div>
+        <div class="progress-item done"><span class="dot"></span>설정창 (BGM/SFX 슬라이더 · 그래픽 품질 Low/Medium/High · PlayerPrefs 저장)</div>
         <div class="progress-item done"><span class="dot"></span>배속 (x1/x2) · 일시정지 팝업</div>
         <div class="progress-item done"><span class="dot"></span>웨이브 예고 UI (일반·중간보스·최종보스 아이콘)</div>
-      </div>
-    </div>
-    <div class="progress-block">
-      <div class="progress-title">🔄 진행 중 / 예정</div>
-      <div class="progress-list">
-        <div class="progress-item todo"><span class="dot"></span>타워 공격·적 사망·웨이브 SFX 연결</div>
-        <div class="progress-item todo"><span class="dot"></span>타이틀씬 배경 + 게임 로고 배치</div>
-        <div class="progress-item todo"><span class="dot"></span>Android APK 빌드 (ETC2 텍스처 · 60fps 프레임 캡)</div>
-        <div class="progress-item todo"><span class="dot"></span>실기기 테스트 + 메모리 프로파일링</div>
+        <div class="progress-item done"><span class="dot"></span>SoundManager 구현 (BGM / SFX 채널 분리 · AudioSource 풀링)</div>
+        <div class="progress-item done"><span class="dot"></span>타워 공격·적 사망·웨이브·카드·스킬 SFX 연결</div>
+        <div class="progress-item done"><span class="dot"></span>타이틀 BGM / 인게임 BGM 적용</div>
+        <div class="progress-item done"><span class="dot"></span>타이틀씬 배경 + 게임 로고 배치</div>
+        <div class="progress-item done"><span class="dot"></span>Android APK 빌드 (ETC2 텍스처 · 60fps 프레임 캡)</div>
+        <div class="progress-item done"><span class="dot"></span>실기기 테스트 + 메모리 프로파일링</div>
       </div>
     </div>
   </section>
@@ -215,7 +290,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     startNode.H = <span class="fn">GetHeuristic</span>(startNode, endNode); <span class="cm">// 맨해튼 거리</span>
     open.<span class="fn">Add</span>(startNode);
 
-    <span class="kw">while</span> (open.Count > <span class="nu">0</span>)
+    <span class="kw">while</span> (open.Count &gt; <span class="nu">0</span>)
     {
         <span class="tp">GridNode</span> current = <span class="fn">GetLowestF</span>(open);
         <span class="kw">if</span> (current == endNode)
@@ -225,7 +300,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
             LastPath = path;
             <span class="kw">return</span> path;
         }
-
         open.<span class="fn">Remove</span>(current);
         closed.<span class="fn">Add</span>(current);
 
@@ -261,7 +335,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     {
         <span class="kw">foreach</span> (<span class="kw">var</span> e <span class="kw">in</span> _effects)
         {
-            <span class="kw">if</span> (e <span class="kw">is</span> <span class="tp">BuffEffect</span> existing && existing.EffectType == effect.EffectType)
+            <span class="kw">if</span> (e <span class="kw">is</span> <span class="tp">BuffEffect</span> existing &amp;&amp; existing.EffectType == effect.EffectType)
             { existing.<span class="fn">Refresh</span>(); <span class="kw">return</span>; } <span class="cm">// 중복 시 지속시간만 갱신</span>
         }
     }
@@ -322,7 +396,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 <span class="kw">private async</span> <span class="tp">UniTaskVoid</span> <span class="fn">ReturnAsync</span>(<span class="tp">GameObject</span> go, <span class="kw">float</span> duration)
 {
     <span class="kw">await</span> <span class="tp">UniTask</span>.<span class="fn">Delay</span>(<span class="tp">TimeSpan</span>.<span class="fn">FromSeconds</span>(duration));
-    <span class="kw">if</span> (go != <span class="kw">null</span> && go.activeSelf) <span class="tp">Managers</span>.PoolM.<span class="fn">Push</span>(go);
+    <span class="kw">if</span> (go != <span class="kw">null</span> &amp;&amp; go.activeSelf) <span class="tp">Managers</span>.PoolM.<span class="fn">Push</span>(go);
 }</pre></div>
           </div>
         </div>
@@ -342,13 +416,13 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
             <div class="code-body"><pre><span class="kw">void</span> <span class="fn">OnEnable</span>()
 {
     <span class="cm">// 카드 효과·시너지 변경 시 스탯 자동 재계산</span>
-    <span class="tp">Managers</span>.GameM.OnCardApplied     += <span class="fn">ApplyStats</span>;
+    <span class="tp">Managers</span>.GameM.OnCardApplied      += <span class="fn">ApplyStats</span>;
     <span class="tp">Managers</span>.SynergyM.OnSynergyChanged += <span class="fn">ApplyStats</span>;
 }
 
 <span class="kw">void</span> <span class="fn">OnDisable</span>()
 {
-    <span class="tp">Managers</span>.GameM.OnCardApplied     -= <span class="fn">ApplyStats</span>;
+    <span class="tp">Managers</span>.GameM.OnCardApplied      -= <span class="fn">ApplyStats</span>;
     <span class="tp">Managers</span>.SynergyM.OnSynergyChanged -= <span class="fn">ApplyStats</span>;
     <span class="tp">Managers</span>.SynergyM.<span class="fn">Unregister</span>(Data.towerType);
 }</pre></div>
@@ -361,7 +435,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
         <div class="sys-body">
           <p class="sys-desc">
             <code>@Managers</code> GameObject를 자동 생성 후 DontDestroyOnLoad로 유지합니다.
-            Pool·Resource·Effect·UI·Game·Card·Skill·Synergy·Sound·Save·Firebase 등
+            Pool·Resource·Effect·UI·Game·Card·Skill·Synergy·Sound·Save·Firebase·Difficulty 등
             15개 서브매니저를 모듈화해 씬 어디서든 <code>Managers.PoolM</code>, <code>Managers.SkillM</code>으로 접근합니다.
             씬 전환 시 <code>Managers.Clear()</code>로 Pool·Resource·UI·Synergy를 일괄 초기화합니다.
           </p>
@@ -369,11 +443,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
             <div class="code-head"><span class="code-lang">C#</span><span class="code-file">Managers.cs</span></div>
             <div class="code-body"><pre><span class="kw">public class</span> <span class="tp">Managers</span> : <span class="tp">MonoBehaviour</span>
 {
-    <span class="kw">readonly</span> <span class="tp">PoolManager</span>     poolManager     = <span class="kw">new</span>();
-    <span class="kw">readonly</span> <span class="tp">EffectManager</span>   effectManager   = <span class="kw">new</span>();
-    <span class="kw">readonly</span> <span class="tp">SkillManager</span>    skillManager    = <span class="kw">new</span>();
-    <span class="kw">readonly</span> <span class="tp">SynergyManager</span>  synergyManager  = <span class="kw">new</span>();
-    <span class="kw">readonly</span> <span class="tp">SaveManager</span>     saveManager     = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">PoolManager</span>       poolManager       = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">EffectManager</span>     effectManager     = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">SkillManager</span>      skillManager      = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">SynergyManager</span>    synergyManager    = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">DifficultyManager</span>  difficultyManager = <span class="kw">new</span>();
+    <span class="kw">readonly</span> <span class="tp">SaveManager</span>       saveManager       = <span class="kw">new</span>();
     <span class="cm">// ... 15개 서브매니저</span>
 
     <span class="kw">void</span> <span class="fn">OnApplicationPause</span>(<span class="kw">bool</span> pause)
@@ -395,31 +470,80 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
         <div class="sys-head"><span class="sys-num">06</span><span class="sys-name">로그라이크 카드 · 스킬 시스템</span></div>
         <div class="sys-body">
           <p class="sys-desc">
-            웨이브 클리어 후 카드 3장 중 1장을 선택합니다. 카드 카테고리는 A(전투강화) / B(경제) / C(특수) / D(스킬)로 구분됩니다.
-            스킬은 5종, 마스터 레벨 3, 최대 3개 보유·교체 가능합니다. 교체 시 레벨이 초기화됩니다.
-            모든 카드·스킬 데이터는 ScriptableObject로 분리해 하드코딩이 없습니다.
+            웨이브 클리어 후 카드 3장 중 1장을 선택합니다.<br>
+            카드는 4개 카테고리로 구성됩니다:
+            <strong>A(전투강화)</strong> — 공격력·공속·사거리·치명타 강화 /
+            <strong>B(경제)</strong> — 즉시 골드·처치 보상 증가·건설비 감소·웨이브 보너스 2배 /
+            <strong>C(특수)</strong> — 무료 타워·적 HP 감소·코어 HP 회복·시너지 증폭 /
+            <strong>D(스킬)</strong> — 스킬 선택·스킬 포인트 추가.<br>
+            스킬은 5종(장벽·화살 소나기·동결·번개 폭풍·독 안개), 마스터 레벨 3, 최대 3개 보유·교체 가능.
+            교체 시 레벨 초기화. 모든 데이터는 ScriptableObject로 분리해 하드코딩이 없습니다.
           </p>
         </div>
       </div>
 
       <div class="sys-item">
-        <div class="sys-head"><span class="sys-num">07</span><span class="sys-name">Firebase 저장 연동</span></div>
+        <div class="sys-head"><span class="sys-num">07</span><span class="sys-name">난이도 시스템 (DifficultyManager)</span></div>
+        <div class="sys-body">
+          <p class="sys-desc">
+            Easy·Normal·Hard·Hell 4단계 난이도를 <code>DifficultyManager</code>가 관리합니다.
+            각 난이도는 적 HP·속도, 골드, 코어 HP, 웨이브 수, 중간보스 등장 웨이브를 독립적으로 조정합니다.
+            HELL 난이도는 웨이브 1부터 중간보스가 등장해 극단적인 난이도를 제공합니다.
+            해금 상태는 Firebase에 동기화되어 기기를 바꿔도 유지됩니다.
+          </p>
+          <div class="code-block">
+            <div class="code-head"><span class="code-lang">C#</span><span class="code-file">DifficultyManager.cs</span></div>
+            <div class="code-body"><pre><span class="kw">public float</span> EnemyHpMultiplier => Selected <span class="kw">switch</span>
+{
+    <span class="tp">Define</span>.Difficulty.Easy   => <span class="nu">0.80f</span>,
+    <span class="tp">Define</span>.Difficulty.Normal => <span class="nu">1.00f</span>,
+    <span class="tp">Define</span>.Difficulty.Hard   => <span class="nu">1.30f</span>,
+    <span class="tp">Define</span>.Difficulty.Hell   => <span class="nu">1.70f</span>,
+    _ => <span class="nu">1f</span>
+};
+
+<span class="kw">public int</span> WaveCount => Selected <span class="kw">switch</span>
+{
+    <span class="tp">Define</span>.Difficulty.Easy   => <span class="nu">10</span>,
+    <span class="tp">Define</span>.Difficulty.Normal => <span class="nu">15</span>,
+    <span class="tp">Define</span>.Difficulty.Hard   => <span class="nu">20</span>,
+    <span class="tp">Define</span>.Difficulty.Hell   => <span class="nu">25</span>,
+    _ => <span class="nu">10</span>
+};
+
+<span class="kw">public void</span> <span class="fn">OnGameClear</span>()
+{
+    <span class="cm">// 현재 난이도가 최대 해금일 때만 다음 단계 해금</span>
+    <span class="kw">if</span> (selected == data.UnlockedDifficulty &amp;&amp; data.UnlockedDifficulty &lt; maxIndex)
+    {
+        data.UnlockedDifficulty = selected + <span class="nu">1</span>;
+        <span class="tp">Managers</span>.SaveM.<span class="fn">SaveCurrent</span>();
+    }
+}</pre></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sys-item">
+        <div class="sys-head"><span class="sys-num">08</span><span class="sys-name">Firebase 저장 연동</span></div>
         <div class="sys-body">
           <p class="sys-desc">
             Firebase Authentication 익명 로그인 + Firestore 세이브 데이터 저장을 연동했습니다.
             <code>SaveManager</code>는 PlayerPrefs와 Firebase 이중 저장 구조이며,
             <code>OnApplicationPause</code>에서 앱 백그라운드 진입 시 자동으로 Firebase에 동기화합니다.
+            저장 데이터에는 스테이지 클리어 여부, 해금 난이도, 레벨/경험치, 최고 기록(스테이지·웨이브·난이도)이 포함됩니다.
           </p>
         </div>
       </div>
 
       <div class="sys-item">
-        <div class="sys-head"><span class="sys-num">08</span><span class="sys-name">업적 · 난이도 · 설정 시스템</span></div>
+        <div class="sys-head"><span class="sys-num">09</span><span class="sys-name">업적 · 설정 시스템</span></div>
         <div class="sys-body">
           <p class="sys-desc">
             <code>AchievementManager</code>로 업적 달성 시 팝업 알림을 표시합니다.
-            난이도는 쉬움·보통·어려움 3단계로 적 HP 배율을 적용합니다.
-            설정창은 BGM/SFX 슬라이더, 그래픽 품질(Low/Medium/High)을 제공하며 PlayerPrefs에 저장합니다.
+            설정창은 BGM/SFX 슬라이더, 그래픽 품질(Low/Medium/High) 선택을 제공하며 PlayerPrefs에 저장합니다.
+            배속(x1/x2)과 일시정지 팝업(계속하기/포기)도 구현되어 있으며,
+            일시정지 상태에서 설정 변경 후 복귀 시 timeScale이 올바르게 복구됩니다.
           </p>
         </div>
       </div>
@@ -454,6 +578,12 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
           <code>_closed</code> bool 플래그를 추가해 첫 Close 호출 이후 중복 호출을 무시하도록 처리했습니다.
         </div>
       </div>
+      <div class="trouble-item">
+        <div class="trouble-q">Q. 일시정지 팝업에서 설정 변경 후 계속하기를 누르면 게임이 멈춤</div>
+        <div class="trouble-a">
+          설정 팝업이 닫힐 때 <code>Time.timeScale</code>을 1f로 복구하지 않아 발생. PausePopup Resume 처리에서 timeScale 복구를 명시적으로 호출하도록 수정했습니다.
+        </div>
+      </div>
     </div>
   </section>
 
@@ -463,22 +593,44 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
       <div class="theme-card done">
         <span class="icon">🌲</span>
         <div class="name">숲 (Forest)</div>
-        <div class="status" style="color:var(--green)">데이터 구성 완료</div>
+        <div class="status" style="color:var(--green)">HP 배율 ×1.0</div>
       </div>
       <div class="theme-card done">
         <span class="icon">🏜️</span>
         <div class="name">사막 (Desert)</div>
-        <div class="status" style="color:var(--green)">데이터 구성 완료</div>
+        <div class="status" style="color:var(--green)">HP 배율 ×1.6</div>
       </div>
       <div class="theme-card done">
         <span class="icon">❄️</span>
         <div class="name">겨울 (Winter)</div>
-        <div class="status" style="color:var(--green)">데이터 구성 완료</div>
+        <div class="status" style="color:var(--green)">HP 배율 ×2.5</div>
       </div>
       <div class="theme-card done">
         <span class="icon">🏰</span>
         <div class="name">악마성 (Dungeon)</div>
-        <div class="status" style="color:var(--green)">데이터 구성 완료</div>
+        <div class="status" style="color:var(--green)">HP 배율 ×3.8</div>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px">각 스테이지는 Low Poly Toon Battle Arena 에셋을 사용하며, 클리어 여부에 따라 자물쇠 표시가 적용됩니다.</p>
+  </section>
+
+  <section class="section">
+    <h2 class="sec-title">🤖 AI 보조 개발</h2>
+    <div class="ai-box">
+      <div class="ai-title">
+        <span class="tag tag-purple">Claude Code</span>
+        AI 코딩 어시스턴트 활용
+      </div>
+      <p class="ai-desc">
+        이 프로젝트는 Anthropic의 <strong>Claude Code</strong> (AI 코딩 어시스턴트)를 적극 활용해 개발했습니다.<br>
+        AI 도구를 활용하면서 코드의 구조적 설계와 품질에 더 집중할 수 있었고, 실무에서 AI 협업 개발 방식을 직접 경험했습니다.
+      </p>
+      <div class="ai-list">
+        <div class="ai-item">아키텍처 설계 검토 — Managers 싱글톤, ITickable 패턴, 서브매니저 모듈화 구조 리뷰</div>
+        <div class="ai-item">코드 리뷰 — StatModifier, BuffHandler, A* 구현 등 핵심 로직 검토 및 개선 제안</div>
+        <div class="ai-item">버그 트래킹 — stageKey 불일치, double-release, timeScale 복구 누락 등 디버깅 보조</div>
+        <div class="ai-item">반복 작업 자동화 — ScriptableObject 필드 추가, 이펙트 키 일괄 연결, 데이터 구조 정비</div>
+        <div class="ai-item">Unity 패턴 확인 — UniTask, ObjectPool, Addressables PreLoad 등 최신 패턴 적용</div>
       </div>
     </div>
   </section>
