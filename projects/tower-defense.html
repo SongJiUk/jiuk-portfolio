@@ -273,8 +273,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
           <p class="sys-desc">
             A* 알고리즘을 직접 구현. 스킬 <strong>장벽(Block)</strong>으로 경로 위에 상자를 설치해 적의 이동 경로를 능동적으로 조작할 수 있습니다.
             상자 설치 시 <code>RecalculatePath()</code> 이벤트로 모든 적이 현재 위치에서 즉시 경로를 재계산합니다.
-            단, 모든 경로를 완전히 막는 것은 불가능하도록 설계했습니다 — 설치 결과 경로가 <code>null</code>이 되면 배치를 취소해
-            적이 코어로 도달할 경로를 항상 보장합니다.
+            단, 모든 경로를 완전히 막는 것은 불가능하도록 설계했습니다 — 장벽의 지속시간이 쿨타임보다 짧아
+            상자가 사라지기 전에 다음 장벽을 설치할 수 없으므로, 경로를 영구적으로 봉쇄할 수 없습니다.
             맨해튼 거리 휴리스틱, 탐색 후 G/H/Parent 초기화로 다음 호출 오염을 방지합니다.
           </p>
           <div class="code-block">
@@ -553,41 +553,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     </div>
   </section>
 
-  <section class="section">
-    <h2 class="sec-title">🐛 트러블슈팅</h2>
-    <div class="trouble-list">
-      <div class="trouble-item">
-        <div class="trouble-q">Q. 타워 설치 후 적이 완전히 막혀 코어로 이동 불가</div>
-        <div class="trouble-a">
-          설치 전 A*로 경로를 미리 탐색해 경로가 <code>null</code>이면 설치를 취소합니다. 경로 재계산은 이벤트(<code>RecalculatePath</code>)로 모든 적에게 브로드캐스트해 각자 현재 위치에서 재탐색합니다.
-        </div>
-      </div>
-      <div class="trouble-item">
-        <div class="trouble-q">Q. 웨이브 시작 버튼을 눌러도 적이 스폰되지 않음</div>
-        <div class="trouble-a">
-          <code>Object_WaveAnnounce</code> 오브젝트가 없어서 <code>BeginSpawning()</code>이 미호출되는 버그. <code>OnWaveStart</code>에서 직접 호출하도록 수정해 오브젝트 의존성을 제거했습니다.
-        </div>
-      </div>
-      <div class="trouble-item">
-        <div class="trouble-q">Q. 스테이지 로드 시 stageKey 불일치로 StageData가 null</div>
-        <div class="trouble-a">
-          Addressables 키를 <code>"Stage{n}"</code>으로 등록했지만 코드에서 <code>"Stage{n}Data"</code>로 조회해 발생. 키 명명 규칙을 <code>"Stage{n}Data"</code>로 통일해 해결했습니다.
-        </div>
-      </div>
-      <div class="trouble-item">
-        <div class="trouble-q">Q. UI_ForceClose 팝업이 이중으로 닫혀 Pool double-release 오류</div>
-        <div class="trouble-a">
-          <code>_closed</code> bool 플래그를 추가해 첫 Close 호출 이후 중복 호출을 무시하도록 처리했습니다.
-        </div>
-      </div>
-      <div class="trouble-item">
-        <div class="trouble-q">Q. 일시정지 팝업에서 설정 변경 후 계속하기를 누르면 게임이 멈춤</div>
-        <div class="trouble-a">
-          설정 팝업이 닫힐 때 <code>Time.timeScale</code>을 1f로 복구하지 않아 발생. PausePopup Resume 처리에서 timeScale 복구를 명시적으로 호출하도록 수정했습니다.
-        </div>
-      </div>
-    </div>
-  </section>
 
   <section class="section">
     <h2 class="sec-title">🗺️ 스테이지 테마</h2>
