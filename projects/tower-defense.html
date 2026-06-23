@@ -221,47 +221,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     <p style="font-size:11px;color:var(--muted);margin-top:10px">* 스테이지 HP 배율도 별도 적용됩니다 — 숲 ×1.0 / 사막 ×1.6 / 겨울 ×2.5 / 악마성 ×3.8</p>
   </section>
 
-  <section class="section">
-    <h2 class="sec-title">📋 개발 완료 현황</h2>
-    <div class="progress-block">
-      <div class="progress-title">✅ 전체 완료</div>
-      <div class="progress-list">
-        <div class="progress-item done"><span class="dot"></span>Managers 싱글톤 · 15개 서브매니저 모듈화 (DontDestroyOnLoad)</div>
-        <div class="progress-item done"><span class="dot"></span>ITickable / UpdateManager 중앙 집중식 업데이트 시스템</div>
-        <div class="progress-item done"><span class="dot"></span>A* 경로탐색 직접 구현 (GridSystem + GridNode + PathFinder)</div>
-        <div class="progress-item done"><span class="dot"></span>타워 설치 시 경로 차단 여부 검증 (RecalculatePath 이벤트)</div>
-        <div class="progress-item done"><span class="dot"></span>타워 6종 (Basic / Cannon / Slow / Sniper / Poison / Lightning)</div>
-        <div class="progress-item done"><span class="dot"></span>타워 업그레이드 3단계 (Damage / Range / Speed)</div>
-        <div class="progress-item done"><span class="dot"></span>적 7종 (일반 / 빠름 / 탱커 / 분열 / 부활 / 중간보스 / 최종보스)</div>
-        <div class="progress-item done"><span class="dot"></span>분열 적(Split): 사망 시 소형 적 소환 / 부활 적(Revive): 사망 후 재기동</div>
-        <div class="progress-item done"><span class="dot"></span>IBuff 인터페이스 + BuffHandler 버프/디버프 다중 스택 시스템</div>
-        <div class="progress-item done"><span class="dot"></span>StatModifier 패턴으로 슬로우·독·동결·공격강화 최종 스탯 연산</div>
-        <div class="progress-item done"><span class="dot"></span>EffectManager Pool 기반 이펙트 일원화 (Play / PlayLine)</div>
-        <div class="progress-item done"><span class="dot"></span>번개 체인 이펙트 (ChainLightningEffect · UniTask 순서 제어)</div>
-        <div class="progress-item done"><span class="dot"></span>ObjectPool 전면 적용 (투사체·이펙트·사운드·FloatingText)</div>
-        <div class="progress-item done"><span class="dot"></span>Addressables PreLoad 방식 에셋 비동기 관리</div>
-        <div class="progress-item done"><span class="dot"></span>로그라이크 카드 시스템 (A 전투강화 / B 경제 / C 특수 / D 스킬)</div>
-        <div class="progress-item done"><span class="dot"></span>스킬 5종 · 마스터 레벨 3 · 최대 3개 보유·교체 (SkillManager)</div>
-        <div class="progress-item done"><span class="dot"></span>시너지 시스템 (SynergyManager · 타워 조합 보너스)</div>
-        <div class="progress-item done"><span class="dot"></span>난이도 4단계 (Easy / Normal / Hard / Hell) · 클리어 시 순차 해금</div>
-        <div class="progress-item done"><span class="dot"></span>Firebase Authentication 익명 로그인 + Firestore 저장 연동</div>
-        <div class="progress-item done"><span class="dot"></span>SaveManager: PlayerPrefs + Firebase 이중 저장 · 앱 백그라운드 자동 Sync</div>
-        <div class="progress-item done"><span class="dot"></span>스테이지 선택 (4개) + 난이도 선택 팝업 (UI_DifficultySelectPopup)</div>
-        <div class="progress-item done"><span class="dot"></span>데미지 FloatingText (일반·치명타·독·슬로우 색상 구분)</div>
-        <div class="progress-item done"><span class="dot"></span>보스 HP바 UI 이벤트 연동 (OnBossSpawned / OnDeath)</div>
-        <div class="progress-item done"><span class="dot"></span>업적 시스템 (AchievementManager · 달성 팝업)</div>
-        <div class="progress-item done"><span class="dot"></span>설정창 (BGM/SFX 슬라이더 · 그래픽 품질 Low/Medium/High · PlayerPrefs 저장)</div>
-        <div class="progress-item done"><span class="dot"></span>배속 (x1/x2) · 일시정지 팝업</div>
-        <div class="progress-item done"><span class="dot"></span>웨이브 예고 UI (일반·중간보스·최종보스 아이콘)</div>
-        <div class="progress-item done"><span class="dot"></span>SoundManager 구현 (BGM / SFX 채널 분리 · AudioSource 풀링)</div>
-        <div class="progress-item done"><span class="dot"></span>타워 공격·적 사망·웨이브·카드·스킬 SFX 연결</div>
-        <div class="progress-item done"><span class="dot"></span>타이틀 BGM / 인게임 BGM 적용</div>
-        <div class="progress-item done"><span class="dot"></span>타이틀씬 배경 + 게임 로고 배치</div>
-        <div class="progress-item done"><span class="dot"></span>Android APK 빌드 (ETC2 텍스처 · 60fps 프레임 캡)</div>
-        <div class="progress-item done"><span class="dot"></span>실기기 테스트 + 메모리 프로파일링</div>
-      </div>
-    </div>
-  </section>
 
   <section class="section">
     <h2 class="sec-title">⚙️ 구현된 시스템</h2>
