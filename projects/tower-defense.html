@@ -92,6 +92,14 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 .trouble-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:16px 20px}
 .trouble-q{font-size:13px;font-weight:600;color:var(--coral);margin-bottom:6px}
 .trouble-a{font-size:13px;color:var(--muted);line-height:1.7}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:4px}
+.gallery-item{border-radius:4px;overflow:hidden;border:1px solid var(--border);background:var(--bg2);cursor:pointer;transition:border-color .2s}
+.gallery-item:hover{border-color:var(--border2)}
+.gallery-item img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
+.gallery-item .cap{font-size:11px;color:var(--muted);padding:7px 12px}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:800;align-items:center;justify-content:center;cursor:pointer}
+.lightbox.open{display:flex}
+.lightbox img{max-width:92vw;max-height:88vh;border-radius:4px;border:1px solid var(--border2)}
 .footer-nav{padding:44px 0 60px;display:flex;justify-content:center}
 .footer-nav a{font-family:var(--pixel);font-size:7px;color:var(--purple);text-decoration:none;letter-spacing:2px;transition:color .2s}.footer-nav a:hover{color:var(--gold)}
 </style>
@@ -146,6 +154,52 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
       <div class="meta-card"><div class="lbl">DIFFICULTY</div><div class="val">4단계 (Easy / Normal / Hard / Hell)</div></div>
     </div>
   </section>
+
+  <section class="section">
+    <h2 class="sec-title">📸 스크린샷</h2>
+    <div class="gallery">
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/Title.PNG" alt="타이틀 화면">
+        <div class="cap">타이틀 화면</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/StageSelect.PNG" alt="스테이지 · 난이도 선택">
+        <div class="cap">스테이지 · 난이도 선택</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/GamePlay.PNG" alt="인게임 전경">
+        <div class="cap">인게임 전경</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/TowerUpgrade.PNG" alt="타워 업그레이드">
+        <div class="cap">타워 업그레이드</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/CardSelect.PNG" alt="카드 선택">
+        <div class="cap">카드 선택 (로그라이크)</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/Boss.PNG" alt="보스 등장">
+        <div class="cap">보스 등장</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/Boss2.PNG" alt="보스 전투">
+        <div class="cap">보스 전투</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/Lightning.PNG" alt="번개 체인 이펙트">
+        <div class="cap">번개 체인 이펙트</div>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="../images/TowerDefense/GameClear.PNG" alt="스테이지 클리어">
+        <div class="cap">스테이지 클리어</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="">
+  </div>
 
   <section class="section">
     <h2 class="sec-title">🔄 게임 핵심 루프</h2>
@@ -567,5 +621,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
 
 </div>
 </main>
+<script>
+function openLightbox(el) {
+  const img = el.querySelector('img');
+  document.getElementById('lightbox-img').src = img.src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+</script>
 </body>
 </html>
