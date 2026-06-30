@@ -442,6 +442,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
             모든 타워가 구독해 스탯을 자동 재계산합니다. 카드 효과도 <code>OnCardApplied</code> 이벤트로 동일하게 반영됩니다.
             업그레이드 수치는 ScriptableObject에 분리해 코드 변경 없이 밸런싱이 가능합니다.
           </p>
+          <table class="unit-table" style="margin-top:14px">
+            <thead><tr><th>시너지</th><th>조합</th><th>효과</th></tr></thead>
+            <tbody>
+              <tr><td>⚡☠️ 전도성 독</td><td>독 + 번개</td><td>독 걸린 적에게 체인 데미지 ×1.5</td></tr>
+              <tr><td>🎯☠️ 독침</td><td>독 + 저격</td><td>독 걸린 적 저격 시 크리티컬 확률 +25%</td></tr>
+              <tr><td>🐢⚡ 도체</td><td>슬로우 + 번개</td><td>슬로우 걸린 적 명중 시 체인 1회 추가</td></tr>
+              <tr><td>🐢💣 정밀 포격</td><td>슬로우 + 캐논</td><td>슬로우 걸린 적 명중 시 스플래시 반경 ×1.5</td></tr>
+              <tr><td>🔫🎯 집중사격</td><td>기본 + 저격</td><td>두 타워 모두 공격속도 +15%</td></tr>
+            </tbody>
+          </table>
           <div class="code-block">
             <div class="code-head"><span class="code-lang">C#</span><span class="code-file">TowerController.cs</span></div>
             <div class="code-body"><pre><span class="kw">void</span> <span class="fn">OnEnable</span>()
