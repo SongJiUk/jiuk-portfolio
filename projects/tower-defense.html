@@ -300,6 +300,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
         <div class="sys-head"><span class="sys-num">01</span><span class="sys-name">A* 경로탐색 + 동적 재탐색</span></div>
         <div class="sys-body">
           <p class="sys-desc">
+            스테이지 타일맵을 기준으로 <code>GridSystem</code>이 격자를 생성하고, 각 타일을 <code>GridNode</code>로 등록합니다.
+            Road 레이어 타일은 이동 가능(<code>CanWalk = true</code>), 그 외는 벽으로 처리해 A*가 탐색할 그래프를 구성합니다.<br><br>
             A* 알고리즘을 직접 구현. 스킬 <strong>장벽(Block)</strong>으로 경로 위에 상자를 설치해 적의 이동 경로를 능동적으로 조작할 수 있습니다.
             상자 설치 시 <code>RecalculatePath()</code> 이벤트로 모든 적이 현재 위치에서 즉시 경로를 재계산합니다.
             단, 모든 경로를 완전히 막는 것은 불가능하도록 설계했습니다 — 장벽의 지속시간이 쿨타임보다 짧아
@@ -400,9 +402,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
         <div class="sys-head"><span class="sys-num">03</span><span class="sys-name">EffectManager - Pool 기반 이펙트 일원화</span></div>
         <div class="sys-body">
           <p class="sys-desc">
-            투사체 착탄·사망·버프·스킬·타워 설치·번개 체인 등 모든 이펙트를 <code>EffectManager</code> 한 곳으로 통일했습니다.
-            <code>Play(key, pos)</code>는 위치 이펙트, <code>PlayLine(key, from, to)</code>는 방향성 이펙트(번개 등)에 사용합니다.
-            <code>async void</code> 대신 <code>UniTaskVoid</code>를 사용해 예외 안전성을 확보하고, duration 후 자동으로 풀에 반환합니다.
+            투사체 착탄·사망·버프·스킬·타워 설치 등 모든 이펙트를 <code>EffectManager</code> 한 곳으로 통일했습니다.
+            <code>Play(key, pos)</code> 한 줄로 이펙트를 재생하고, <code>async void</code> 대신 <code>UniTaskVoid</code>를 사용해 예외 안전성을 확보합니다.
+            duration 후 자동으로 풀에 반환되므로 호출부에서 별도 처리가 필요 없습니다.
           </p>
           <div class="code-block">
             <div class="code-head"><span class="code-lang">C#</span><span class="code-file">EffectManager.cs</span></div>
@@ -412,16 +414,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
     <span class="kw">if</span> (go == <span class="kw">null</span>) <span class="kw">return</span>;
     go.transform.position = pos;
     <span class="fn">ReturnAsync</span>(go, duration).<span class="fn">Forget</span>();
-}
-
-<span class="cm">// 번개 체인처럼 시작→목표 방향으로 향하는 방향성 이펙트</span>
-<span class="kw">public void</span> <span class="fn">PlayLine</span>(<span class="kw">string</span> key, <span class="tp">Vector3</span> from, <span class="tp">Vector3</span> to, <span class="kw">float</span> dur = <span class="nu">0.3f</span>)
-{
-    <span class="tp">GameObject</span> go = <span class="tp">Managers</span>.PoolM.<span class="fn">Pop</span>(key);
-    <span class="kw">if</span> (go == <span class="kw">null</span>) <span class="kw">return</span>;
-    go.transform.position = from;
-    go.transform.rotation = <span class="tp">Quaternion</span>.<span class="fn">LookRotation</span>(to - from);
-    <span class="fn">ReturnAsync</span>(go, dur).<span class="fn">Forget</span>();
 }
 
 <span class="kw">private async</span> <span class="tp">UniTaskVoid</span> <span class="fn">ReturnAsync</span>(<span class="tp">GameObject</span> go, <span class="kw">float</span> duration)
@@ -644,7 +636,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:600;height:52px;background:rgba(
         <div class="status" style="color:var(--green)">HP 배율 ×3.8</div>
       </div>
     </div>
-    <p style="font-size:11px;color:var(--muted);margin-top:12px">각 스테이지는 Low Poly Toon Battle Arena 에셋을 사용하며, 클리어 여부에 따라 자물쇠 표시가 적용됩니다.</p>
+    <p style="font-size:11px;color:var(--muted);margin-top:12px">각 스테이지는 해당 난이도 클리어 시 다음 난이도가 순차 해금되며, 미해금 난이도는 자물쇠로 표시됩니다.</p>
   </section>
 
   <section class="section">
